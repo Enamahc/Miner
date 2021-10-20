@@ -5,7 +5,6 @@ html, body {
 	padding: 0;
 	margin: 0;
 	line-height: 1;
-  /*font-family: 'Do Hyeon', sans-serif;*/
   font-family: "Orbitron", sans-serif;
 	overflow: hidden;
 }
@@ -22,6 +21,12 @@ html, body {
   --res1GaugeH: 25%;
   --res2GaugeH: 10%;
   --res3GaugeH: 5%;
+}
+
+@media (min-width: 1200px) {
+  body {
+    font-size: 1.2em;
+  }
 }
 
 @media (max-width: 1250px) {
@@ -48,6 +53,10 @@ html, body {
 @media (max-width: 900px) {
   #map {
     font-size: 70%;
+  }
+  
+  #ship {
+    transform: scale(0.8);
   }
 
   #author {
@@ -126,7 +135,212 @@ header {
   inset: 0 0 auto auto;
 }
 
+#loading {
+  display: flex;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+  color: ghostWhite;
+  justify-content: center;
+  align-items: center;
+}
 
+#square {
+  display: block;
+  position: absolute;
+  height: 110px;
+  width: 110px;
+}
+
+#square span {
+  width: 17px;
+  height: 17px;
+  background-color: #000;
+  display: inline-block;
+  -webkit-animation: square 2.5s infinite ease-in-out both;
+          animation: square 2.5s infinite ease-in-out both;
+}
+#square span:nth-child(1) {
+  left: 0px;
+  background: var(--couche1);
+  -webkit-animation-delay: 0.2s;
+          animation-delay: 0.2s;
+}
+#square span:nth-child(2) {
+  left: 15px;
+  background: var(--couche1);
+  -webkit-animation-delay: 0.3s;
+          animation-delay: 0.3s;
+}
+#square span:nth-child(3) {
+  left: 30px;
+  background: var(--couche1);
+  -webkit-animation-delay: 0.4s;
+          animation-delay: 0.4s;
+}
+#square span:nth-child(4) {
+  left: 45px;
+  background: var(--couche1);
+  -webkit-animation-delay: 0.5s;
+          animation-delay: 0.5s;
+}
+#square span:nth-child(5) {
+  left: 60px;
+  background: var(--couche1);
+  -webkit-animation-delay: 0.6s;
+          animation-delay: 0.6s;
+}
+#square span:nth-child(6) {
+  left: 75px;
+  background: var(--couche1);
+  -webkit-animation-delay: 0.3s;
+          animation-delay: 0.3s;
+}
+#square span:nth-child(7) {
+  left: 90px;
+  background: var(--couche2);
+  -webkit-animation-delay: 0.4s;
+          animation-delay: 0.4s;
+}
+#square span:nth-child(8) {
+  left: 105px;
+  background: var(--couche2);
+  -webkit-animation-delay: 0.5s;
+          animation-delay: 0.5s;
+}
+#square span:nth-child(9) {
+  left: 120px;
+  background: var(--couche2);
+  -webkit-animation-delay: 0.6s;
+          animation-delay: 0.6s;
+}
+#square span:nth-child(10) {
+  left: 135px;
+  background: var(--couche1);
+  -webkit-animation-delay: 0.7s;
+          animation-delay: 0.7s;
+}
+#square span:nth-child(11) {
+  left: 150px;
+  background: var(--couche1);
+  -webkit-animation-delay: 0.4s;
+          animation-delay: 0.4s;
+}
+#square span:nth-child(12) {
+  left: 165px;
+  background: var(--couche2);
+  -webkit-animation-delay: 0.5s;
+          animation-delay: 0.5s;
+}
+#square span:nth-child(13) {
+  left: 180px;
+  background: var(--corecolor);
+  -webkit-animation-delay: 0.6s;
+          animation-delay: 0.6s;
+}
+#square span:nth-child(14) {
+  left: 195px;
+  background: var(--couche2);
+  -webkit-animation-delay: 0.7s;
+          animation-delay: 0.7s;
+}
+#square span:nth-child(15) {
+  left: 210px;
+  background: var(--couche1);
+  -webkit-animation-delay: 0.8s;
+          animation-delay: 0.8s;
+}
+#square span:nth-child(16) {
+  left: 225px;
+  background: var(--couche1);
+  -webkit-animation-delay: 0.5s;
+          animation-delay: 0.5s;
+}
+#square span:nth-child(17) {
+  left: 240px;
+  background: var(--couche2);
+  -webkit-animation-delay: 0.6s;
+          animation-delay: 0.6s;
+}
+#square span:nth-child(18) {
+  left: 255px;
+  background: var(--couche2);
+  -webkit-animation-delay: 0.7s;
+          animation-delay: 0.7s;
+}
+#square span:nth-child(19) {
+  left: 270px;
+  background: var(--couche2);
+  -webkit-animation-delay: 0.8s;
+          animation-delay: 0.8s;
+}
+#square span:nth-child(20) {
+  left: 285px;
+  background: var(--couche1);
+  -webkit-animation-delay: 0.9s;
+          animation-delay: 0.9s;
+}
+#square span:nth-child(21) {
+  left: 300px;
+  background: var(--couche1);
+  -webkit-animation-delay: 0.6s;
+          animation-delay: 0.6s;
+}
+#square span:nth-child(22) {
+  left: 315px;
+  background: var(--couche1);
+  -webkit-animation-delay: 0.7s;
+          animation-delay: 0.7s;
+}
+#square span:nth-child(23) {
+  left: 330px;
+  background: var(--couche1);
+  -webkit-animation-delay: 0.8s;
+          animation-delay: 0.8s;
+}
+#square span:nth-child(24) {
+  left: 345px;
+  background: var(--couche1);
+  -webkit-animation-delay: 0.9s;
+          animation-delay: 0.9s;
+}
+#square span:nth-child(25) {
+  left: 360px;
+  background: var(--couche1);
+  -webkit-animation-delay: 1s;
+          animation-delay: 1s;
+}
+
+@keyframes square {
+  0% {
+    -webkit-transform: rotateY(0deg);
+            transform: rotateY(0deg);
+  }
+  50% {
+    -webkit-transform: rotateY(180deg);
+            transform: rotateY(180deg);
+  }
+  100% {
+    -webkit-transform: rotateX(180deg);
+            transform: rotateX(180deg);
+  }
+}
+
+@-webkit-keyframes square {
+  0% {
+    -webkit-transform: rotateY(0deg);
+            transform: rotateY(0deg);
+  }
+  50% {
+    -webkit-transform: rotateY(180deg);
+            transform: rotateY(180deg);
+  }
+  100% {
+    -webkit-transform: rotateX(180deg);
+            transform: rotateX(180deg);
+  }
+}
 
 #lefttopbar {
   display: flex;
@@ -186,9 +400,9 @@ button {
   /* Chrome */
 }
 
-main {
+#main {
   height: calc(100% - 26px);
-  display: grid;
+  display: none;
   grid-template-columns: 22% 23% 30% 25%;
   grid-template-rows: auto 1fr 1fr;
 }
@@ -305,9 +519,8 @@ li {
 }
 
 #ship {
-  left: 35%;
+  left: 30%;
   position: absolute;
-  background: red;
 }
 
 #ship:hover {
@@ -351,13 +564,10 @@ li {
   color: ghostwhite;
   display: flex;
   margin: auto;
-  height: 100%;
-  width: 100%;
   justify-content: center;
   align-items: center;
   grid-row: 1/2;
   grid-column: 1/2;
-  border-bottom: solid 2px #002b35;
 }
 
 #shipStorage {
@@ -432,6 +642,7 @@ li {
   grid-column: 1/2;
   flex-direction: column;
   border-bottom: solid 2px #002b35;
+  border-top: solid 2px #002b35;
   overflow: auto;
 }
 
@@ -1147,12 +1358,11 @@ li {
 }
 
 td {
-  border: 1px solid grey;
   aspect-ratio: 1 / 1; 
 }
 
 .grid td.clicked {
-  background-color: black;
+  background-color: #180b00;
 }
 
 #tabs {
@@ -1195,7 +1405,7 @@ td {
   justify-content: center;
   border: 2px solid #002b36;
   border-radius: 8px;
-  font-size: 0.7em;
+  font-size: 0.8em;
   margin: 0.5em;
   /* background-color: hsl(10, 15%, 70%); */
   min-width: 150px;
@@ -1224,10 +1434,8 @@ td {
 }
 
 .buyable_title-price {
-  font-weight: bold;
   display: flex;
   flex-direction: column;
-  overflow: auto;
   white-space: nowrap;
 }
 

@@ -1,8 +1,8 @@
 <html lang="en" dir="ltr">
   <head>
+    <meta name="google-site-verification" content="t7YHYNkhq9FsDg9D92XTpE6l9sS2azeGwzBQ6izsDH8" />
     <link rel="stylesheet" type="text/css" href="stylesheet.css" />
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet">
   </head>
   <header>
     <div id="lefttopbar">
@@ -21,17 +21,46 @@
       <button onclick="reset()">Reset</button>
     </div>
   </header>
-  <main>
+  <div id="loading">
+    <div id="square">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <main id="main">
     <div id="res">
-      <div class="cat1">Iron : <span id="Iron"></span></div>
-      <div class="cat1">Copper : <span id="Copper"></span></div>
-      <div class="cat1">Aluminium : <span id="Aluminium"></span></div>
-      <div class="cat2">Zinc : <span id="Zinc"></span></div>
-      <div class="cat2">Lead : <span id="Lead"></span></div>
-      <div class="cat2">Silver : <span id="Silver"></span></div>
-      <div class="cat3">Iridium : <span id="Iridium"></span></div>
-      <div class="cat3">Gold : <span id="Gold"></span></div>
-      <div class="cat3">Palladium : <span id="Palladium"></span></div>
+      <div class="cat1">Iron : <span id="Res1a"></span></div>
+      <div class="cat1">Copper : <span id="Res1b"></span></div>
+      <div class="cat1">Aluminium : <span id="Res1c"></span></div>
+      <div class="cat2">Zinc : <span id="Res2a"></span></div>
+      <div class="cat2">Lead : <span id="Res2b"></span></div>
+      <div class="cat2">Silver : <span id="Res2c"></span></div>
+      <div class="cat3">Iridium : <span id="Res3a"></span></div>
+      <div class="cat3">Gold : <span id="Res3b"></span></div>
+      <div class="cat3">Palladium : <span id="Res3c"></span></div>
       <div class="rare">Rare1 : <span id="Rare1"></span></div>
       <div class="rare">Rare2 : <span id="Rare2"></span></div>
       <div class="rare">Rare3 : <span id="Rare3"></span></div>
@@ -61,7 +90,7 @@
       </div>
       <div id="shipContainer">
         <button onclick="chooseRegion('map', 'map');" class="closeButton">x</button>
-        <img id="miniShip" src="https://iili.io/RrpQLl.png" alt="SHIP" border="0">
+        <img id="miniShip" src="https://iili.io/RrpQLl.png" alt="SHIP">
         <div id="shipStorage">
           <div class="menutitle">
             STORAGE
@@ -71,32 +100,32 @@
             <span>Amount</span>
             <span>Value</span>
             <span class="resName cat1">Iron :</span>
-            <input type="number" id="IronShip" value="0" min="0" step="0.1" onchange="changeStock('Iron', 1)">
-            <span id="IronValue" class="cat1">0</span>
+            <input type="number" id="Res1aShip" value="0" min="0" step="0.1" onchange="changeStock('Res1a', 1)">
+            <span id="Res1aValue" class="cat1">0</span>
             <span class="resName cat1">Copper :</span>
-            <input type="number" id="CopperShip" value="0" min="0" step="0.1" onchange="changeStock('Copper', 1)">
-            <span id="CopperValue" class="cat1">0</span>
+            <input type="number" id="Res1bShip" value="0" min="0" step="0.1" onchange="changeStock('Res1b', 1)">
+            <span id="Res1bValue" class="cat1">0</span>
             <span class="resName cat1">Aluminium :</span>
-            <input type="number" id="AluminiumShip" value="0" min="0" step="0.1" onchange="changeStock('Aluminium', 1)">
-            <span id="AluminiumValue" class="cat1">0</span>
+            <input type="number" id="Res1cShip" value="0" min="0" step="0.1" onchange="changeStock('Res1c', 1)">
+            <span id="Res1cValue" class="cat1">0</span>
             <span class="resName cat2">Zinc :</span>
-            <input type="number" id="ZincShip" value="0" min="0" step="0.01" onchange="changeStock('Zinc', 2)">
-            <span id="ZincValue" class="cat2">0</span>
+            <input type="number" id="Res2aShip" value="0" min="0" step="0.01" onchange="changeStock('Res2a', 2)">
+            <span id="Res2aValue" class="cat2">0</span>
             <span class="resName cat2">Lead :</span>
-            <input type="number" id="LeadShip" value="0" min="0" step="0.01" onchange="changeStock('Lead', 2)">
-            <span id="LeadValue" class="cat2">0</span>
+            <input type="number" id="Res2bShip" value="0" min="0" step="0.01" onchange="changeStock('Res2b', 2)">
+            <span id="Res2bValue" class="cat2">0</span>
             <span class="resName cat2">Silver :</span>
-            <input type="number" id="SilverShip" value="0" min="0" step="0.01" onchange="changeStock('Silver', 2)">
-            <span id="SilverValue" class="cat2">0</span>
+            <input type="number" id="Res2cShip" value="0" min="0" step="0.01" onchange="changeStock('Res2c', 2)">
+            <span id="Res2cValue" class="cat2">0</span>
             <span class="resName cat3">Iridium :</span>
-            <input type="number" id="IridiumShip" value="0" min="0" step="0.001" onchange="changeStock('Iridium', 3)">
-            <span id="IridiumValue" class="cat3">0</span>
+            <input type="number" id="Res3aShip" value="0" min="0" step="0.001" onchange="changeStock('Res3a', 3)">
+            <span id="Res3aValue" class="cat3">0</span>
             <span class="resName cat3">Gold :</span>
-            <input type="number" id="GoldShip" value="0" min="0" step="0.001" onchange="changeStock('Gold', 3)">
-            <span id="GoldValue" class="cat3">0</span>
+            <input type="number" id="Res3bShip" value="0" min="0" step="0.001" onchange="changeStock('Res3b', 3)">
+            <span id="Res3bValue" class="cat3">0</span>
             <span class="resName cat3">Palladium :</span>
-            <input type="number" id="PalladiumShip" value="0" min="0" step="0.001" onchange="changeStock('Palladium', 3)">
-            <span id="PalladiumValue" class="cat3">0</span>
+            <input type="number" id="Res3cShip" value="0" min="0" step="0.001" onchange="changeStock('Res3c', 3)">
+            <span id="Res3cValue" class="cat3">0</span>
             <span class="resName rare">Rare1 :</span>
             <input type="number" id="Rare1Ship" value="0" min="0" step="1" onchange="changeStock('Rare1', 4)">
             <span id="Rare1Value" class="rare">0</span>
@@ -123,46 +152,47 @@
           <div>Equipment :
             <ul id="Equipment" style="margin: 0; padding: 0;">
               <li>- Cargo <span id="cargo">Mk1</span>
-                <div class="info">i
+                <!-- <div class="info">i
                   <span class="tooltip">Affects the amount of resource that can be stored on board</span>
-                </div>
+                </div> -->
               </li>
               <li>- Drone Bay <span id="droneBay">Mk1</span>
-                <div class="info">i
+                <!-- <div class="info">i
                   <span class="tooltip">Affects the number of drone that can be stored on board</span>
-                </div>
+                </div> -->
               </li>
               
               <li>- Thrusters <span id="thrusters">Mk1</span>
-                <div class="info">i
+                <!-- <div class="info">i
                   <span class="tooltip">Affects travel time to another planet</span>
-                </div>
+                </div> -->
               </li>
               <li>- Antenna <span id="antenna">Mk1</span>
-                <div class="info">i
+                <!-- <div class="info">i
                   <span class="tooltip">Allows you to find more distant planets</span>
-                </div>
+                </div> -->
               </li>
               <li id="tractorBeam">- Tractor Beam
-                <div class="info">i
+                <!-- <div class="info">i
                   <span class="tooltip">Automatically refills ship storage</span>
-                </div>
+                </div> -->
               </li>
-              <li id="planetAnalyzer">- Planet Scanner
-                <div class="info">i
+              <li id="planetAnalyzer">- Planet Analyzer
+                <!-- <div class="info">i
                   <span class="tooltip">Allows you to choose the planet according to its composition</span>
-                </div>
+                </div> -->
               </li>
               <li id="teleporter">- Teleporter
-              <div class="info">i
+              <!-- <div class="info">i
                 <span class="tooltip">Reduces travel times to 0</span>
-              </div>
+              </div> -->
               </li>
               <li id="autopilot">- Trading AI
-              <div class="info">i
+              <!-- <div class="info">i
                 <span class="tooltip">Allows the ship to go and sell automatically when storage is full</span>
-              </div>
+              </div> -->
               </li>
+              <li id="spatialDrill">- Spatial Drilling Laser</li>
             </ul>
           </div>
         </div>
@@ -179,6 +209,7 @@
           </button>
           <button id="prestige" class="shipButton" onclick="prestige1()">
             /!\ Find New Planet /!\
+          <span class="tooltip">Leave this planet and find another one to mine</span>
           </button>
         </div>
       </div>
@@ -186,7 +217,7 @@
     </div>
     <div id="map">
       <p style="font-size: 120%;text-align:center;margin-left: 2%;">Choose a region to start mining:</p>
-      <img onclick="shipMenu()" id="ship" src="https://iili.io/RrpQLl.png" alt="SHIP">
+      <img onclick="shipMenu()" id="ship" src="https://iili.io/RrpQLl.png" alt="SHIP" border="0">
       <div id="timer">
       </div>
       <div id="planet">
@@ -497,6 +528,7 @@
       </div>
     </div>
   </main>
+  
   
 
         <script src="main.js" charset="utf-8" type="text/javascript"></script>
