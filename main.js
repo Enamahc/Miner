@@ -9,6 +9,7 @@ var gamedata = {
   version: "0.0.0.a",
   newgame: true,
   money: 0,
+  planetSize: 10,
   res: {
     Res1a: 0,
     Res1b: 0,
@@ -52,7 +53,7 @@ var gamedata = {
     Rare3: 0
   },
   sumValue: 0,
-  sellingTime: 150,
+  sellingTime: 10,
   timeLeft: 0,
   minePower: 1,
   reach: {
@@ -97,31 +98,19 @@ var gamedata = {
   },
   possibleOuterMaterial: ["Iron", "Copper", "Aluminium"],
   outermaterial: {
-  	name: "",
+    name: "",
     ref: ""
-    },
+  },
   possibleInnerMaterial: ["Zinc", "Lead", "Silver"],
   innermaterial: {
-  	name: "",
+    name: "",
     ref: ""
-    },
+  },
   possibleCoreMaterial: ["Iridium", "Gold", "Palladium"],
   corematerial: {
-  	name: "",
+    name: "",
     ref: ""
-    },
-  d1base: 2,
-  d1x: 1.15,
-  d1rate: 1,
-  d2base: 20,
-  d2x: 1.15,
-  d2rate: 5,
-  d3base: 200,
-  d3x: 1.15,
-  d3rate: 25,
-  yield1: 0.1,
-  yield2: 0.01,
-  yield3: 0.001,
+  },
   droneAssign: {
     d1NW: 0,
     d1N: 0,
@@ -150,6 +139,18 @@ var gamedata = {
     d3S: 0,
     d3SE: 0 */
   },
+  d1base: 2,
+  d1x: 1.15,
+  d1rate: 1,
+  d2base: 1,
+  d2x: 1.15,
+  d2rate: 1,
+  d3base: 0.5,
+  d3x: 1.15,
+  d3rate: 1,
+  yield1: 0.1,
+  yield2: 0.01,
+  yield3: 0.001,
   drone1: 0,
   d1left: 0,
   d1res1Cost: 2,
@@ -157,17 +158,18 @@ var gamedata = {
   d1res3Cost: 2,
   drone2: 0,
   d2left: 0,
-  d2res1Cost: 20,
-  d2res2Cost: 20,
-  d2res3Cost: 20,
+  d2res1Cost: 1,
+  d2res2Cost: 1,
+  d2res3Cost: 1,
   drone3: 0,
   d3left: 0,
-  d3res1Cost: 200,
-  d3res2Cost: 200,
-  d3res3Cost: 200,
+  d3res1Cost: 0.5,
+  d3res2Cost: 0.5,
+  d3res3Cost: 0.5,
   shipCargoLvl: 1,
   shipMaxCargo: 10,
   shipCapacity: 10,
+  shipBayCapacity: 5,
   shipStock: {
     Res1a: 0,
     Res1b: 0,
@@ -182,31 +184,336 @@ var gamedata = {
     Rare2: 0,
     Rare3: 0
   },
-  shipTech: {
-  	cargo: 1,
-    droneBay: 1,
-    thruster: 1,
-    antenna: 1,
+  tech: {
+    membercard1: 0,
+    membercard2: 0,
+    membercard3: 0,
+    lab: 0,
+    drone1: 0,
+    drone2: 0,
+    drone3: 0,
+    exoMk1: 0,
+    exoMk2: 0,
+    cargoMk2: 0,
+    cargoMk3: 0,
+    droneBayMk2: 0,
+    droneBayMk3: 0,
     tractorBeam: 0,
     scanner: 0,
     teleporter: 0,
     tradingAI: 0,
     miningAI: 0
   },
-  blueprint: {
-  	lab: 0,
-  	drone1: 0,
-    drone2: 0,
-    drone3: 0,
-    exoskeleton: 0,
-    
-  },
-  tech: {
-  	
-  },
   prestigeTime: 10,
   lasttick: 0
 };
+
+var blueprints = {
+  membercard1: {
+    prev: "",
+    next: "membercard2",
+    bought: false,
+    price: 2500,
+    Res1a: 0,
+    Res1b: 0,
+    Res1c: 0,
+    Res2a: 0,
+    Res2b: 0,
+    Res2c: 0,
+    Res3a: 0,
+    Res3b: 0,
+    Res3c: 0,
+    Rare1: 0,
+    Rare2: 0,
+    Rare3: 0
+  },
+  membercard2: {
+    prev: "membercard1",
+    next: "membercard3",
+    bought: false,
+    price: 5000,
+    Res1a: 0,
+    Res1b: 0,
+    Res1c: 0,
+    Res2a: 0,
+    Res2b: 0,
+    Res2c: 0,
+    Res3a: 0,
+    Res3b: 0,
+    Res3c: 0,
+    Rare1: 0,
+    Rare2: 0,
+    Rare3: 0
+  },
+  membercard3: {
+    prev: "membercard2",
+    next: "membercard4",
+    bought: false,
+    price: 0,
+    Res1a: 0,
+    Res1b: 0,
+    Res1c: 0,
+    Res2a: 0,
+    Res2b: 0,
+    Res2c: 0,
+    Res3a: 0,
+    Res3b: 0,
+    Res3c: 0,
+    Rare1: 0,
+    Rare2: 0,
+    Rare3: 0
+  },
+  lab: {
+    prev: "",
+    next: "",
+    bought: false,
+    price: 0,
+    Res1a: 0,
+    Res1b: 0,
+    Res1c: 0,
+    Res2a: 0,
+    Res2b: 0,
+    Res2c: 0,
+    Res3a: 0,
+    Res3b: 0,
+    Res3c: 0,
+    Rare1: 0,
+    Rare2: 0,
+    Rare3: 0
+  },
+  drone1: {
+    prev: "",
+    next: "drone2",
+    bought: false,
+    price: 10,
+    Res1a: 2,
+    Res1b: 2,
+    Res1c: 2,
+    Res2a: 0,
+    Res2b: 0,
+    Res2c: 0,
+    Res3a: 0,
+    Res3b: 0,
+    Res3c: 0,
+    Rare1: 0,
+    Rare2: 0,
+    Rare3: 0
+  },
+  drone2: {
+    prev: "drone1",
+    next: "drone3",
+    bought: false,
+    price: 250,
+    Res1a: 0,
+    Res1b: 0,
+    Res1c: 0,
+    Res2a: 1,
+    Res2b: 1,
+    Res2c: 1,
+    Res3a: 0,
+    Res3b: 0,
+    Res3c: 0,
+    Rare1: 0,
+    Rare2: 0,
+    Rare3: 0
+  },
+  drone3: {
+    prev: "drone2",
+    next: "",
+    bought: false,
+    price: 0,
+    Res1a: 0,
+    Res1b: 0,
+    Res1c: 0,
+    Res2a: 0,
+    Res2b: 0,
+    Res2c: 0,
+    Res3a: 0.5,
+    Res3b: 0.5,
+    Res3c: 0.5,
+    Rare1: 0,
+    Rare2: 0,
+    Rare3: 0
+  },
+  exoMk1: {
+    prev: "",
+    next: "exoMk2",
+    bought: false,
+    price: 350,
+    Res1a: 33,
+    Res1b: 33,
+    Res1c: 33,
+    Res2a: 0,
+    Res2b: 0,
+    Res2c: 0,
+    Res3a: 0,
+    Res3b: 0,
+    Res3c: 0,
+    Rare1: 0,
+    Rare2: 0,
+    Rare3: 0
+  },
+  exoMk2: {
+    prev: "exoMk1",
+    next: "",
+    bought: false,
+    price: 350,
+    Res1a: 33,
+    Res1b: 33,
+    Res1c: 33,
+    Res2a: 0,
+    Res2b: 0,
+    Res2c: 0,
+    Res3a: 0,
+    Res3b: 0,
+    Res3c: 0,
+    Rare1: 0,
+    Rare2: 0,
+    Rare3: 0
+  },
+  cargoMk2: {
+    prev: "",
+    next: "cargoMk3",
+    bought: false,
+    price: 100,
+    Res1a: 3.3,
+    Res1b: 3.3,
+    Res1c: 3.3,
+    Res2a: 0,
+    Res2b: 0,
+    Res2c: 0,
+    Res3a: 0,
+    Res3b: 0,
+    Res3c: 0,
+    Rare1: 0,
+    Rare2: 0,
+    Rare3: 0
+  },
+  cargoMk3: {
+    prev: "cargoMk2",
+    next: "cargoMk4",
+    bought: false,
+    price: 0,
+    Res1a: 0,
+    Res1b: 0,
+    Res1c: 0,
+    Res2a: 0,
+    Res2b: 0,
+    Res2c: 0,
+    Res3a: 0,
+    Res3b: 0,
+    Res3c: 0,
+    Rare1: 0,
+    Rare2: 0,
+    Rare3: 0
+  },
+  droneBayMk2: {
+    prev: "",
+    next: "droneBayMk3",
+    bought: false,
+    price: 150,
+    Res1a: 30,
+    Res1b: 30,
+    Res1c: 30,
+    Res2a: 0,
+    Res2b: 0,
+    Res2c: 0,
+    Res3a: 0,
+    Res3b: 0,
+    Res3c: 0,
+    Rare1: 0,
+    Rare2: 0,
+    Rare3: 0
+  },
+  droneBayMk3: {
+    prev: "droneBayMk2",
+    next: "droneBayMk4",
+    bought: false,
+    price: 0,
+    Res1a: 0,
+    Res1b: 0,
+    Res1c: 0,
+    Res2a: 0,
+    Res2b: 0,
+    Res2c: 0,
+    Res3a: 0,
+    Res3b: 0,
+    Res3c: 0,
+    Rare1: 0,
+    Rare2: 0,
+    Rare3: 0
+  },
+  tractorBeam: {},
+  scanner: {},
+  teleporter: {},
+  tradingAI: {},
+  miningAI: {}
+}
+
+window.onload = function() {
+  document.getElementById("shipMenu").style.display = "none";
+  chooseRegion("map", "map");
+  tab("workbench");
+
+  if (savegame != null) {
+    Object.entries(gamedata).forEach(([key, value]) => {
+      gamedata[key] = savegame[key];
+    });
+    offlineProgress();
+    if (gamedata.timeLeft > 0) {
+      selling();
+    }
+  } else if (prestige != null) {
+    Object.entries(prestige).forEach(([key, value]) => {
+      gamedata[key] = prestige[key];
+    });
+    init();
+  }
+  prestige = {
+    res: {}
+  };
+  if (gamedata.newgame == true) {
+    document.getElementById('loading').style.display = 'flex';
+    setTimeout(
+      function() {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('main').style.display = 'grid';
+      }, 5000);
+    init();
+  } else {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('main').style.display = 'grid';
+  }
+  document.getElementById("outermaterial").innerHTML = gamedata.outermaterial.name;
+  document.getElementById("innermaterial").innerHTML = gamedata.innermaterial.name;
+  document.getElementById("corematerial").innerHTML = gamedata.corematerial.name;
+  gamedata.d1res1Cost = gamedata.d1base * Math.pow(gamedata.d1x, gamedata.drone1);
+  gamedata.d1res2Cost = gamedata.d1base * Math.pow(gamedata.d1x, gamedata.drone1);
+  gamedata.d1res3Cost = gamedata.d1base * Math.pow(gamedata.d1x, gamedata.drone1);
+  gamedata.d2res1Cost = gamedata.d2base * Math.pow(gamedata.d2x, gamedata.drone2);
+  gamedata.d2res2Cost = gamedata.d2base * Math.pow(gamedata.d2x, gamedata.drone2);
+  gamedata.d2res3Cost = gamedata.d2base * Math.pow(gamedata.d2x, gamedata.drone2);
+  gamedata.d3res1Cost = gamedata.d3base * Math.pow(gamedata.d3x, gamedata.drone3);
+  gamedata.d3res2Cost = gamedata.d3base * Math.pow(gamedata.d3x, gamedata.drone3);
+  gamedata.d3res3Cost = gamedata.d3base * Math.pow(gamedata.d3x, gamedata.drone3);
+  update("d1res1Cost", format(gamedata.d1res1Cost, "standard"));
+  update("d1res2Cost", format(gamedata.d1res2Cost, "standard"));
+  update("d1res3Cost", format(gamedata.d1res3Cost, "standard"));
+  update("d2res1Cost", format(gamedata.d2res1Cost, "standard"));
+  update("d2res2Cost", format(gamedata.d2res2Cost, "standard"));
+  update("d2res3Cost", format(gamedata.d2res3Cost, "standard"));
+  update("d3res1Cost", format(gamedata.d3res1Cost, "standard"));
+  update("d3res2Cost", format(gamedata.d3res2Cost, "standard"));
+  update("d3res3Cost", format(gamedata.d3res3Cost, "standard"));
+  Object.entries(gamedata.droneAssign).forEach(([key, value]) => {
+    update(key, format(gamedata.droneAssign[key], "round"));
+    update("local_" + key, format(gamedata.droneAssign[key], "round"));
+  });
+  h = 3 * gamedata.planetSize;
+  l = h + h / 3;
+  borders();
+  save();
+}
 
 var grids = {
   grid1NW: 0,
@@ -229,8 +536,8 @@ var grids = {
   grid3core: 0
 };
 
-var h = 33;
-var l = h + h/3 ;
+var h = 0;
+var l = 0;
 var cornerBorder = [];
 var flatBorder = [];
 var flatCoreBorder = [];
@@ -240,12 +547,12 @@ var coreBorder = [];
 var coreExtBorder = [];
 var coreIntBorder = [];
 
-function borders(){
+function borders() {
   for (let y = 2 / 3 * h * h - (h / 3 - 1); y <= 2 / 3 * h * h; y++) {
     cornerBorder.push(y);
   }
-  for (let y = 1; y <= h/3; y++) {
-    let n = h*h*2/3 + y*(2*h/3);
+  for (let y = 1; y <= h / 3; y++) {
+    let n = h * h * 2 / 3 + y * (2 * h / 3);
     cornerBorder.push(n);
   }
   for (let y = 2 / 3 * h * l - l + 1; y <= 2 / 3 * h * l; y++) {
@@ -255,90 +562,73 @@ function borders(){
     let n = 1 / 3 * h * (y - 1) + 1;
     c2leftBorder.push(n);
   }
-  for (let y = 0; y < l/2; y++){
-    for (let z = 1; z <= l/2; z++){
-      let n = l*l/4+l/4+z+y*l;
+  for (let y = 0; y < l / 2; y++) {
+    for (let z = 1; z <= l / 2; z++) {
+      let n = l * l / 4 + l / 4 + z + y * l;
       coreCoord.push(n);
     }
   }
-  for (let y = 1; y <= l; y++){coreExtBorder.push(y);}
-  for (let y = 0; y < l; y++){
-    let n = l*y+1;
-    if(!coreExtBorder.includes(n)){
+  for (let y = 1; y <= l; y++) {
+    coreExtBorder.push(y);
+  }
+  for (let y = 0; y < l; y++) {
+    let n = l * y + 1;
+    if (!coreExtBorder.includes(n)) {
       coreExtBorder.push(n);
     }
   }
-  for (let y = 1; y <= l; y++){
-    let n = l*y;
-    if(!coreExtBorder.includes(n)){
+  for (let y = 1; y <= l; y++) {
+    let n = l * y;
+    if (!coreExtBorder.includes(n)) {
       coreExtBorder.push(n);
     }
   }
-  for (let y = l*l-l; y <= l*l; y++){coreExtBorder.push(y);}
-  for (let y = 0; y < coreCoord.length; y++){
-    let n1 = coreCoord[y]-1;
-    let n2 = coreCoord[y]+1;
-    let n3 = coreCoord[y]-l;
-    let n4 = coreCoord[y]+l;
-    if (!coreCoord.includes(n1)){
+  for (let y = l * l - l; y <= l * l; y++) {
+    coreExtBorder.push(y);
+  }
+  for (let y = 0; y < coreCoord.length; y++) {
+    let n1 = coreCoord[y] - 1;
+    let n2 = coreCoord[y] + 1;
+    let n3 = coreCoord[y] - l;
+    let n4 = coreCoord[y] + l;
+    if (!coreCoord.includes(n1)) {
       coreIntBorder.push(n1);
       coreBorder.push(coreCoord[y]);
     }
-    if (!coreCoord.includes(n2)){
+    if (!coreCoord.includes(n2)) {
       coreIntBorder.push(n2);
       coreBorder.push(coreCoord[y]);
     }
-    if (!coreCoord.includes(n3)){
+    if (!coreCoord.includes(n3)) {
       coreIntBorder.push(n3);
       coreBorder.push(coreCoord[y]);
     }
-    if (!coreCoord.includes(n4)){
+    if (!coreCoord.includes(n4)) {
       coreIntBorder.push(n4);
       coreBorder.push(coreCoord[y]);
     }
   }
-  for (let y = (l*(h/3-1)+1); y <= l*h/3; y++){
-  	flatCoreBorder.push(y);
+  for (let y = (l * (h / 3 - 1) + 1); y <= l * h / 3; y++) {
+    flatCoreBorder.push(y);
   }
 }
-borders();
 
-if (savegame != null) {
-  Object.entries(gamedata).forEach(([key, value]) => {
-    gamedata[key] = savegame[key];
-  });
-
-	offlineProgress();
-  if (gamedata.timeLeft > 0) {
-    selling();
-  }
-} else if (prestige != null) {
-  Object.entries(prestige).forEach(([key, value]) => {
-    gamedata[key] = prestige[key];
-  });
-} else if (gamedata.newgame === true) {
-  init();
-  gamedata.newgame = false;
-}
-
-function offlineProgress(){
-	var time = Math.round((Date.now() - gamedata.lasttick)/1000);
-  var resCycle = gamedata.prestigeTime + (gamedata.shipMaxCargo/(gamedata.yield1 * gamedata.drone1 + gamedata.yield2 * gamedata.drone2 + gamedata.yield3 * gamedata.drone3));
-	if (gamedata.shipTech.miningAI === 0 && gamedata.shipTech.tradingAI === 0){
-  	for (let i = 0; i<time; i++){
-    	droneMining();
+function offlineProgress() {
+  var time = Math.round((Date.now() - gamedata.lasttick) / 1000);
+  var resCycle = gamedata.prestigeTime + (gamedata.shipMaxCargo / (gamedata.yield1 * gamedata.drone1 + gamedata.yield2 * gamedata.drone2 + gamedata.yield3 * gamedata.drone3));
+  if (gamedata.tech.miningAI === 0 && gamedata.tech.tradingAI === 0) {
+    if (gamedata.d1left + gamedata.d2left + gamedata.d3left <= gamedata.drone1 + gamedata.drone2 + gamedata.drone3) {
+      for (let i = 0; i < time; i++) {
+        droneMining();
+      }
     }
-  } else if (gamedata.shipTech.miningAI === 1 && gamedata.shipTech.tradingAI === 0){
-  	for (let i = 0; i<Math.floor(time/resCycle); i++){
-    	Math.floor(Math.random() * 3);
+  } else if (gamedata.tech.miningAI === 1 && gamedata.tech.tradingAI === 0) {
+    for (let i = 0; i < Math.floor(time / resCycle); i++) {
+      Math.floor(Math.random() * 3);
     }
   }
+  gamedata.timeLeft = gamedata.timeLeft - time;
 }
-
-prestige = {
-  res: {
-  }
-};
 
 function init() {
   let x = Math.floor(Math.random() * 3);
@@ -350,6 +640,14 @@ function init() {
   x = Math.floor(Math.random() * 3);
   gamedata.corematerial.name = gamedata.possibleCoreMaterial[x];
   gamedata.corematerial.ref = "Res3" + String.fromCharCode(97 + x);
+
+  if (gamedata.newgame === false) {
+    gamedata.planetSize = Math.round(randn_bm(1,20,1));
+  } else if (gamedata.newgame === true) {
+    gamedata.planetSize = 10;
+  }
+  h = 3 * gamedata.planetSize;
+  l = h + h / 3;
 
   Object.entries(gamedata.notMined).forEach(([key, value]) => {
     let x = 0;
@@ -366,55 +664,22 @@ function init() {
     } else if (key.includes("3") && key.length === 6) {
       x = l / 2 * l / 2;
     }
-    for (let y = 1; y <= x; ++y) {/* 
-      if (!key.includes("core")){
-        gamedata.notMined[key].push(y);
-      } else {
-        if (coreCoord.includes(y)){
-          gamedata.notMined.d3core.push(y);
-        } else { */
-      		gamedata.notMined[key].push(y);
-        /* }
-              } */
+    for (let y = 1; y <= x; ++y) {
+      gamedata.notMined[key].push(y);
     }
-    
   });
+  gamedata.d1left = gamedata.drone1;
+  gamedata.d2left = gamedata.drone2;
+  gamedata.d3left = gamedata.drone3;
 
   Object.entries(gamedata.resValue).forEach(([key, value]) => {
     gamedata.resValue[key] = Math.random() * (((gamedata.baseValue[key] * 0.25) + gamedata.baseValue[key]) - gamedata.baseValue[key] * 0.75) + gamedata.baseValue[key] * 0.75;
   });
-}
-
-window.onload = function (){
-  document.getElementById("outermaterial").innerHTML = gamedata.outermaterial.name;
-  document.getElementById("innermaterial").innerHTML = gamedata.innermaterial.name;
-  document.getElementById("corematerial").innerHTML = gamedata.corematerial.name;
-  update("d1res1Cost", format(gamedata.d1res1Cost, "standard"));
-  update("d1res2Cost", format(gamedata.d1res2Cost, "standard"));
-  update("d1res3Cost", format(gamedata.d1res3Cost, "standard"));
-  update("d2res1Cost", format(gamedata.d2res1Cost, "standard"));
-  update("d2res2Cost", format(gamedata.d2res2Cost, "standard"));
-  update("d2res3Cost", format(gamedata.d2res3Cost, "standard"));
-  update("d3res1Cost", format(gamedata.d3res1Cost, "standard"));
-  update("d3res2Cost", format(gamedata.d3res2Cost, "standard"));
-  update("d3res3Cost", format(gamedata.d3res3Cost, "standard"));
-  Object.entries(gamedata.droneAssign).forEach(([key, value]) => {
-    update(key, format(gamedata.droneAssign[key], "round"));
-    update("local_" + key, format(gamedata.droneAssign[key], "round"));
-  });
-  document.getElementById("shipMenu").style.display = "none";
-  chooseRegion("map", "map");
-  tab("workbench");
-	save();
-  setTimeout(
-    function() {
-      document.getElementById('loading').style.display='none';
-      document.getElementById('main').style.display='grid';
-    }, 5000);
+  gamedata.newgame = false;
 }
 
 function reset() {
-	clearInterval(saveGameLoop);
+  clearInterval(saveGameLoop);
   window.localStorage.clear();
   document.location.reload(true);
   gamedata.newgame = true;
@@ -454,11 +719,26 @@ var refreshLoop = window.setInterval(function() {
   } else {
     document.getElementById("cargoFull").style.display = "none";
   }
-  
+
 }, 10);
 
 function update(id, content) {
   document.getElementById(id).innerHTML = content;
+}
+
+function randn_bm(min, max, skew) {
+  let u = 0,
+    v = 0;
+  while (u === 0) u = Math.random(); //Converting [0,1) to (0,1)
+  while (v === 0) v = Math.random();
+  let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+
+  num = num / 10.0 + 0.5; // Translate to 0 -> 1
+  if (num > 1 || num < 0) num = randn_bm(min, max, skew); // resample between 0 and 1 if out of range
+  num = Math.pow(num, skew); // Skew
+  num *= max - min; // Stretch to fill range
+  num += min; // offset to min
+  return num;
 }
 
 function format(number, type) {
@@ -473,7 +753,12 @@ function format(number, type) {
       Math.floor(exponent / 3) * 3
     );
   if (type == "standard") return new Intl.NumberFormat([locales, "en-EN"]).format(number);
-  if (type == "currency") return new Intl.NumberFormat([locales, "en-EN"], {style: "currency", currency: currency, maximumFractionDigits: 3, currencyDisplay: 'narrowSymbol'}).format(number);
+  if (type == "currency") return new Intl.NumberFormat([locales, "en-EN"], {
+    style: "currency",
+    currency: currency,
+    maximumFractionDigits: 3,
+    currencyDisplay: 'narrowSymbol'
+  }).format(number);
 }
 
 function removeItemOnce(arr, value) {
@@ -485,13 +770,13 @@ function removeItemOnce(arr, value) {
   return arr;
 }
 
-function rareDrop(){
-	if (Math.random() >= (1-1/100000)){
-  	gamedata.res.Rare3 += 1;
-  } else if (Math.random() >= (1-1/10000)){
-  	gamedata.res.Rare2 += 1;
-  } else if (Math.random() >= (1-1/1000)){
-  	gamedata.res.Rare1 += 1;
+function rareDrop() {
+  if (Math.random() >= (1 - 1 / 100000)) {
+    gamedata.res.Rare3 += 1;
+  } else if (Math.random() >= (1 - 1 / 10000)) {
+    gamedata.res.Rare2 += 1;
+  } else if (Math.random() >= (1 - 1 / 1000)) {
+    gamedata.res.Rare1 += 1;
   }
 }
 
@@ -520,38 +805,38 @@ function droneMining() {
     var toMine = [];
     var cell = [];
     if (value > 0) {
-    	if (key != "d3core"){
-      	cell = document.getElementById("mineGri" + key).getElementsByTagName("td");
+      if (key != "d3core") {
+        cell = document.getElementById("mineGri" + key).getElementsByTagName("td");
       } else {
-      	cell = document.getElementById("mineGrid2core").getElementsByTagName("td");
+        cell = document.getElementById("mineGrid2core").getElementsByTagName("td");
       }
-      if (key.includes("core") && gamedata.reach.core != 0){
-      	if (key.includes("2")){
+      if (key.includes("core") && gamedata.reach.core != 0) {
+        if (key.includes("2")) {
           const notMinedExt = gamedata.notMined[key].filter(function(n) {
-            if (!coreCoord.includes(n)){
+            if (!coreCoord.includes(n)) {
               return n;
             }
           })
-        	toMine = notMinedExt.slice(0, gamedata.droneAssign[key]);
+          toMine = notMinedExt.slice(0, gamedata.droneAssign[key]);
         } else if (key.includes("3")) {
-          if (gamedata.reach.d2core != 0 && gamedata.notMined.d2core.includes(1441)){
+          if (gamedata.reach.d2core != 0 && gamedata.notMined.d2core.includes(1441)) {
             const notMinedTemp = gamedata.notMined.d2core.filter(function(n) {
-            	if (coreCoord.includes(n)){
-                if (coreBorder.includes(gamedata.reach.d2core+l)){
-                  return n >= (gamedata.reach.d2core+l);
-                } else if (coreBorder.includes(gamedata.reach.d2core+1)){
-                  return n >= (gamedata.reach.d2core+1);
-                } else if (coreBorder.includes(gamedata.reach.d2core-1)){
-                  return n >= (gamedata.reach.d2core-1);
-                } else if (coreBorder.includes(gamedata.reach.d2core-l)){
-                  return n >= (gamedata.reach.d2core-l);
+              if (coreCoord.includes(n)) {
+                if (coreBorder.includes(gamedata.reach.d2core + l)) {
+                  return n >= (gamedata.reach.d2core + l);
+                } else if (coreBorder.includes(gamedata.reach.d2core + 1)) {
+                  return n >= (gamedata.reach.d2core + 1);
+                } else if (coreBorder.includes(gamedata.reach.d2core - 1)) {
+                  return n >= (gamedata.reach.d2core - 1);
+                } else if (coreBorder.includes(gamedata.reach.d2core - l)) {
+                  return n >= (gamedata.reach.d2core - l);
                 }
               }
             })
             toMine = notMinedTemp.slice(0, gamedata.droneAssign[key]);
-          } else if (!gamedata.notMined.d2core.includes(1441)){
-          	const notMinedCore = gamedata.notMined.d2core.filter(function(n) {
-              if (coreCoord.includes(n)){
+          } else if (!gamedata.notMined.d2core.includes(1441)) {
+            const notMinedCore = gamedata.notMined.d2core.filter(function(n) {
+              if (coreCoord.includes(n)) {
                 return n;
               }
             })
@@ -589,10 +874,10 @@ function droneMining() {
       if (toMine.length >= 0) {
         for (let x = 0; x < toMine.length; x++) {
           if (cell[toMine[x] - 1] === undefined) {
-          	if (key.includes("3")){
-            	removeItemOnce(gamedata.notMined.d2core, toMine[x]);
+            if (key.includes("3")) {
+              removeItemOnce(gamedata.notMined.d2core, toMine[x]);
             } else {
-            	removeItemOnce(gamedata.notMined[key], toMine[x]);
+              removeItemOnce(gamedata.notMined[key], toMine[x]);
             }
             if (key.includes("1")) {
               if (flatBorder.includes(toMine[x]) && gamedata.reach[key] === 0) {
@@ -600,21 +885,21 @@ function droneMining() {
               }
               gamedata.res[gamedata.outermaterial.ref] = gamedata.res[gamedata.outermaterial.ref] + gamedata.yield1;
             } else if (key.includes("2")) {
-            	if (key.includes("core") && coreIntBorder.includes(toMine[x]) && gamedata.reach[key] === 0){
+              if (key.includes("core") && coreIntBorder.includes(toMine[x]) && gamedata.reach[key] === 0) {
                 gamedata.reach[key] = toMine[x];
               }
               gamedata.res[gamedata.innermaterial.ref] = gamedata.res[gamedata.innermaterial.ref] + gamedata.yield2;
-              if (key.length === 3 && gamedata.reach.core === 0 && flatCoreBorder.includes(toMine[x])){
+              if (key.length === 3 && gamedata.reach.core === 0 && flatCoreBorder.includes(toMine[x])) {
                 gamedata.reach.core = toMine[x];
               }
             } else if (key.includes("3")) {
               gamedata.res[gamedata.corematerial.ref] = gamedata.res[gamedata.corematerial.ref] + gamedata.yield3;
-            
+
             }
 
           } else {
             if (key.includes("2") || key.includes("3")) {
-            	if (gamedata.minePower === 1){
+              if (gamedata.minePower === 1) {
                 gamedata.minePower = 2;
                 cell[toMine[x] - 1].click();
                 gamedata.minePower = 1;
@@ -655,52 +940,53 @@ function mining(grid, el, row, col, i, region, optReg) {
     }
   } else {
     postRow = 0;
-  }/* 
-    console.log("region : " + region);
-    console.log("optReg : " + optReg); */
+  }
+  /* 
+      console.log("region : " + region);
+      console.log("optReg : " + optReg); */
   if (
     ((!region.includes(antCol) && antCol != 0) ||
-     (!region.includes(antRow) && antRow != 0) ||
-     (!region.includes(postCol) && postCol != 0) ||
-     (!region.includes(postRow) && postRow != 0) ||
-     (optReg.includes("1") && optReg.length === 4 && (col === 0 || row === 0)) ||
-     (row === 0 && optReg.includes("1")) || 
-     ((row === 0 || row === l-1 || col === 0 || col === l-1) && optReg.includes("core") && gamedata.reach.core != 0) || 
-     (optReg.includes("2") && optReg.length === 3 && !gamedata.notMined["d1" + optReg.slice(2)].includes(i + (2 * h / 3 * (l) - l)) && row === 0) ||
-     (optReg.includes("2") && optReg.length === 4 && !gamedata.notMined["d1" + optReg.slice(2)].includes(h*(2*h/3)-(h/3-col-1)+2*h*row/3) && row === 0)
-     ) &&
+      (!region.includes(antRow) && antRow != 0) ||
+      (!region.includes(postCol) && postCol != 0) ||
+      (!region.includes(postRow) && postRow != 0) ||
+      (optReg.includes("1") && optReg.length === 4 && (col === 0 || row === 0)) ||
+      (row === 0 && optReg.includes("1")) ||
+      ((row === 0 || row === l - 1 || col === 0 || col === l - 1) && optReg.includes("core") && gamedata.reach.core != 0) ||
+      (optReg.includes("2") && optReg.length === 3 && !gamedata.notMined["d1" + optReg.slice(2)].includes(i + (2 * h / 3 * (l) - l)) && row === 0) ||
+      (optReg.includes("2") && optReg.length === 4 && ((!gamedata.notMined["d1" + optReg.slice(2)].includes(h * (2 * h / 3) + 2/3*h*(row+1)) && col === 0)||(!gamedata.notMined["d1" + optReg.slice(2)].includes(h * (2 * h / 3) - h/3+(col+1)) && row === 0)))
+    ) &&
     region.includes(i)
   ) {
     if (((optReg.length == 4 && cornerBorder.includes(i)) || (optReg.length == 3 && flatBorder.includes(i)) || (optReg.includes("core") && coreIntBorder.includes(i))) && gamedata.reach[optReg] === 0) {
-    	console.log("Reached next layer!");
+      console.log("Reached next layer!");
       gamedata.reach[optReg] = i;
     }
-    if (optReg.includes("2") && optReg.length === 3 && gamedata.reach.core === 0 && flatCoreBorder.includes(i)){
-    	console.log("Core region reached!");
+    if (optReg.includes("2") && optReg.length === 3 && gamedata.reach.core === 0 && flatCoreBorder.includes(i)) {
+      console.log("Core region reached!");
       gamedata.reach.core = col + optReg;
     }
     if (grid.parentNode.id.includes("core")) {
-    	if (!coreCoord.includes(i) && gamedata.minePower > 1 && gamedata.reach.core != 0){
-      	if (coreIntBorder.includes(i) && gamedata.reach.d2core === 0){
-    			console.log("Core reached!");
-        	gamedata.reach.d2core = i;
+      if (!coreCoord.includes(i) && gamedata.minePower > 1 && gamedata.reach.core != 0) {
+        if (coreIntBorder.includes(i) && gamedata.reach.d2core === 0) {
+          console.log("Core reached!");
+          gamedata.reach.d2core = i;
         }
         removeItemOnce(region, i);
         el.className = "clicked";
         gamedata.res[gamedata.innermaterial.ref] = gamedata.res[gamedata.innermaterial.ref] + gamedata.yield2;
-      } else if (coreCoord.includes(i) && gamedata.minePower > 2 && gamedata.reach.d2core != 0){
+      } else if (coreCoord.includes(i) && gamedata.minePower > 2 && gamedata.reach.d2core != 0) {
         removeItemOnce(region, i);
         el.className = "clicked";
         gamedata.res[gamedata.corematerial.ref] = gamedata.res[gamedata.corematerial.ref] + gamedata.yield3;
-      	
+
       }
     } else if (grid.parentNode.id.includes("1")) {
       removeItemOnce(region, i);
       el.className = "clicked";
       gamedata.res[gamedata.outermaterial.ref] = gamedata.res[gamedata.outermaterial.ref] + gamedata.yield1;
     } else if (
-    	grid.parentNode.id.includes("2") && 
-    	gamedata.minePower > 1
+      grid.parentNode.id.includes("2") &&
+      gamedata.minePower > 1
     ) {
       removeItemOnce(region, i);
       el.className = "clicked";
@@ -765,10 +1051,10 @@ function clickableGrid(rows, cols, callback, regionArray, regionName) {
         } else if (regionName.includes("d1")) {
           cell.className = "couche1";
         } else if (regionName.includes("d2")) {
-        	if (regionName.length === 6 && coreCoord.includes(i)){
-          	cell.className = "couche3";
+          if (regionName.length === 6 && coreCoord.includes(i)) {
+            cell.className = "couche3";
           } else {
-          	cell.className = "couche2";
+            cell.className = "couche2";
           }
         }
         cell.addEventListener(
@@ -986,7 +1272,7 @@ function changeStock(res, resCat) {
         el.value = format(gamedata.shipStock[res], "standard");
       }
     } else {
-    	el.value = format(gamedata.shipStock[res], "standard");
+      el.value = format(gamedata.shipStock[res], "standard");
     }
   } else {
     el.value = format(gamedata.shipStock[res], "standard");
@@ -1060,10 +1346,39 @@ function selling() {
 }
 
 function prestige1() {
+  clearInterval(saveGameLoop);
   Object.entries(gamedata.shipStock).forEach(([key, value]) => {
     prestige.res[key] = gamedata.shipStock[key];
   });
+  if ((gamedata.drone1 + gamedata.drone2 + gamedata.drone3) <= gamedata.shipBayCapacity) {
+    prestige.drone1 = gamedata.drone1;
+    prestige.drone2 = gamedata.drone2;
+    prestige.drone3 = gamedata.drone3;
+  } else {
+    let x = gamedata.shipBayCapacity;
+    let d1 = gamedata.drone1;
+    let d2 = gamedata.drone2;
+    let d3 = gamedata.drone3;
+    while (x > 0) {
+      if (d3 > 0) {
+        d3 -= 1;
+        x -= 1;
+        prestige.drone3 += 1;
+      } else if (d2 > 0) {
+        d2 -= 1;
+        x -= 1;
+        prestige.drone2 += 1;
+      } else if (d1 > 0) {
+        d1 -= 1;
+        x -= 1;
+        prestige.drone1 += 1;
+      } else {
+        break;
+      }
+    }
+  }
   prestige.money = gamedata.money;
+  prestige.newgame = false;
   localStorage.clear();
   localStorage.setItem("PrestigeSave", JSON.stringify(prestige));
   chooseRegion('map', 'map');
