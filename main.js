@@ -1186,19 +1186,19 @@ function rareDrop() {
   if (Math.random() >= (1 - 1 / 100000)) {
     gamedata.res.Rare3 += 1;
   	if (gamedata.rare.Rare3 == false) {
-  		document.getElementById("Rare3").parentNode.style.display = "block";
+  		document.getElementById("Rare3").parentNode.style.display = "flex";
       gamedata.rare.Rare3 = true;
     }
   } else if (Math.random() >= (1 - 1 / 10000)) {
     gamedata.res.Rare2 += 1;
   	if (gamedata.rare.Rare2 == false) {
-  		document.getElementById("Rare2").parentNode.style.display = "block";
+  		document.getElementById("Rare2").parentNode.style.display = "flex";
       gamedata.rare.Rare2 = true;
     }
   } else if (Math.random() >= (1 - 1 / 1000)) {
     gamedata.res.Rare1 += 1;
   	if (gamedata.rare.Rare1 == false) {
-  		document.getElementById("Rare1").parentNode.style.display = "block";
+  		document.getElementById("Rare1").parentNode.style.display = "flex";
       gamedata.rare.Rare1 = true;
     }
   }
