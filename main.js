@@ -1086,11 +1086,11 @@ function createShopItem(BP){
   buyable_title_text.innerText = nextItem.title;
   var cost = document.createElement("div");
   buyable_title_price.appendChild(cost);
-  cost.innerText = "Cost ($$$):";
+  cost.innerText = "Cost :";
   cost.className = "price";
   var amount = document.createElement("span");
   cost.appendChild(amount);
-  amount.innerText = nextItem.price;
+  amount.innerText = format(nextItem.price, "currency");
 
   
 }
