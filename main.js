@@ -24,6 +24,20 @@ var gamedata = {
     Rare2: 0,
     Rare3: 0
   },
+  resName: {
+    Res1a: "Iron",
+    Res1b: "Copper",
+    Res1c: "Aluminium",
+    Res2a: "Zinc",
+    Res2b: "Lead",
+    Res2c: "Silver",
+    Res3a: "Iridium",
+    Res3b: "Gold",
+    Res3c: "Palladium",
+    Rare1: "Rare1",
+    Rare2: "Rare2",
+    Rare3: "Rare3"
+  },
   baseValue: {
     Res1a: 1,
     Res1b: 1,
@@ -52,9 +66,11 @@ var gamedata = {
     Rare2: 0,
     Rare3: 0
   },
-  sumValue: 0,
-  sellingTime: 10,
-  timeLeft: 0,
+  rare: {
+    Rare1: false,
+    Rare2: false,
+    Rare3: false
+  },
   minePower: 1,
   reach: {
     d1NW: 0,
@@ -140,13 +156,13 @@ var gamedata = {
     d3SE: 0 */
   },
   d1base: 2,
-  d1x: 1.15,
+  d1x: 1.4,
   d1rate: 1,
   d2base: 1,
-  d2x: 1.15,
+  d2x: 1.4,
   d2rate: 1,
-  d3base: 0.5,
-  d3x: 1.15,
+  d3base: 0.2,
+  d3x: 1.4,
   d3rate: 1,
   yield1: 0.1,
   yield2: 0.01,
@@ -163,9 +179,9 @@ var gamedata = {
   d2res3Cost: 1,
   drone3: 0,
   d3left: 0,
-  d3res1Cost: 0.5,
-  d3res2Cost: 0.5,
-  d3res3Cost: 0.5,
+  d3res1Cost: 0.2,
+  d3res2Cost: 0.2,
+  d3res3Cost: 0.2,
   shipCargoLvl: 1,
   shipMaxCargo: 10,
   shipCapacity: 10,
@@ -184,25 +200,45 @@ var gamedata = {
     Rare2: 0,
     Rare3: 0
   },
+  sumValue: 0,
+  sellingTime: 150,
+  timeLeft: 0,
   tech: {
     membercard1: 0,
     membercard2: 0,
     membercard3: 0,
     lab: 0,
-    drone1: 0,
-    drone2: 0,
-    drone3: 0,
-    exoMk1: 0,
+    droneMk1: 0,
+    droneMk2: 0,
+    droneMk3: 0,
+    exoMk1: 1,
     exoMk2: 0,
+    exoMk3: 0,
+    cargoMk1: 1,
     cargoMk2: 0,
     cargoMk3: 0,
+    droneBayMk1: 1,
     droneBayMk2: 0,
     droneBayMk3: 0,
-    tractorBeam: 0,
-    scanner: 0,
+    thrustersMk1: 1,
+    thrustersMk2: 0,
+    thrustersMk3: 0,
+    antennaMk1: 1,
+    antennaMk2: 0,
+    antennaMk3: 0,
+    converterMk1: 0,
+    converterMk2: 0,
+    converterMk3: 0,
+    autonomousDrone: 0,
+    massReducer: 0,
+    engineeredDroneMk2: 0,
+    planetAnalyzer: 0,
     teleporter: 0,
     tradingAI: 0,
-    miningAI: 0
+    miningAI: 0,
+    spatialDrillingLaser: 0,
+    tractorBeam: 0,
+    autoPrestige: 0
   },
   prestigeTime: 10,
   lasttick: 0
@@ -210,250 +246,485 @@ var gamedata = {
 
 var blueprints = {
   membercard1: {
-    prev: "",
-    next: "membercard2",
+    prev: [],
+    next: ["membercard2"],
+    title: "Member Card I",
     bought: false,
-    price: 2500,
-    Res1a: 0,
-    Res1b: 0,
-    Res1c: 0,
-    Res2a: 0,
-    Res2b: 0,
-    Res2c: 0,
-    Res3a: 0,
-    Res3b: 0,
-    Res3c: 0,
-    Rare1: 0,
-    Rare2: 0,
-    Rare3: 0
+    toCraft: false,
+    price: 2500
   },
   membercard2: {
-    prev: "membercard1",
-    next: "membercard3",
+    prev: ["membercard1"],
+    next: ["membercard3"],
+    title: "Member Card II",
     bought: false,
-    price: 5000,
-    Res1a: 0,
-    Res1b: 0,
-    Res1c: 0,
-    Res2a: 0,
-    Res2b: 0,
-    Res2c: 0,
-    Res3a: 0,
-    Res3b: 0,
-    Res3c: 0,
-    Rare1: 0,
-    Rare2: 0,
-    Rare3: 0
+    toCraft: false,
+    price: 5000
   },
   membercard3: {
-    prev: "membercard2",
-    next: "membercard4",
+    prev: ["membercard2"],
+    next: [],
+    title: "Member Card III",
     bought: false,
-    price: 0,
-    Res1a: 0,
-    Res1b: 0,
-    Res1c: 0,
-    Res2a: 0,
-    Res2b: 0,
-    Res2c: 0,
-    Res3a: 0,
-    Res3b: 0,
-    Res3c: 0,
-    Rare1: 0,
-    Rare2: 0,
-    Rare3: 0
+    toCraft: false,
+    price: 0
   },
   lab: {
-    prev: "",
-    next: "",
+    prev: [],
+    next: [],
+    title: "Lab",
     bought: false,
-    price: 0,
-    Res1a: 0,
-    Res1b: 0,
-    Res1c: 0,
-    Res2a: 0,
-    Res2b: 0,
-    Res2c: 0,
-    Res3a: 0,
-    Res3b: 0,
-    Res3c: 0,
-    Rare1: 0,
-    Rare2: 0,
-    Rare3: 0
+    toCraft: true,
+    price: 500,
+    res: {
+      Res1a: 15,
+      Res1b: 15,
+      Res1c: 15,
+      Res2a: 5,
+      Res2b: 5,
+      Res2c: 5,
+      Res3a: 0,
+      Res3b: 0,
+      Res3c: 0
+    }
   },
-  drone1: {
-    prev: "",
-    next: "drone2",
+  droneMk1: {
+    prev: [],
+    next: ["droneMk2", "exoMk2"],
+    title: "Drone Mk1",
     bought: false,
+    toCraft: true,
     price: 10,
-    Res1a: 2,
-    Res1b: 2,
-    Res1c: 2,
-    Res2a: 0,
-    Res2b: 0,
-    Res2c: 0,
-    Res3a: 0,
-    Res3b: 0,
-    Res3c: 0,
-    Rare1: 0,
-    Rare2: 0,
-    Rare3: 0
+    res: {
+      Res1a: 2,
+      Res1b: 2,
+      Res1c: 2,
+      Res2a: 0,
+      Res2b: 0,
+      Res2c: 0,
+      Res3a: 0,
+      Res3b: 0,
+      Res3c: 0
+    }
   },
-  drone2: {
-    prev: "drone1",
-    next: "drone3",
+  droneMk2: {
+    prev: ["droneMk1", "exoMk2"],
+    next: ["droneMk3", "exoMk3"],
+    title: "Drone Mk2",
     bought: false,
+    toCraft: true,
     price: 250,
-    Res1a: 0,
-    Res1b: 0,
-    Res1c: 0,
-    Res2a: 1,
-    Res2b: 1,
-    Res2c: 1,
-    Res3a: 0,
-    Res3b: 0,
-    Res3c: 0,
-    Rare1: 0,
-    Rare2: 0,
-    Rare3: 0
+    res: {
+      Res1a: 0,
+      Res1b: 0,
+      Res1c: 0,
+      Res2a: 1,
+      Res2b: 1,
+      Res2c: 1,
+      Res3a: 0,
+      Res3b: 0,
+      Res3c: 0
+    }
   },
-  drone3: {
-    prev: "drone2",
-    next: "",
+  droneMk3: {
+    prev: ["droneMk2", "exoMk3"],
+    next: [],
+    title: "Drone Mk3",
     bought: false,
+    toCraft: true,
     price: 0,
-    Res1a: 0,
-    Res1b: 0,
-    Res1c: 0,
-    Res2a: 0,
-    Res2b: 0,
-    Res2c: 0,
-    Res3a: 0.5,
-    Res3b: 0.5,
-    Res3c: 0.5,
-    Rare1: 0,
-    Rare2: 0,
-    Rare3: 0
+    res: {
+      Res1a: 0,
+      Res1b: 0,
+      Res1c: 0,
+      Res2a: 0,
+      Res2b: 0,
+      Res2c: 0,
+      Res3a: 0.2,
+      Res3b: 0.2,
+      Res3c: 0.2
+    }
   },
   exoMk1: {
-    prev: "",
-    next: "exoMk2",
-    bought: false,
-    price: 350,
-    Res1a: 33,
-    Res1b: 33,
-    Res1c: 33,
-    Res2a: 0,
-    Res2b: 0,
-    Res2c: 0,
-    Res3a: 0,
-    Res3b: 0,
-    Res3c: 0,
-    Rare1: 0,
-    Rare2: 0,
-    Rare3: 0
+    prev: [],
+    next: ["exoMk2"],
+    bought: true
   },
   exoMk2: {
-    prev: "exoMk1",
-    next: "",
+    prev: ["exoMk1", "drone1"],
+    next: ["exoMk2","drone2"],
+    title: "Exoskeleton Mk1",
     bought: false,
-    price: 350,
-    Res1a: 33,
-    Res1b: 33,
-    Res1c: 33,
-    Res2a: 0,
-    Res2b: 0,
-    Res2c: 0,
-    Res3a: 0,
-    Res3b: 0,
-    Res3c: 0,
-    Rare1: 0,
-    Rare2: 0,
-    Rare3: 0
+    toCraft: true,
+    price: 150,
+    res: {
+      Res1a: 33,
+      Res1b: 33,
+      Res1c: 33,
+      Res2a: 0,
+      Res2b: 0,
+      Res2c: 0,
+      Res3a: 0,
+      Res3b: 0,
+      Res3c: 0}
+  },
+  exoMk3: {
+    prev: ["exoMk2", "drone2"],
+    next: ["drone3"],
+    title: "Exoskeleton Mk2",
+    bought: false,
+    toCraft: true,
+    price: 2500,
+    res: {
+      Res1a: 150,
+      Res1b: 150,
+      Res1c: 150,
+      Res2a: 33,
+      Res2b: 33,
+      Res2c: 33,
+      Res3a: 0,
+      Res3b: 0,
+      Res3c: 0
+    }
+  },
+  cargoMk1: {
+    prev: [],
+    next: ["cargoMk2", "droneBayMk2"],
+    bought: true
   },
   cargoMk2: {
-    prev: "",
-    next: "cargoMk3",
+    prev: ["cargoMk1"],
+    next: ["cargoMk3", "droneBayMk3"],
+    title: "Cargo Bay Mk2",
     bought: false,
+    toCraft: true,
     price: 100,
-    Res1a: 3.3,
-    Res1b: 3.3,
-    Res1c: 3.3,
-    Res2a: 0,
-    Res2b: 0,
-    Res2c: 0,
-    Res3a: 0,
-    Res3b: 0,
-    Res3c: 0,
-    Rare1: 0,
-    Rare2: 0,
-    Rare3: 0
+    res: {
+      Res1a: 3.3,
+      Res1b: 3.3,
+      Res1c: 3.3,
+      Res2a: 0,
+      Res2b: 0,
+      Res2c: 0,
+      Res3a: 0,
+      Res3b: 0,
+      Res3c: 0
+    }
   },
   cargoMk3: {
-    prev: "cargoMk2",
-    next: "cargoMk4",
+    prev: ["cargoMk2"],
+    next: [],
+    title: "Cargo Bay Mk3",
     bought: false,
-    price: 0,
-    Res1a: 0,
-    Res1b: 0,
-    Res1c: 0,
-    Res2a: 0,
-    Res2b: 0,
-    Res2c: 0,
-    Res3a: 0,
-    Res3b: 0,
-    Res3c: 0,
-    Rare1: 0,
-    Rare2: 0,
-    Rare3: 0
+    toCraft: true,
+    price: 2000,
+    res: {
+      Res1a: 30,
+      Res1b: 30,
+      Res1c: 30,
+      Res2a: 3.3,
+      Res2b: 3.3,
+      Res2c: 3.3,
+      Res3a: 0,
+      Res3b: 0,
+      Res3c: 0
+    }
+  },
+  droneBayMk1: {
+    prev: [],
+    next: ["droneBayMk2"],
+    bought: true
   },
   droneBayMk2: {
-    prev: "",
-    next: "droneBayMk3",
+    prev: ["cargoMk1", "droneBayMk1"],
+    next: ["droneBayMk3"],
+    title: "Drone Bay Mk2",
     bought: false,
-    price: 150,
-    Res1a: 30,
-    Res1b: 30,
-    Res1c: 30,
-    Res2a: 0,
-    Res2b: 0,
-    Res2c: 0,
-    Res3a: 0,
-    Res3b: 0,
-    Res3c: 0,
-    Rare1: 0,
-    Rare2: 0,
-    Rare3: 0
+    toCraft: true,
+    price: 250,
+    res: {
+      Res1a: 30,
+      Res1b: 30,
+      Res1c: 30,
+      Res2a: 1,
+      Res2b: 1,
+      Res2c: 1,
+      Res3a: 0,
+      Res3b: 0,
+      Res3c: 0
+    }
   },
   droneBayMk3: {
-    prev: "droneBayMk2",
-    next: "droneBayMk4",
+    prev: ["cargoMk2", "droneBayMk2"],
+    next: [],
+    title: "Drone Bay Mk3",
     bought: false,
-    price: 0,
-    Res1a: 0,
-    Res1b: 0,
-    Res1c: 0,
-    Res2a: 0,
-    Res2b: 0,
-    Res2c: 0,
-    Res3a: 0,
-    Res3b: 0,
-    Res3c: 0,
-    Rare1: 0,
-    Rare2: 0,
-    Rare3: 0
+    toCraft: true,
+    price: 4000,
+    res: {
+      Res1a: 300,
+      Res1b: 300,
+      Res1c: 300,
+      Res2a: 30,
+      Res2b: 30,
+      Res2c: 30,
+      Res3a: 0.05,
+      Res3b: 0.05,
+      Res3c: 0.05,
+    }
   },
-  tractorBeam: {},
-  scanner: {},
-  teleporter: {},
-  tradingAI: {},
-  miningAI: {}
+  thrustersMk1: {
+    prev: [],
+    next: ["thrustersMk2"],
+    bought: true
+  },
+  thrustersMk2: {
+    prev: ["thrustersMk1"],
+    next: ["thrustersMk3"],
+    title: "Thrusters Mk2",
+    bought: false,
+    toCraft: true,
+    price: 350,
+    res: {
+      Res1a: 33,
+      Res1b: 33,
+      Res1c: 33,
+      Res2a: 0.3,
+      Res2b: 0.3,
+      Res2c: 0.3,
+      Res3a: 0,
+      Res3b: 0,
+      Res3c: 0,
+    }
+  },
+  thrustersMk3: {
+    prev: ["thrustersMk2"],
+    next: [],
+    title: "Thrusters Mk3",
+    bought: false,
+    toCraft: true,
+    price: 2000,
+    res: {
+      Res1a: 210,
+      Res1b: 210,
+      Res1c: 210,
+      Res2a: 21,
+      Res2b: 21,
+      Res2c: 21,
+      Res3a: 0.21,
+      Res3b: 0.21,
+      Res3c: 0.21
+    }
+  },
+  antennaMk1: {
+    prev: [],
+    next: ["antennaMk2"],
+    bought: true
+  },
+  antennaMk2: {
+    prev: ["antennaMk1"],
+    next: ["antennaMk3"],
+    title: "Antenna Mk2",
+    bought: false,
+    toCraft: true,
+    price: 1000,
+    res: {
+      Res1a: 1,
+      Res1b: 1,
+      Res1c: 1,
+      Res2a: 1,
+      Res2b: 1,
+      Res2c: 1,
+      Res3a: 0,
+      Res3b: 0,
+      Res3c: 0
+    }
+  },
+  antennaMk3: {
+    prev: ["antennaMk2"],
+    next: [],
+    title: "Antenna Mk3",
+    bought: false,
+    toCraft: true,
+    price: 5000,
+    res: {
+      Res1a: 1,
+      Res1b: 1,
+      Res1c: 1,
+      Res2a: 1,
+      Res2b: 1,
+      Res2c: 1,
+      Res3a: 1,
+      Res3b: 1,
+      Res3c: 1
+    }
+  }
+}
+
+var research = {
+  engineeredDroneMk2: {
+    prev: [],
+    next: [],
+    title: "Engineered Drone Mk2",
+    bought: false,
+    toCraft: false,
+    RP: 9700
+  },
+  planetAnalyzer: {
+    prev: [],
+    next: ["massReducer"],
+    title: "Planet Analyzer",
+    bought: false,
+    toCraft: true,
+    RP: 4850,
+    res: {
+      Res1a: 30,
+      Res1b: 30,
+      Res1c: 30,
+      Res2a: 3,
+      Res2b: 3,
+      Res2c: 3,
+      Res3a: 0,
+      Res3b: 0,
+      Res3c: 0
+    }
+  },
+  converterMk1: {
+    prev: [],
+    next: ["massReducer", "converterMk2"],
+    title: "Resource Converter Mk1",
+    bought: false,
+    toCraft: true,
+    RP: 4850,
+    res: {
+      Res1a: 30,
+      Res1b: 30,
+      Res1c: 30,
+      Res2a: 3,
+      Res2b: 3,
+      Res2c: 3,
+      Res3a: 0,
+      Res3b: 0,
+      Res3c: 0
+    }
+  },
+  massReducer: {
+    prev: ["planetAnalyzer", "converterMk1"],
+    next: [],
+    title: "Mass Reducer",
+    bought: false,
+    toCraft: false,
+    RP: 4850
+  },
+  converterMk2: {
+    prev: ["converterMk1"],
+    next: ["converterMk3"],
+    title: "Resource Converter Mk2",
+    bought: false,
+    toCraft: false,
+    RP: 29099
+  },
+  converterMk3: {
+    prev: ["converterMk2"],
+    next: [],
+    title: "Resource Converter Mk3",
+    bought: false,
+    toCraft: false,
+    RP: 43648
+  },
+  tractorBeam: {
+    prev: [],
+    next: ["miningAI"],
+    title: "Tractor Beam",
+    bought: false,
+    toCraft: true,
+    RP: 4850,
+    res: {
+      Res1a: 30,
+      Res1b: 30,
+      Res1c: 30,
+      Res2a: 3,
+      Res2b: 3,
+      Res2c: 3,
+      Res3a: 0,
+      Res3b: 0,
+      Res3c: 0
+    }
+  },
+  autonomousDrone: {
+    prev:[],
+    next: ["miningAI"],
+    title: "Autonomous Drones",
+    bought: false,
+    toCraft: false,
+    RP: 4850
+  },
+  miningAI: {
+    prev: ["tractorBeam", "autonomousDrone"],
+    next: ["tradingAI", "spatialDrillingLaser"],
+    title: "Mining AI",
+    bought: false,
+    toCraft: false,
+    RP: 4850
+  },
+  tradingAI: {
+    prev: ["miningAI"],
+    next: [],
+    title: "Trading AI",
+    bought: false,
+    toCraft: false,
+    RP: 9700
+  },
+  spatialDrillingLaser: {
+    prev: ["miningAI"],
+    next: ["teleporter", "autoPrestige"],
+    title: "Spatial Drilling Laser",
+    bought: false,
+    toCraft: true,
+    RP: 130944,
+    res: {
+      Res1a: 147,
+      Res1b: 147,
+      Res1c: 147,
+      Res2a: 21,
+      Res2b: 21,
+      Res2c: 21,
+      Res3a: 3,
+      Res3b: 3,
+      Res3c: 3
+    }
+  },
+  teleporter: {
+    prev: ["spatialDrillingLaser"],
+    next: [],
+    title: "Teleporter",
+    bought: false,
+    toCraft: true,
+    RP: 261888,
+    res: {
+      Res1a: 300,
+      Res1b: 300,
+      Res1c: 300,
+      Res2a: 30,
+      Res2b: 30,
+      Res2c: 30,
+      Res3a: 3,
+      Res3b: 3,
+      Res3c: 3
+    }
+  },
+  autoPrestige: {
+    prev: ["spatialDrillingLaser"],
+    next: [],
+    title: "AutoPrestigeTBD",
+    bought: false,
+    toCraft: false,
+  }
 }
 
 window.onload = function() {
-  document.getElementById("shipMenu").style.display = "none";
   chooseRegion("map", "map");
-  tab("workbench");
+  tab("shop");
 
   if (savegame != null) {
     Object.entries(gamedata).forEach(([key, value]) => {
@@ -472,7 +743,8 @@ window.onload = function() {
   prestige = {
     res: {}
   };
-  if (gamedata.newgame == true) {
+  
+  if (gamedata.newgame === true) {
     document.getElementById('loading').style.display = 'flex';
     setTimeout(
       function() {
@@ -484,34 +756,58 @@ window.onload = function() {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('main').style.display = 'grid';
   }
+  
   document.getElementById("outermaterial").innerHTML = gamedata.outermaterial.name;
   document.getElementById("innermaterial").innerHTML = gamedata.innermaterial.name;
   document.getElementById("corematerial").innerHTML = gamedata.corematerial.name;
-  gamedata.d1res1Cost = gamedata.d1base * Math.pow(gamedata.d1x, gamedata.drone1);
-  gamedata.d1res2Cost = gamedata.d1base * Math.pow(gamedata.d1x, gamedata.drone1);
-  gamedata.d1res3Cost = gamedata.d1base * Math.pow(gamedata.d1x, gamedata.drone1);
-  gamedata.d2res1Cost = gamedata.d2base * Math.pow(gamedata.d2x, gamedata.drone2);
-  gamedata.d2res2Cost = gamedata.d2base * Math.pow(gamedata.d2x, gamedata.drone2);
-  gamedata.d2res3Cost = gamedata.d2base * Math.pow(gamedata.d2x, gamedata.drone2);
-  gamedata.d3res1Cost = gamedata.d3base * Math.pow(gamedata.d3x, gamedata.drone3);
-  gamedata.d3res2Cost = gamedata.d3base * Math.pow(gamedata.d3x, gamedata.drone3);
-  gamedata.d3res3Cost = gamedata.d3base * Math.pow(gamedata.d3x, gamedata.drone3);
-  update("d1res1Cost", format(gamedata.d1res1Cost, "standard"));
-  update("d1res2Cost", format(gamedata.d1res2Cost, "standard"));
-  update("d1res3Cost", format(gamedata.d1res3Cost, "standard"));
-  update("d2res1Cost", format(gamedata.d2res1Cost, "standard"));
-  update("d2res2Cost", format(gamedata.d2res2Cost, "standard"));
-  update("d2res3Cost", format(gamedata.d2res3Cost, "standard"));
-  update("d3res1Cost", format(gamedata.d3res1Cost, "standard"));
-  update("d3res2Cost", format(gamedata.d3res2Cost, "standard"));
-  update("d3res3Cost", format(gamedata.d3res3Cost, "standard"));
+  
+  Object.entries(blueprints).forEach(([key, value]) => {
+  	if (gamedata.tech[key] === 1){
+    	blueprints[key].bought = true;
+    }
+  });
+  Object.entries(research).forEach(([key, value]) => {
+  	if (gamedata.tech[key] === 1){
+    	research[key].bought = true;
+    }
+  });
+  
+  Object.entries(gamedata.rare).forEach(([key, value]) => {
+  	if (gamedata.rare[key] === false) {
+  		document.getElementById(key).parentNode.style.display = "none";
+    }
+  });
+  
   Object.entries(gamedata.droneAssign).forEach(([key, value]) => {
     update(key, format(gamedata.droneAssign[key], "round"));
     update("local_" + key, format(gamedata.droneAssign[key], "round"));
   });
-  h = 3 * gamedata.planetSize;
-  l = h + h / 3;
-  borders();
+  
+  if (gamedata.tech.lab === 1) {
+  	document.getElementById("labButton").style.display = "block";
+  } else {
+  	document.getElementById("labButton").style.display = "none";
+  }
+  if (gamedata.tech.droneMk1 === 1) {
+  	document.getElementById("workBenchButton").style.display = "block";
+  	setDronePrice();
+  	document.getElementById("droneMk1").style.display = "block";
+  } else {
+  	/* document.getElementById("workBenchButton").style.display = "none"; */
+  	document.getElementById("droneMk1").style.display = "none";
+  	document.getElementById("droneMk2").style.display = "none";
+  	document.getElementById("droneMk3").style.display = "none";
+  }
+  if (gamedata.tech.droneMk2 === 1) {
+  	document.getElementById("droneMk2").style.display = "block";
+  }
+  if (gamedata.tech.droneMk3 === 1) {
+  	document.getElementById("droneMk3").style.display = "block";
+  }
+  
+  setDronePrice();
+  setDim();
+  setShop();
   save();
 }
 
@@ -726,6 +1022,122 @@ function update(id, content) {
   document.getElementById(id).innerHTML = content;
 }
 
+function setDronePrice (){
+  gamedata.d1res1Cost = gamedata.d1base * Math.pow(gamedata.d1x, gamedata.drone1);
+  gamedata.d1res2Cost = gamedata.d1base * Math.pow(gamedata.d1x, gamedata.drone1);
+  gamedata.d1res3Cost = gamedata.d1base * Math.pow(gamedata.d1x, gamedata.drone1);
+  gamedata.d2res1Cost = gamedata.d2base * Math.pow(gamedata.d2x, gamedata.drone2);
+  gamedata.d2res2Cost = gamedata.d2base * Math.pow(gamedata.d2x, gamedata.drone2);
+  gamedata.d2res3Cost = gamedata.d2base * Math.pow(gamedata.d2x, gamedata.drone2);
+  gamedata.d3res1Cost = gamedata.d3base * Math.pow(gamedata.d3x, gamedata.drone3);
+  gamedata.d3res2Cost = gamedata.d3base * Math.pow(gamedata.d3x, gamedata.drone3);
+  gamedata.d3res3Cost = gamedata.d3base * Math.pow(gamedata.d3x, gamedata.drone3);
+  update("d1res1Cost", format(gamedata.d1res1Cost, "standard"));
+  update("d1res2Cost", format(gamedata.d1res2Cost, "standard"));
+  update("d1res3Cost", format(gamedata.d1res3Cost, "standard"));
+  update("d2res1Cost", format(gamedata.d2res1Cost, "standard"));
+  update("d2res2Cost", format(gamedata.d2res2Cost, "standard"));
+  update("d2res3Cost", format(gamedata.d2res3Cost, "standard"));
+  update("d3res1Cost", format(gamedata.d3res1Cost, "standard"));
+  update("d3res2Cost", format(gamedata.d3res2Cost, "standard"));
+  update("d3res3Cost", format(gamedata.d3res3Cost, "standard"));
+}
+
+function setDim(){
+  h = 3 * gamedata.planetSize;
+  l = h + h / 3;
+  borders();
+}
+
+function setShop(){
+	Object.entries(blueprints).forEach(([key, value]) => {
+  	if (blueprints[key].bought === true){
+    	for (let i = 0; i < blueprints[key].next.length; i++){
+      	createShopItem(blueprints[key].next[i]);
+      }
+    }
+  });
+}
+
+function createShopItem(BP){
+	var nextItem = blueprints[BP];
+  var buyable = document.createElement("div");
+  buyable.className = "buyable";
+  document.getElementById("shop").appendChild(buyable);
+  var buyable_text = document.createElement("div");
+  buyable_text.className = "buyable_text";
+  buyable.appendChild(buyable_text);
+  let btn = document.createElement("button");
+  btn.innerText = "Buy";
+  btn.className = "buyable_button";
+  btn.addEventListener("click", function () {
+    buyShopItem(false);
+  });
+  buyable.appendChild(btn);
+  var buyable_title = document.createElement("div");
+  buyable_title.className = "buyable_title";
+  buyable_text.appendChild(buyable_title);
+  var buyable_title_text = document.createElement("span");
+  buyable_title_text.className = "buyable_title_text";
+  var buyable_title_price = document.createElement("div");
+  buyable_title_price.className = "buyable_title_price";
+  buyable_title.appendChild(buyable_title_text);
+  buyable_title.appendChild(buyable_title_price);
+  buyable_title_text.innerText = nextItem.title;
+  var cost = document.createElement("div");
+  buyable_title_price.appendChild(cost);
+  cost.innerText = "Cost ($$$):";
+  cost.className = "price";
+  var amount = document.createElement("span");
+  cost.appendChild(amount);
+  amount.innerText = nextItem.price;
+
+  
+}
+
+function buyShopItem(){
+	
+}
+
+function createWorkshopItem(BP){
+	var nextItem = blueprints[BP];
+  var buyable = document.createElement("div");
+  buyable.className = "buyable";
+  document.getElementById("shop").appendChild(buyable);
+  var buyable_text = document.createElement("div");
+  buyable_text.className = "buyable_text";
+  buyable.appendChild(buyable_text);
+  var buyable_title = document.createElement("div");
+  buyable_title.className = "buyable_title";
+  buyable_text.appendChild(buyable_title);
+  var buyable_title_text = document.createElement("div");
+  buyable_title_text.className = "buyable_title_text";
+  var buyable_title_price = document.createElement("div");
+  buyable_title_price.className = "buyable_title_price";
+  buyable_title.appendChild(buyable_title_text);
+  buyable_title.appendChild(buyable_title_price);
+  buyable_title_text.innerText = nextItem.title;
+  if (nextItem.toCraft === true){
+    Object.entries(nextItem.res).forEach(([key, value]) => {
+    	if (value > 0){
+        var res = document.createElement("div");
+        if (key.includes("1")){
+        	res.className = "cat1";
+        } else if (key.includes("2")){
+        	res.className = "cat2";
+        } else {
+        	res.className = "cat3";
+        }
+  			buyable_title_price.appendChild(res);
+        res.innerText = gamedata.resName[key];
+  			var amount = document.createElement("span");
+  			res.appendChild(amount);
+        amount.innerText = value;
+      }
+    });
+  }
+}
+
 function randn_bm(min, max, skew) {
   let u = 0,
     v = 0;
@@ -773,10 +1185,22 @@ function removeItemOnce(arr, value) {
 function rareDrop() {
   if (Math.random() >= (1 - 1 / 100000)) {
     gamedata.res.Rare3 += 1;
+  	if (gamedata.rare.Rare3 == false) {
+  		document.getElementById("Rare3").parentNode.style.display = "block";
+      gamedata.rare.Rare3 = true;
+    }
   } else if (Math.random() >= (1 - 1 / 10000)) {
     gamedata.res.Rare2 += 1;
+  	if (gamedata.rare.Rare2 == false) {
+  		document.getElementById("Rare2").parentNode.style.display = "block";
+      gamedata.rare.Rare2 = true;
+    }
   } else if (Math.random() >= (1 - 1 / 1000)) {
     gamedata.res.Rare1 += 1;
+  	if (gamedata.rare.Rare1 == false) {
+  		document.getElementById("Rare1").parentNode.style.display = "block";
+      gamedata.rare.Rare1 = true;
+    }
   }
 }
 
@@ -1228,17 +1652,48 @@ function buyDrone3() {
 }
 
 function shipMenu() {
+  var shipTech = ["cargo", "droneBay", "thrusters", "antenna", "planetAnalyzer", "tractorBeam", "miningAI", "tradingAI", "spatialDrillingLaser", "teleporter", "autoPrestige"];
   document.getElementById("shipMenu").style.display = "grid";
   let root = document.documentElement.style;
   root.setProperty("--res1GaugeH", (100 / (gamedata.shipMaxCargo / (gamedata.shipStock.Res1a + gamedata.shipStock.Res1b + gamedata.shipStock.Res1c))) + "%");
   root.setProperty("--res2GaugeH", (100 / (gamedata.shipMaxCargo / (gamedata.shipStock.Res2a + gamedata.shipStock.Res2b + gamedata.shipStock.Res2c))) + "%");
   root.setProperty("--res3GaugeH", (100 / (gamedata.shipMaxCargo / (gamedata.shipStock.Res3a + gamedata.shipStock.Res3b + gamedata.shipStock.Res3c))) + "%");
 
+  Object.entries(gamedata.rare).forEach(([key, value]) => {
+  	if (gamedata.rare[key] == false) {
+  		let el = document.getElementsByClassName(key)
+    	for(var i=0; i<el.length; i++){
+        el[i].style.display = "none";
+      }
+    } else {
+  		let el = document.getElementsByClassName(key)
+    	for(var i=0; i<el.length; i++){
+        el[i].style.display = "block";
+      }
+    }
+  });
+  
   Object.entries(gamedata.res).forEach(([key, value]) => {
     let el = document.getElementById(key + "Ship");
     el.value = format(gamedata.shipStock[key], "standard");
     update(key + "Value", format(gamedata.resValue[key], "standard"));
   });
+  for (let i = 0; i<4; i++){
+  	if (gamedata.tech[shipTech[i] + "Mk3"] == 1){
+  	document.getElementById(shipTech[i]).innerText = "Mk3";
+    } else if (gamedata.tech[shipTech[i] + "Mk2"] == 1){
+  	document.getElementById(shipTech[i]).innerText = "Mk2";
+    } else if (gamedata.tech[shipTech[i] + "Mk1"] == 1){
+  	document.getElementById(shipTech[i]).innerText = "Mk1";
+    }
+  }
+  for (let i = 4; i<shipTech.length; i++){
+  	if (gamedata.tech[shipTech[i]] == 0){
+  		document.getElementById(shipTech[i]).style.display = "none";
+    } else {
+  		document.getElementById(shipTech[i]).style.display = "block";
+    }
+  }
   update("sumValue", format(gamedata.sumValue, "currency"));
   update("money", format(gamedata.money, "currency"));
 }
