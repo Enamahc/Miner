@@ -63,11 +63,11 @@ html, body {
     display: none;
   }
 
-  .buyable_title-text {
+  .buyable_title_text {
     font-size: 1em;
   }
 
-  .buyable_title-price {
+  .buyable_title_price {
     font-size: 0.8em;
   }
 
@@ -386,18 +386,18 @@ button {
   font-family: "Orbitron", sans-serif;
   background: black;
   font-size: 75%;
+  
+  /* Safari/WebKit */
   width: intrinsic;
-  /* Safari/WebKit */
-  width: -moz-max-content;
-  /* Firefox/Gecko */
-  width: -webkit-max-content;
-  /* Chrome */
   height: intrinsic;
-  /* Safari/WebKit */
-  height: -moz-max-content;
+  
   /* Firefox/Gecko */
-  height: -webkit-max-content;
+  width: -moz-max-content;
+  height: -moz-max-content;
+  
   /* Chrome */
+  width: -webkit-max-content;
+  height: -webkit-max-content;
 }
 
 #main {
@@ -421,7 +421,6 @@ button {
   display: flex;
   width: 100%;
   border-bottom: solid 1px #002b35;
-  background-color: black;
   justify-content: space-between;
   color: var(--couche1);
 }
@@ -430,7 +429,6 @@ button {
   display: flex;
   width: 100%;
   border-bottom: solid 1px #002b35;
-  background-color: black;
   justify-content: space-between;
   color: var(--couche2);
 }
@@ -439,7 +437,6 @@ button {
   display: flex;
   width: 100%;
   justify-content: space-between;
-  background-color: black;
   border-bottom: solid 1px #002b35;
   color: var(--corecolor);
 }
@@ -536,6 +533,7 @@ li {
 }
 
 #shipMenu {
+  display: none;
   position: absolute;
   height: 100vh;
   width: 100vw;
@@ -647,7 +645,7 @@ li {
 }
 
 #shipEquipment > * {
-  margin: 3% 0 0 3%;
+  margin: 3% 0 0 0;
 }
 
 #Equipment > * {
@@ -1401,7 +1399,7 @@ td {
 
 .buyable {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   border: 2px solid #002b36;
   border-radius: 8px;
@@ -1419,30 +1417,34 @@ td {
 .buyable_text {
   flex-grow: 1;
   margin-left: 1em;
-  background-color: black;
 }
 
 .buyable_title {
   display: flex;
   flex-direction: column;
+  justify-content: space-evenly;
+  height: 100%;
 }
 
-.buyable_title-text {
-  font-weight: bold;
+.buyable_title_text {
   font-size: 1.3em;
   min-height: 1.3em;
 }
 
-.buyable_title-price {
+.buyable_title_price {
   display: flex;
   flex-direction: column;
   white-space: nowrap;
 }
 
+.price {
+  display: flex;
+  color: gold;
+  justify-content: space-between;
+}
 
 .buyable_button {
   align-self: center;
-  background: black;
   border: 2px solid darkred;
   border-radius: 8px;
   color: darkred;
