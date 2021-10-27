@@ -1,536 +1,545 @@
-<head>
-  <meta name="google-site-verification" content="t7YHYNkhq9FsDg9D92XTpE6l9sS2azeGwzBQ6izsDH8" />
-  <link rel="stylesheet" type="text/css" href="stylesheet.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
-</head>
-<header>
-  <div id="lefttopbar">
-    <p id="title">Not Satisfactory</p>
-    <p id="author">by Enamahc</p>
-    <p id="version">ver. 0.0.0.a</p>
-  </div>
-  <div id="midtopbar">
-    <p id="msg" class="hideable">This is the message of the day
-      <span class="tooltip">Hello world, this message is a test!</span>
-    </p>
-  </div>
-  <div id="righttopbar">
-    <button onclick="save()">Save</button>
-    <button>Options</button>
-    <button onclick="reset()">Reset</button>
-  </div>
-</header>
-<div id="loading">
-  <div id="square">
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
-</div>
-<main id="main">
-  <div id="res">
-    <div class="cat1">Iron : <span id="Res1a"></span></div>
-    <div class="cat1">Copper : <span id="Res1b"></span></div>
-    <div class="cat1">Aluminium : <span id="Res1c"></span></div>
-    <div class="cat2">Zinc : <span id="Res2a"></span></div>
-    <div class="cat2">Lead : <span id="Res2b"></span></div>
-    <div class="cat2">Silver : <span id="Res2c"></span></div>
-    <div class="cat3">Iridium : <span id="Res3a"></span></div>
-    <div class="cat3">Gold : <span id="Res3b"></span></div>
-    <div class="cat3">Palladium : <span id="Res3c"></span></div>
-    <div class="rare">Rare1 : <span id="Rare1"></span></div>
-    <div class="rare">Rare2 : <span id="Rare2"></span></div>
-    <div class="rare">Rare3 : <span id="Rare3"></span></div>
-    <div id="droneList">
-      <div id="droneMk1" class="drone d1">Drone Mk1 :
-        <div>
-          <span id="d1left"></span>/
-          <span id="drone1"></span>
-        </div>
+<html lang="en" dir="ltr">
+  <body>
+  <head>
+      <meta name="google-site-verification" content="t7YHYNkhq9FsDg9D92XTpE6l9sS2azeGwzBQ6izsDH8" />
+      <link rel="stylesheet" type="text/css" href="stylesheet.css" />
+      <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+    </head>
+    <header>
+      <div id="lefttopbar">
+        <p id="title">Not Satisfactory</p>
+        <p id="author">by Enamahc</p>
+        <p id="version">ver. 0.0.0.a</p>
       </div>
-      <div id="droneMk2" class="drone d2">Drone Mk2 :
-        <div>
-          <span id="d2left"></span>/
-          <span id="drone2"></span>
-        </div>
+      <div id="midtopbar">
+        <p id="msg" class="hideable">This is the message of the day
+          <span class="tooltip">Hello world, this message is a test!</span>
+        </p>
       </div>
-      <div id="droneMk3" class="drone d3">Drone Mk3 :
-        <div>
-          <span id="d3left"></span>/
-          <span id="drone3"></span>
-        </div>
+      <div id="righttopbar">
+        <button onclick="save()">Save</button>
+        <button>Options</button>
+        <button onclick="reset()">Reset</button>
+      </div>
+    </header>
+    <div id="loading">
+      <div id="square">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
     </div>
-  </div>
-  <div id="shipMenu">
-    <div onclick="chooseRegion('map', 'map');" id="shipBackground">
-    </div>
-    <div id="shipContainer">
-      <button onclick="chooseRegion('map', 'map');" class="closeButton">x</button>
-      <img id="miniShip" src="https://iili.io/RrpQLl.png" alt="SHIP">
-      <div id="shipStorage">
-        <div class="menutitle">
-          STORAGE
-        </div>
-        <div id="resShip">
-          <div></div>
-          <span>Amount</span>
-          <span>Value</span>
-          <span class="resName cat1">Iron :</span>
-          <input type="number" id="Res1aShip" value="0" min="0" step="0.1" onchange="changeStock('Res1a', 1)">
-          <span id="Res1aValue" class="cat1">0</span>
-          <span class="resName cat1">Copper :</span>
-          <input type="number" id="Res1bShip" value="0" min="0" step="0.1" onchange="changeStock('Res1b', 1)">
-          <span id="Res1bValue" class="cat1">0</span>
-          <span class="resName cat1">Aluminium :</span>
-          <input type="number" id="Res1cShip" value="0" min="0" step="0.1" onchange="changeStock('Res1c', 1)">
-          <span id="Res1cValue" class="cat1">0</span>
-          <span class="resName cat2">Zinc :</span>
-          <input type="number" id="Res2aShip" value="0" min="0" step="0.01" onchange="changeStock('Res2a', 2)">
-          <span id="Res2aValue" class="cat2">0</span>
-          <span class="resName cat2">Lead :</span>
-          <input type="number" id="Res2bShip" value="0" min="0" step="0.01" onchange="changeStock('Res2b', 2)">
-          <span id="Res2bValue" class="cat2">0</span>
-          <span class="resName cat2">Silver :</span>
-          <input type="number" id="Res2cShip" value="0" min="0" step="0.01" onchange="changeStock('Res2c', 2)">
-          <span id="Res2cValue" class="cat2">0</span>
-          <span class="resName cat3">Iridium :</span>
-          <input type="number" id="Res3aShip" value="0" min="0" step="0.001" onchange="changeStock('Res3a', 3)">
-          <span id="Res3aValue" class="cat3">0</span>
-          <span class="resName cat3">Gold :</span>
-          <input type="number" id="Res3bShip" value="0" min="0" step="0.001" onchange="changeStock('Res3b', 3)">
-          <span id="Res3bValue" class="cat3">0</span>
-          <span class="resName cat3">Palladium :</span>
-          <input type="number" id="Res3cShip" value="0" min="0" step="0.001" onchange="changeStock('Res3c', 3)">
-          <span id="Res3cValue" class="cat3">0</span>
-          <span class="resName rare Rare1">Rare1 :</span>
-          <input type="number" id="Rare1Ship" class="Rare1" value="0" min="0" step="1" onchange="changeStock('Rare1', 4)">
-          <span id="Rare1Value" class="rare Rare1">0</span>
-          <span class="resName rare  Rare2">Rare2 :</span>
-          <input type="number" id="Rare2Ship" class="Rare2" value="0" min="0" step="1" onchange="changeStock('Rare2', 4)">
-          <span id="Rare2Value" class="rare Rare2">0</span>
-          <span class="resName rare  Rare2">Rare3 :</span>
-          <input type="number" id="Rare3Ship" class="Rare3" value="0" min="0" step="1" onchange="changeStock('Rare3', 4)">
-          <span id="Rare3Value" class="rare Rare3">0</span>
-          
-          <span style="display: flex; justify-content: left;">Total</span>
-          <button id="totalRes" onclick="resetAmounts()">Reset</button>
-          <span id="sumValue">0</span>
-        </div>
-        <div id="cargoFullContainer">
-          <div id="cargoFull">
-            CARGO FULL
+    <main id="main">
+      <div id="res">
+        <div class="cat1">Iron : <span id="Res1a"></span></div>
+        <div class="cat1">Copper : <span id="Res1b"></span></div>
+        <div class="cat1">Aluminium : <span id="Res1c"></span></div>
+        <div class="cat2">Zinc : <span id="Res2a"></span></div>
+        <div class="cat2">Lead : <span id="Res2b"></span></div>
+        <div class="cat2">Silver : <span id="Res2c"></span></div>
+        <div class="cat3">Iridium : <span id="Res3a"></span></div>
+        <div class="cat3">Gold : <span id="Res3b"></span></div>
+        <div class="cat3">Palladium : <span id="Res3c"></span></div>
+        <div class="rare">Rare1 : <span id="Rare1"></span></div>
+        <div class="rare">Rare2 : <span id="Rare2"></span></div>
+        <div class="rare">Rare3 : <span id="Rare3"></span></div>
+        <div id="droneList">
+          <div id="droneMk1" class="drone d1">Drone Mk1 :
+            <div>
+              <span id="d1left"></span>/
+              <span id="drone1"></span>
+            </div>
+          </div>
+          <div id="droneMk2" class="drone d2">Drone Mk2 :
+            <div>
+              <span id="d2left"></span>/
+              <span id="drone2"></span>
+            </div>
+          </div>
+          <div id="droneMk3" class="drone d3">Drone Mk3 :
+            <div>
+              <span id="d3left"></span>/
+              <span id="drone3"></span>
+            </div>
           </div>
         </div>
       </div>
-      <div id="shipEquipment">
-        <div class="price">Bank Account : <span id="money"></span></div>
-        <div>Storage capacity : <span id="storage"></span>100u</div>
-        <div>Equipment :
-          <ul id="Equipment" style="margin: 0; padding: 0;">
-            <li>- Cargo <span id="cargo">Mk1</span>
-              <!-- <div class="info">i
-                <span class="tooltip">Affects the amount of resource that can be stored on board</span>
-              </div> -->
-            </li>
-            <li>- Drone Bay <span id="droneBay">Mk1</span>
-              <!-- <div class="info">i
-                <span class="tooltip">Affects the number of drone that can be stored on board</span>
-              </div> -->
-            </li>
-            
-            <li>- Thrusters <span id="thrusters">Mk1</span>
-              <!-- <div class="info">i
-                <span class="tooltip">Affects travel time to another planet</span>
-              </div> -->
-            </li>
-            <li>- Antenna <span id="antenna">Mk1</span>
-              <!-- <div class="info">i
-                <span class="tooltip">Allows you to find more distant planets</span>
-              </div> -->
-            </li>
-            <li id="planetAnalyzer">- Planet Analyzer
-              <!-- <div class="info">i
-                <span class="tooltip">Allows you to choose the planet according to its composition</span>
-              </div> -->
-            </li>
-            <li id="tractorBeam">- Tractor Beam
-              <!-- <div class="info">i
-                <span class="tooltip">Automatically refills ship storage</span>
-              </div> -->
-            </li>
-            <li id="miningAI">- Mining AI
-            <!-- <div class="info">i
-              <span class="tooltip">Allows the ship to mine other planets when game is closed</span>
-            </div> -->
-            </li>
-            <li id="tradingAI">- Trading AI
-            <!-- <div class="info">i
-              <span class="tooltip">Allows the ship to sell resources mined when game is closed</span>
-            </div> -->
-            </li>
-            <li id="spatialDrillingLaser">- Spatial Drilling Laser
-            <!-- <div class="info">i
-              <span class="tooltip">Allows the ship to mine planet from orbit</span>
-            </div> -->
-            </li>
-            <li id="teleporter">- Teleporter
-            <!-- <div class="info">i
-              <span class="tooltip">Reduces travel times to 0</span>
-            </div> -->
-            </li>
-            <li id="autoPrestige">- AutoPrestige
-            <!-- <div class="info">i
-              <span class="tooltip"Automate travels to new planets</span>
-            </div> -->
-            </li>
-          </ul>
+      <div id="shipMenu">
+        <div onclick="chooseRegion('map', 'map');" id="shipBackground">
         </div>
-      </div>
-      <div id="shipGauge">
-        <div id="gauge">
-          <div id="res3Gauge" class="core"></div>
-          <div id="res2Gauge" class="couche2"></div>
-          <div id="res1Gauge" class="couche1"></div>
-        </div>
-      </div>
-      <div id="shipButtons">
-        <button id="sell" class="shipButton" onclick="sellRessources()">
-          SELL
-        </button>
-        <button id="prestige" class="shipButton" onclick="prestige1()">
-          /!\ Find New Planet /!\
-        <span class="tooltip">Leave this planet and find another one to mine</span>
-        </button>
-      </div>
-    </div>
+        <div id="shipContainer">
+          <button onclick="chooseRegion('map', 'map');" class="closeButton">x</button>
+          <img id="miniShip" src="https://iili.io/RrpQLl.png" alt="SHIP">
+          <div id="shipStorage">
+            <div class="menutitle">
+              STORAGE
+            </div>
+            <div id="resShip">
+              <div></div>
+              <span>Amount</span>
+              <span>Value</span>
+              <span class="resName cat1">Iron :</span>
+              <input type="number" id="Res1aShip" value="0" min="0" step="0.1" onchange="changeStock('Res1a', 1)">
+              <span id="Res1aValue" class="cat1">0</span>
+              <span class="resName cat1">Copper :</span>
+              <input type="number" id="Res1bShip" value="0" min="0" step="0.1" onchange="changeStock('Res1b', 1)">
+              <span id="Res1bValue" class="cat1">0</span>
+              <span class="resName cat1">Aluminium :</span>
+              <input type="number" id="Res1cShip" value="0" min="0" step="0.1" onchange="changeStock('Res1c', 1)">
+              <span id="Res1cValue" class="cat1">0</span>
+              <span class="resName cat2">Zinc :</span>
+              <input type="number" id="Res2aShip" value="0" min="0" step="0.01" onchange="changeStock('Res2a', 2)">
+              <span id="Res2aValue" class="cat2">0</span>
+              <span class="resName cat2">Lead :</span>
+              <input type="number" id="Res2bShip" value="0" min="0" step="0.01" onchange="changeStock('Res2b', 2)">
+              <span id="Res2bValue" class="cat2">0</span>
+              <span class="resName cat2">Silver :</span>
+              <input type="number" id="Res2cShip" value="0" min="0" step="0.01" onchange="changeStock('Res2c', 2)">
+              <span id="Res2cValue" class="cat2">0</span>
+              <span class="resName cat3">Iridium :</span>
+              <input type="number" id="Res3aShip" value="0" min="0" step="0.001" onchange="changeStock('Res3a', 3)">
+              <span id="Res3aValue" class="cat3">0</span>
+              <span class="resName cat3">Gold :</span>
+              <input type="number" id="Res3bShip" value="0" min="0" step="0.001" onchange="changeStock('Res3b', 3)">
+              <span id="Res3bValue" class="cat3">0</span>
+              <span class="resName cat3">Palladium :</span>
+              <input type="number" id="Res3cShip" value="0" min="0" step="0.001" onchange="changeStock('Res3c', 3)">
+              <span id="Res3cValue" class="cat3">0</span>
+              <span class="resName rare Rare1">Rare1 :</span>
+              <input type="number" id="Rare1Ship" class="Rare1" value="0" min="0" step="1" onchange="changeStock('Rare1', 4)">
+              <span id="Rare1Value" class="rare Rare1">0</span>
+              <span class="resName rare  Rare2">Rare2 :</span>
+              <input type="number" id="Rare2Ship" class="Rare2" value="0" min="0" step="1" onchange="changeStock('Rare2', 4)">
+              <span id="Rare2Value" class="rare Rare2">0</span>
+              <span class="resName rare  Rare2">Rare3 :</span>
+              <input type="number" id="Rare3Ship" class="Rare3" value="0" min="0" step="1" onchange="changeStock('Rare3', 4)">
+              <span id="Rare3Value" class="rare Rare3">0</span>
 
-  </div>
-  <div id="map">
-    <p style="font-size: 120%;text-align:center;margin-left: 2%;">Choose a region to start mining:</p>
-    <img onclick="shipMenu()" id="ship" src="https://iili.io/RrpQLl.png" alt="SHIP" border="0">
-    <div id="timer">
-    </div>
-    <div id="planet">
-      <div onclick="chooseRegion('NW', 'map')" id="NW" class="region N W">
-        <div id="d1NW" class="d1 assign">0</div>
-        <div class="tag">NW</div>
-        <div id="d2NW" class="d2 assign">0</div>
-        <div class="couche1"></div>
-        <div class="couche2"></div>
-      </div>
-      <div onclick="chooseRegion('N', 'map')" id="N" class="region">
-        <div id="d1N" class="d1 assign">0</div>
-        <div class="tag">N</div>
-        <div id="d2N" class="d2 assign">0</div>
-        <div class="couche1"></div>
-        <div class="couche2"></div>
-      </div>
-      <div onclick="chooseRegion('NE', 'map')" id="NE" class="region">
-        <div id="d1NE" class="d1 assign">0</div>
-        <div class="tag">NE</div>
-        <div id="d2NE" class="d2 assign">0</div>
-        <div class="couche1"></div>
-        <div class="couche2"></div>
-      </div>
-      <div onclick="chooseRegion('W', 'map')" id="W" class="region">
-        <div id="d1W" class="d1 assign">0</div>
-        <div class="tag">W</div>
-        <div id="d2W" class="d2 assign">0</div>
-        <div class="couche1"></div>
-        <div class="couche2"></div>
-      </div>
-      <div onclick="chooseRegion('core', 'map')" id="core" class="region">
-        <div id="d2core" class="d2 assign">0</div>
-        <div id="d3core" class="d3 assign">0</div>
-        <div class="couche2"></div>
-        <div class="couche3"></div>
-        <div class="tag">Core</div>
-      </div>
-      <div onclick="chooseRegion('E', 'map')" id="E" class="region">
-        <div id="d1E" class="d1 assign">0</div>
-        <div class="tag">E</div>
-        <div id="d2E" class="d2 assign">0</div>
-        <div class="couche1"></div>
-        <div class="couche2"></div>
-      </div>
-      <div onclick="chooseRegion('SW', 'map')" id="SW" class="region">
-        <div id="d1SW" class="d1 assign">0</div>
-        <div class="tag">SW</div>
-        <div id="d2SW" class="d2 assign">0</div>
-        <div class="couche1"></div>
-        <div class="couche2"></div>
-      </div>
-      <div onclick="chooseRegion('S', 'map')" id="S" class="region">
-        <div id="d1S" class="d1 assign">0</div>
-        <div class="tag">S</div>
-        <div id="d2S" class="d2 assign">0</div>
-        <div class="couche1"></div>
-        <div class="couche2"></div>
-      </div>
-      <div onclick="chooseRegion('SE', 'map')" id="SE" class="region">
-        <div id="d1SE" class="d1 assign">0</div>
-        <div class="tag">SE</div>
-        <div id="d2SE" class="d2 assign">0</div>
-        <div class="couche1"></div>
-        <div class="couche2"></div>
-      </div>
-    </div>
-    <div id="planetres">
-      <div id="resheader">Resources on this planet</div>
+              <span style="display: flex; justify-content: left;">Total</span>
+              <button id="totalRes" onclick="resetAmounts()">Reset</button>
+              <span id="sumValue">0</span>
+            </div>
+            <div id="cargoFullContainer">
+              <div id="cargoFull">
+                CARGO FULL
+              </div>
+            </div>
+          </div>
+          <div id="shipEquipment">
+            <div class="price">Bank Account : <span id="money"></span></div>
+            <div>Storage capacity : <span id="storage"></span>100u</div>
+            <div>Equipment :
+              <ul id="Equipment" style="margin: 0; padding: 0;">
+                <li>- Cargo <span id="cargo">Mk1</span>
+                  <!-- <div class="info">i
+                    <span class="tooltip">Affects the amount of resource that can be stored on board</span>
+                  </div> -->
+                </li>
+                <li>- Drone Bay <span id="droneBay">Mk1</span>
+                  <!-- <div class="info">i
+                    <span class="tooltip">Affects the number of drone that can be stored on board</span>
+                  </div> -->
+                </li>
 
-      <div id="reslist">
-        <div id="caption">
-          <div class="couche1"></div>
-          <div class="couche2"></div>
-          <div class="couche3"></div>
-        </div>
-        <ul style="position: relative; right: 10%;">
-          <li><span class="hideable">Outer layer : </span><div id="outermaterial"></div>
-          </li>
-          <li><span class="hideable">Inner layer : </span><div id="innermaterial"></div>
-          </li>
-          <li><span class="hideable">Core1 : </span><div id="corematerial"></div>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="detailRegion NW">
-    <button class="backButton" onclick="chooseRegion('map', 'NW')">&lt Back</button>
-    <div class="localAssign NW">
-      <button onclick="removeDrone('NW',1)">-</button>
-      <div class="hideable">Drone Mk1 :</div>
-      <div id="local_d1NW" class="d1">0</div>
-      <button onclick="addDrone('NW',1)">+</button>
-      <button onclick="removeDrone('NW',2)">-</button>
-      <div class="hideable">Drone Mk2 :</div>
-      <div id="local_d2NW" class="d2">0</div>
-      <button onclick="addDrone('NW',2)">+</button>
-    </div>
-    <div class="gridCornerContainer NW">
-      <div id="mineGrid1NW"></div>
-      <div id="mineGrid2NW"></div>
-    </div>
-  </div>
-  <div class="detailRegion N">
-    <button class="backButton" onclick="chooseRegion('map','N')">&lt Back</button>
-    <div class="localAssign N">
-      <button onclick="removeDrone('N',1)">-</button>
-      <div class="hideable">Drone Mk1 :</div>
-      <div id="local_d1N" class="d1">0</div>
-      <button onclick="addDrone('N',1)">+</button>
-      <button onclick="removeDrone('N',2)">-</button>
-      <div class="hideable">Drone Mk2 :</div>
-      <div id="local_d2N" class="d2">0</div>
-      <button onclick="addDrone('N',2)">+</button>
-    </div>
-    <div class="gridContainer N">
-      <div id="mineGrid1N"></div>
-      <div id="mineGrid2N"></div>
-    </div>
-  </div>
-  <div class="detailRegion NE">
-    <button class="backButton" onclick="chooseRegion('map', 'NE')">&lt Back</button>
-    <div class="localAssign NE">
-      <button onclick="removeDrone('NE',1)">-</button>
-      <div class="hideable">Drone Mk1 :</div>
-      <div id="local_d1NE" class="d1">0</div>
-      <button onclick="addDrone('NE',1)">+</button>
-      <button onclick="removeDrone('NE',2)">-</button>
-      <div class="hideable">Drone Mk2 :</div>
-      <div id="local_d2NE" class="d2">0</div>
-      <button onclick="addDrone('NE',2)">+</button>
-    </div>
-    <div class="gridCornerContainer NE">
-      <div id="mineGrid1NE"></div>
-      <div id="mineGrid2NE"></div>
-    </div>
-  </div>
-  <div class="detailRegion W">
-    <button class="backButton" onclick="chooseRegion('map', 'W')">&lt Back</button>
-    <div class="localAssign W">
-      <button onclick="removeDrone('W',1)">-</button>
-      <div class="hideable">Drone Mk1 :</div>
-      <div id="local_d1W" class="d1">0</div>
-      <button onclick="addDrone('W',1)">+</button>
-      <button onclick="removeDrone('W',2)">-</button>
-      <div class="hideable">Drone Mk2 :</div>
-      <div id="local_d2W" class="d2">0</div>
-      <button onclick="addDrone('W',2)">+</button>
-    </div>
-    <div class="gridContainer W">
-      <div id="mineGrid1W"></div>
-      <div id="mineGrid2W"></div>
-    </div>
-  </div>
-  <div class="detailRegion core">
-    <button class="backButton" onclick="chooseRegion('map', 'core')">&lt Back</button>
-    <!-- <div id="coreLocked">Can't access the core because no path has been dug through upper layers</div>
-    <div id="WIP"></div> -->
-    <div class="localAssign core">
-      <button onclick="removeDrone('core',2)">-</button>
-      <div class="hideable">Drone Mk2 :</div>
-      <div id="local_d2core" class="d2">0</div>
-      <button onclick="addDrone('core',2)">+</button>
-      <button onclick="removeDrone('core',3)">-</button>
-      <div class="hideable">Drone Mk3 :</div>
-      <div id="local_d3core" class="d3">0</div>
-      <button onclick="addDrone('core',3)">+</button>
-    </div>
-    <div class="gridContainer core">
-      <div id="mineGrid2core"></div>
-    </div>
-  </div>
-  <div class="detailRegion E">
-    <button class="backButton" onclick="chooseRegion('map', 'E')">Back &gt</button>
-    <div class="localAssign E">
-      <button onclick="removeDrone('E',1)">-</button>
-      <div class="hideable">Drone Mk1 :</div>
-      <div id="local_d1E" class="d1">0</div>
-      <button onclick="addDrone('E',1)">+</button>
-      <button onclick="removeDrone('E',2)">-</button>
-      <div class="hideable">Drone Mk2 :</div>
-      <div id="local_d2E" class="d2">0</div>
-      <button onclick="addDrone('E',2)">+</button>
-    </div>
-    <div class="gridContainer E">
-      <div id="mineGrid1E"></div>
-      <div id="mineGrid2E"></div>
-    </div>
-  </div>
-  <div class="detailRegion SW">
-    <button class="backButton" onclick="chooseRegion('map', 'SW')">&lt Back</button>
-    <div class="localAssign SW">
-      <button onclick="removeDrone('SW',1)">-</button>
-      <div class="hideable">Drone Mk1 :</div>
-      <div id="local_d1SW" class="d1">0</div>
-      <button onclick="addDrone('SW',1)">+</button>
-      <button onclick="removeDrone('SW',2)">-</button>
-      <div class="hideable">Drone Mk2 :</div>
-      <div id="local_d2SW" class="d2">0</div>
-      <button onclick="addDrone('SW',2)">+</button>
-    </div>
-    <div class="gridCornerContainer SW">
-      <div id="mineGrid1SW"></div>
-      <div id="mineGrid2SW"></div>
-    </div>
-  </div>
-  <div class="detailRegion S">
-    <button class="backButton" onclick="chooseRegion('map', 'S')">&lt Back</button>
-    <div class="localAssign S">
-      <button onclick="removeDrone('S',1)">-</button>
-      <div class="hideable">Drone Mk1 :</div>
-      <div id="local_d1S" class="d1">0</div>
-      <button onclick="addDrone('S',1)">+</button>
-      <button onclick="removeDrone('S',2)">-</button>
-      <div class="hideable">Drone Mk2 :</div>
-      <div id="local_d2S" class="d2">0</div>
-      <button onclick="addDrone('S',2)">+</button>
-    </div>
-    <div class="gridContainer S">
-      <div id="mineGrid1S"></div>
-      <div id="mineGrid2S"></div>
-    </div>
-  </div>
-  <div class="detailRegion SE">
-    <button class="backButton" onclick="chooseRegion('map', 'SE')">Back &gt</button>
-    <div class="localAssign SE">
-      <button onclick="removeDrone('SE',1)">-</button>
-      <div class="hideable">Drone Mk1 :</div>
-      <div id="local_d1SE" class="d1">0</div>
-      <button onclick="addDrone('SE',1)">+</button>
-      <button onclick="removeDrone('SE',2)">-</button>
-      <div class="hideable">Drone Mk2 :</div>
-      <div id="local_d2SE" class="d2">0</div>
-      <button onclick="addDrone('SE',2)">+</button>
-    </div>
-    <div class="gridCornerContainer SE">
-      <div id="mineGrid1SE"></div>
-      <div id="mineGrid2SE"></div>
-    </div>
-  </div>
-  <div id="tabs">
-
-    <button onclick="tab('shop')" id="shopButton" class="button">Shop</button>
-    <button onclick="tab('lab')" id="labButton" class="button">Lab</button>
-    <button onclick="tab('workbench')" id="workBenchButton" class="button">Workbench</button>
-
-  </div>
-  <div id="shop" class="menus">
-    <div class="menutitle">SHOP</div>
-  </div>
-  <div id="lab" class="menus">
-    <div class="menutitle"> Research Lab</div>
-  </div>
-  <div id="workbench" class="menus">
-    <div class="menutitle">WORKBENCH</div>
-    <div class="buyable">
-      <div class="buyable_text">
-        <div class="buyable_title">
-          <span class="buyable_title_text"> Mining Drone Mk1 </span>
-          <div id="Drone1Cost" class="buyable_title_price">
-            <div class="cat1">Iron : <span id="d1res1Cost"></span></div>
-            <div class="cat1">Copper : <span id="d1res2Cost"></span></div>
-            <div class="cat1">Aluminium : <span id="d1res3Cost"></span></div>
+                <li>- Thrusters <span id="thrusters">Mk1</span>
+                  <!-- <div class="info">i
+                    <span class="tooltip">Affects travel time to another planet</span>
+                  </div> -->
+                </li>
+                <li>- Antenna <span id="antenna">Mk1</span>
+                  <!-- <div class="info">i
+                    <span class="tooltip">Allows you to find more distant planets</span>
+                  </div> -->
+                </li>
+                <li id="planetAnalyzer">- Planet Analyzer
+                  <!-- <div class="info">i
+                    <span class="tooltip">Allows you to choose the planet according to its composition</span>
+                  </div> -->
+                </li>
+                <li id="tractorBeam">- Tractor Beam
+                  <!-- <div class="info">i
+                    <span class="tooltip">Automatically refills ship storage</span>
+                  </div> -->
+                </li>
+                <li id="miningAI">- Mining AI
+                <!-- <div class="info">i
+                  <span class="tooltip">Allows the ship to mine other planets when game is closed</span>
+                </div> -->
+                </li>
+                <li id="tradingAI">- Trading AI
+                <!-- <div class="info">i
+                  <span class="tooltip">Allows the ship to sell resources mined when game is closed</span>
+                </div> -->
+                </li>
+                <li id="spatialDrillingLaser">- Spatial Drilling Laser
+                <!-- <div class="info">i
+                  <span class="tooltip">Allows the ship to mine planet from orbit</span>
+                </div> -->
+                </li>
+                <li id="teleporter">- Teleporter
+                <!-- <div class="info">i
+                  <span class="tooltip">Reduces travel times to 0</span>
+                </div> -->
+                </li>
+                <li id="autoPrestige">- AutoPrestige
+                <!-- <div class="info">i
+                  <span class="tooltip"Automate travels to new planets</span>
+                </div> -->
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div id="shipGauge">
+            <div id="gauge">
+              <div id="res3Gauge" class="core"></div>
+              <div id="res2Gauge" class="couche2"></div>
+              <div id="res1Gauge" class="couche1"></div>
+            </div>
+          </div>
+          <div id="shipButtons">
+            <button id="sell" class="shipButton" onclick="sellRessources()">
+              SELL
+            </button>
+            <button id="prestige" class="shipButton" onclick="prestige1()">
+              /!\ Find New Planet /!\
+            <span class="tooltip">Leave this planet and find another one to mine</span>
+            </button>
           </div>
         </div>
-        <div class="buyable_description"></div>
-        <span class="tooltip"> An automated drone to mine outer layer.</span>
+
       </div>
-      <button onclick="buyDrone1()" class="buyable_button"> Buy </button>
-    </div>
-    <div class="buyable">
-      <div class="buyable_text">
-        <div class="buyable_title">
-          <span class="buyable_title_text"> Mining Drone Mk2 </span>
-          <div id="drone2Cost" class="buyable_title_price">
-            <div class="cat2">Zinc : <span id="d2res1Cost"></span></div>
-            <div class="cat2">Lead : <span id="d2res2Cost"></span></div>
-            <div class="cat2">Silver : <span id="d2res3Cost"></span></div>
+      <div id="map">
+        <p style="font-size: 120%;text-align:center;margin-left: 2%;">Choose a region to start mining:</p>
+        <img onclick="shipMenu()" id="ship" src="https://iili.io/RrpQLl.png" alt="SHIP" border="0">
+        <div id="timer">
+        </div>
+        <div id="planet">
+          <div onclick="chooseRegion('NW', 'map')" id="NW" class="region N W">
+            <div id="d1NW" class="d1 assign">0</div>
+            <div class="tag">NW</div>
+            <div id="d2NW" class="d2 assign">0</div>
+            <div class="couche1"></div>
+            <div class="couche2"></div>
+          </div>
+          <div onclick="chooseRegion('N', 'map')" id="N" class="region">
+            <div id="d1N" class="d1 assign">0</div>
+            <div class="tag">N</div>
+            <div id="d2N" class="d2 assign">0</div>
+            <div class="couche1"></div>
+            <div class="couche2"></div>
+          </div>
+          <div onclick="chooseRegion('NE', 'map')" id="NE" class="region">
+            <div id="d1NE" class="d1 assign">0</div>
+            <div class="tag">NE</div>
+            <div id="d2NE" class="d2 assign">0</div>
+            <div class="couche1"></div>
+            <div class="couche2"></div>
+          </div>
+          <div onclick="chooseRegion('W', 'map')" id="W" class="region">
+            <div id="d1W" class="d1 assign">0</div>
+            <div class="tag">W</div>
+            <div id="d2W" class="d2 assign">0</div>
+            <div class="couche1"></div>
+            <div class="couche2"></div>
+          </div>
+          <div onclick="chooseRegion('core', 'map')" id="core" class="region">
+            <div id="d2core" class="d2 assign">0</div>
+            <div id="d3core" class="d3 assign">0</div>
+            <div class="couche2"></div>
+            <div class="couche3"></div>
+            <div class="tag">Core</div>
+          </div>
+          <div onclick="chooseRegion('E', 'map')" id="E" class="region">
+            <div id="d1E" class="d1 assign">0</div>
+            <div class="tag">E</div>
+            <div id="d2E" class="d2 assign">0</div>
+            <div class="couche1"></div>
+            <div class="couche2"></div>
+          </div>
+          <div onclick="chooseRegion('SW', 'map')" id="SW" class="region">
+            <div id="d1SW" class="d1 assign">0</div>
+            <div class="tag">SW</div>
+            <div id="d2SW" class="d2 assign">0</div>
+            <div class="couche1"></div>
+            <div class="couche2"></div>
+          </div>
+          <div onclick="chooseRegion('S', 'map')" id="S" class="region">
+            <div id="d1S" class="d1 assign">0</div>
+            <div class="tag">S</div>
+            <div id="d2S" class="d2 assign">0</div>
+            <div class="couche1"></div>
+            <div class="couche2"></div>
+          </div>
+          <div onclick="chooseRegion('SE', 'map')" id="SE" class="region">
+            <div id="d1SE" class="d1 assign">0</div>
+            <div class="tag">SE</div>
+            <div id="d2SE" class="d2 assign">0</div>
+            <div class="couche1"></div>
+            <div class="couche2"></div>
           </div>
         </div>
-        <div class="buyable_description"></div>
-        <span class="tooltip">An automated drone to mine inner layer.</span>
-      </div>
-      <button onclick="buyDrone2()" class="buyable_button"> Buy </button>
-    </div>
-    <div class="buyable">
-      <div class="buyable_text">
-        <div class="buyable_title">
-          <span class="buyable_title_text"> Mining Drone Mk3 </span>
-          <div id="drone3Cost" class="buyable_title_price">
-            <div class="cat3">Iridium : <span id="d3res1Cost"></span></div>
-            <div class="cat3">Gold : <span id="d3res2Cost"></span></div>
-            <div class="cat3">Palladium : <span id="d3res3Cost"></span></div>
+        <div id="planetres">
+          <div id="resheader">Resources on this planet</div>
+
+          <div id="reslist">
+            <div id="caption">
+              <div class="couche1"></div>
+              <div class="couche2"></div>
+              <div class="couche3"></div>
+            </div>
+            <ul style="position: relative; right: 10%;">
+              <li><span class="hideable">Outer layer : </span><div id="outermaterial"></div>
+              </li>
+              <li><span class="hideable">Inner layer : </span><div id="innermaterial"></div>
+              </li>
+              <li><span class="hideable">Core1 : </span><div id="corematerial"></div>
+              </li>
+            </ul>
           </div>
         </div>
-        <div class="buyable_description"></div>
-        <span class="tooltip">An automated drone to mine the core!.</span>
       </div>
-      <button onclick="buyDrone3()" class="buyable_button"> Buy </button>
-    </div>
-  </div>
-</main>
+      <div class="detailRegion NW">
+        <button class="backButton" onclick="chooseRegion('map', 'NW')">&lt Back</button>
+        <div class="localAssign NW">
+          <button onclick="removeDrone('NW',1)">-</button>
+          <div class="hideable">Drone Mk1 :</div>
+          <div id="local_d1NW" class="d1">0</div>
+          <button onclick="addDrone('NW',1)">+</button>
+          <button onclick="removeDrone('NW',2)">-</button>
+          <div class="hideable">Drone Mk2 :</div>
+          <div id="local_d2NW" class="d2">0</div>
+          <button onclick="addDrone('NW',2)">+</button>
+        </div>
+        <div class="gridCornerContainer NW">
+          <div id="mineGrid1NW"></div>
+          <div id="mineGrid2NW"></div>
+        </div>
+      </div>
+      <div class="detailRegion N">
+        <button class="backButton" onclick="chooseRegion('map','N')">&lt Back</button>
+        <div class="localAssign N">
+          <button onclick="removeDrone('N',1)">-</button>
+          <div class="hideable">Drone Mk1 :</div>
+          <div id="local_d1N" class="d1">0</div>
+          <button onclick="addDrone('N',1)">+</button>
+          <button onclick="removeDrone('N',2)">-</button>
+          <div class="hideable">Drone Mk2 :</div>
+          <div id="local_d2N" class="d2">0</div>
+          <button onclick="addDrone('N',2)">+</button>
+        </div>
+        <div class="gridContainer N">
+          <div id="mineGrid1N"></div>
+          <div id="mineGrid2N"></div>
+        </div>
+      </div>
+      <div class="detailRegion NE">
+        <button class="backButton" onclick="chooseRegion('map', 'NE')">&lt Back</button>
+        <div class="localAssign NE">
+          <button onclick="removeDrone('NE',1)">-</button>
+          <div class="hideable">Drone Mk1 :</div>
+          <div id="local_d1NE" class="d1">0</div>
+          <button onclick="addDrone('NE',1)">+</button>
+          <button onclick="removeDrone('NE',2)">-</button>
+          <div class="hideable">Drone Mk2 :</div>
+          <div id="local_d2NE" class="d2">0</div>
+          <button onclick="addDrone('NE',2)">+</button>
+        </div>
+        <div class="gridCornerContainer NE">
+          <div id="mineGrid1NE"></div>
+          <div id="mineGrid2NE"></div>
+        </div>
+      </div>
+      <div class="detailRegion W">
+        <button class="backButton" onclick="chooseRegion('map', 'W')">&lt Back</button>
+        <div class="localAssign W">
+          <button onclick="removeDrone('W',1)">-</button>
+          <div class="hideable">Drone Mk1 :</div>
+          <div id="local_d1W" class="d1">0</div>
+          <button onclick="addDrone('W',1)">+</button>
+          <button onclick="removeDrone('W',2)">-</button>
+          <div class="hideable">Drone Mk2 :</div>
+          <div id="local_d2W" class="d2">0</div>
+          <button onclick="addDrone('W',2)">+</button>
+        </div>
+        <div class="gridContainer W">
+          <div id="mineGrid1W"></div>
+          <div id="mineGrid2W"></div>
+        </div>
+      </div>
+      <div class="detailRegion core">
+        <button class="backButton" onclick="chooseRegion('map', 'core')">&lt Back</button>
+        <!-- <div id="coreLocked">Can't access the core because no path has been dug through upper layers</div>
+        <div id="WIP"></div> -->
+        <div class="localAssign core">
+          <button onclick="removeDrone('core',2)">-</button>
+          <div class="hideable">Drone Mk2 :</div>
+          <div id="local_d2core" class="d2">0</div>
+          <button onclick="addDrone('core',2)">+</button>
+          <button onclick="removeDrone('core',3)">-</button>
+          <div class="hideable">Drone Mk3 :</div>
+          <div id="local_d3core" class="d3">0</div>
+          <button onclick="addDrone('core',3)">+</button>
+        </div>
+        <div class="gridContainer core">
+          <div id="mineGrid2core"></div>
+        </div>
+      </div>
+      <div class="detailRegion E">
+        <button class="backButton" onclick="chooseRegion('map', 'E')">Back &gt</button>
+        <div class="localAssign E">
+          <button onclick="removeDrone('E',1)">-</button>
+          <div class="hideable">Drone Mk1 :</div>
+          <div id="local_d1E" class="d1">0</div>
+          <button onclick="addDrone('E',1)">+</button>
+          <button onclick="removeDrone('E',2)">-</button>
+          <div class="hideable">Drone Mk2 :</div>
+          <div id="local_d2E" class="d2">0</div>
+          <button onclick="addDrone('E',2)">+</button>
+        </div>
+        <div class="gridContainer E">
+          <div id="mineGrid1E"></div>
+          <div id="mineGrid2E"></div>
+        </div>
+      </div>
+      <div class="detailRegion SW">
+        <button class="backButton" onclick="chooseRegion('map', 'SW')">&lt Back</button>
+        <div class="localAssign SW">
+          <button onclick="removeDrone('SW',1)">-</button>
+          <div class="hideable">Drone Mk1 :</div>
+          <div id="local_d1SW" class="d1">0</div>
+          <button onclick="addDrone('SW',1)">+</button>
+          <button onclick="removeDrone('SW',2)">-</button>
+          <div class="hideable">Drone Mk2 :</div>
+          <div id="local_d2SW" class="d2">0</div>
+          <button onclick="addDrone('SW',2)">+</button>
+        </div>
+        <div class="gridCornerContainer SW">
+          <div id="mineGrid1SW"></div>
+          <div id="mineGrid2SW"></div>
+        </div>
+      </div>
+      <div class="detailRegion S">
+        <button class="backButton" onclick="chooseRegion('map', 'S')">&lt Back</button>
+        <div class="localAssign S">
+          <button onclick="removeDrone('S',1)">-</button>
+          <div class="hideable">Drone Mk1 :</div>
+          <div id="local_d1S" class="d1">0</div>
+          <button onclick="addDrone('S',1)">+</button>
+          <button onclick="removeDrone('S',2)">-</button>
+          <div class="hideable">Drone Mk2 :</div>
+          <div id="local_d2S" class="d2">0</div>
+          <button onclick="addDrone('S',2)">+</button>
+        </div>
+        <div class="gridContainer S">
+          <div id="mineGrid1S"></div>
+          <div id="mineGrid2S"></div>
+        </div>
+      </div>
+      <div class="detailRegion SE">
+        <button class="backButton" onclick="chooseRegion('map', 'SE')">Back &gt</button>
+        <div class="localAssign SE">
+          <button onclick="removeDrone('SE',1)">-</button>
+          <div class="hideable">Drone Mk1 :</div>
+          <div id="local_d1SE" class="d1">0</div>
+          <button onclick="addDrone('SE',1)">+</button>
+          <button onclick="removeDrone('SE',2)">-</button>
+          <div class="hideable">Drone Mk2 :</div>
+          <div id="local_d2SE" class="d2">0</div>
+          <button onclick="addDrone('SE',2)">+</button>
+        </div>
+        <div class="gridCornerContainer SE">
+          <div id="mineGrid1SE"></div>
+          <div id="mineGrid2SE"></div>
+        </div>
+      </div>
+      <div id="tabs">
+
+        <button onclick="tab('shop')" id="shopButton" class="button">Shop</button>
+        <button onclick="tab('lab')" id="labButton" class="button">Lab</button>
+        <button onclick="tab('workbench')" id="workBenchButton" class="button">Workbench</button>
+
+      </div>
+      <div id="shop" class="menus">
+        <div class="menutitle">SHOP</div>
+      </div>
+      <div id="lab" class="menus">
+        <div class="menutitle"> Research Lab</div>
+      </div>
+      <div id="workbench" class="menus">
+        <div class="menutitle">WORKBENCH</div>
+        <div class="buyable">
+          <div class="buyable_text">
+            <div class="buyable_title">
+              <span class="buyable_title_text"> Mining Drone Mk1 </span>
+              <div id="Drone1Cost" class="buyable_title_price">
+                <div class="cat1">Iron : <span id="d1res1Cost"></span></div>
+                <div class="cat1">Copper : <span id="d1res2Cost"></span></div>
+                <div class="cat1">Aluminium : <span id="d1res3Cost"></span></div>
+              </div>
+            </div>
+            <div class="buyable_description"></div>
+            <span class="tooltip"> An automated drone to mine outer layer.</span>
+          </div>
+          <button onclick="buyDrone1()" class="buyable_button"> Buy </button>
+        </div>
+        <div class="buyable">
+          <div class="buyable_text">
+            <div class="buyable_title">
+              <span class="buyable_title_text"> Mining Drone Mk2 </span>
+              <div id="drone2Cost" class="buyable_title_price">
+                <div class="cat2">Zinc : <span id="d2res1Cost"></span></div>
+                <div class="cat2">Lead : <span id="d2res2Cost"></span></div>
+                <div class="cat2">Silver : <span id="d2res3Cost"></span></div>
+              </div>
+            </div>
+            <div class="buyable_description"></div>
+            <span class="tooltip">An automated drone to mine inner layer.</span>
+          </div>
+          <button onclick="buyDrone2()" class="buyable_button"> Buy </button>
+        </div>
+        <div class="buyable">
+          <div class="buyable_text">
+            <div class="buyable_title">
+              <span class="buyable_title_text"> Mining Drone Mk3 </span>
+              <div id="drone3Cost" class="buyable_title_price">
+                <div class="cat3">Iridium : <span id="d3res1Cost"></span></div>
+                <div class="cat3">Gold : <span id="d3res2Cost"></span></div>
+                <div class="cat3">Palladium : <span id="d3res3Cost"></span></div>
+              </div>
+            </div>
+            <div class="buyable_description"></div>
+            <span class="tooltip">An automated drone to mine the core!.</span>
+          </div>
+          <button onclick="buyDrone3()" class="buyable_button"> Buy </button>
+        </div>
+      </div>
+    </main>
+
+
+
+
+        <script src="main.js" charset="utf-8" type="text/javascript"></script>
+    </body>
+</html>
