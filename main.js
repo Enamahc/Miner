@@ -169,19 +169,10 @@ var gamedata = {
   yield3: 0.001,
   drone1: 0,
   d1left: 0,
-  d1res1Cost: 2,
-  d1res2Cost: 2,
-  d1res3Cost: 2,
   drone2: 0,
   d2left: 0,
-  d2res1Cost: 1,
-  d2res2Cost: 1,
-  d2res3Cost: 1,
   drone3: 0,
   d3left: 0,
-  d3res1Cost: 0.2,
-  d3res2Cost: 0.2,
-  d3res3Cost: 0.2,
   shipCargoLvl: 1,
   shipMaxCargo: 10,
   shipCapacity: 10,
@@ -240,6 +231,34 @@ var gamedata = {
     tractorBeam: 0,
     autoPrestige: 0
   },
+  BP: {
+    lab: 0,
+    droneMk1: 0,
+    droneMk2: 0,
+    droneMk3: 0,
+    exoMk1: 1,
+    exoMk2: 0,
+    exoMk3: 0,
+    cargoMk1: 1,
+    cargoMk2: 0,
+    cargoMk3: 0,
+    droneBayMk1: 1,
+    droneBayMk2: 0,
+    droneBayMk3: 0,
+    thrustersMk1: 1,
+    thrustersMk2: 0,
+    thrustersMk3: 0,
+    antennaMk1: 1,
+    antennaMk2: 0,
+    antennaMk3: 0,
+    converterMk1: 0,
+    autonomousDrone: 0,
+    planetAnalyzer: 0,
+    teleporter: 0,
+    spatialDrillingLaser: 0,
+    tractorBeam: 0,
+    autoPrestige: 0
+  },
   prestigeTime: 10,
   lasttick: 0
 };
@@ -248,10 +267,11 @@ var blueprints = {
   membercard1: {
     prev: [],
     next: ["membercard2"],
-    title: "Member Card I",
+    title: "Membership Card I",
     bought: false,
     toCraft: false,
-    price: 2500
+    price: 2500,
+    desc: "This membership card of the Universal Miners Organization reduces travel costs by 99.99%!"
   },
   membercard2: {
     prev: ["membercard1"],
@@ -259,7 +279,8 @@ var blueprints = {
     title: "Member Card II",
     bought: false,
     toCraft: false,
-    price: 5000
+    price: 5000,
+    desc: "Get another 99.99% reduction on travel costs!"
   },
   membercard3: {
     prev: ["membercard2"],
@@ -267,12 +288,13 @@ var blueprints = {
     title: "Member Card III",
     bought: false,
     toCraft: false,
-    price: 0
+    price: 0,
+    desc: "XXXXXXXXXXXXXXXXXX"
   },
   lab: {
     prev: [],
     next: [],
-    title: "Lab",
+    title: "Research Lab",
     bought: false,
     toCraft: true,
     price: 500,
@@ -286,12 +308,13 @@ var blueprints = {
       Res3a: 0,
       Res3b: 0,
       Res3c: 0
-    }
+    },
+    desc: "This laboratory provides access to research on the collected materials."
   },
   droneMk1: {
     prev: [],
     next: ["droneMk2", "exoMk2"],
-    title: "Drone Mk1",
+    title: "Mining Drone Mk1",
     bought: false,
     toCraft: true,
     price: 10,
@@ -305,12 +328,13 @@ var blueprints = {
       Res3a: 0,
       Res3b: 0,
       Res3c: 0
-    }
+    },
+    desc: "Automated mining drone that can mine the upper layer of the planet."
   },
   droneMk2: {
     prev: ["droneMk1", "exoMk2"],
     next: ["droneMk3", "exoMk3"],
-    title: "Drone Mk2",
+    title: "Mining Drone Mk2",
     bought: false,
     toCraft: true,
     price: 250,
@@ -324,12 +348,13 @@ var blueprints = {
       Res3a: 0,
       Res3b: 0,
       Res3c: 0
-    }
+    },
+    desc: "Automated mining drone that can mine the second layer of the planet."
   },
   droneMk3: {
     prev: ["droneMk2", "exoMk3"],
     next: [],
-    title: "Drone Mk3",
+    title: "Mining Drone Mk3",
     bought: false,
     toCraft: true,
     price: 0,
@@ -343,7 +368,8 @@ var blueprints = {
       Res3a: 0.2,
       Res3b: 0.2,
       Res3c: 0.2
-    }
+    },
+    desc: "Automated mining drone that can mine the core of the planet!"
   },
   exoMk1: {
     prev: [],
@@ -351,8 +377,8 @@ var blueprints = {
     bought: true
   },
   exoMk2: {
-    prev: ["exoMk1", "drone1"],
-    next: ["exoMk2","drone2"],
+    prev: ["exoMk1", "droneMk1"],
+    next: ["exoMk2", "droneMk2"],
     title: "Exoskeleton Mk1",
     bought: false,
     toCraft: true,
@@ -366,11 +392,13 @@ var blueprints = {
       Res2c: 0,
       Res3a: 0,
       Res3b: 0,
-      Res3c: 0}
+      Res3c: 0
+    },
+    desc: "Increase your strength enough to mine the second layer of the planet by hand."
   },
   exoMk3: {
-    prev: ["exoMk2", "drone2"],
-    next: ["drone3"],
+    prev: ["exoMk2", "droneMk2"],
+    next: ["droneMk3"],
     title: "Exoskeleton Mk2",
     bought: false,
     toCraft: true,
@@ -385,7 +413,8 @@ var blueprints = {
       Res3a: 0,
       Res3b: 0,
       Res3c: 0
-    }
+    },
+    desc: "Increase your strength enough to mine the core of the planet by hand!"
   },
   cargoMk1: {
     prev: [],
@@ -409,7 +438,8 @@ var blueprints = {
       Res3a: 0,
       Res3b: 0,
       Res3c: 0
-    }
+    },
+    desc: "Increases ship cargo space from 10 units to 100 units!"
   },
   cargoMk3: {
     prev: ["cargoMk2"],
@@ -428,7 +458,8 @@ var blueprints = {
       Res3a: 0,
       Res3b: 0,
       Res3c: 0
-    }
+    },
+    desc: "Increases ship cargo space from 100 units to 1000 units!"
   },
   droneBayMk1: {
     prev: [],
@@ -452,7 +483,8 @@ var blueprints = {
       Res3a: 0,
       Res3b: 0,
       Res3c: 0
-    }
+    },
+    desc: "Increases the number of drones transportable to new planets from 5 to 20!"
   },
   droneBayMk3: {
     prev: ["cargoMk2", "droneBayMk2"],
@@ -471,7 +503,8 @@ var blueprints = {
       Res3a: 0.05,
       Res3b: 0.05,
       Res3c: 0.05,
-    }
+    },
+    desc: "Increases the number of drones transportable to new planets from 20 to 50!"
   },
   thrustersMk1: {
     prev: [],
@@ -495,7 +528,8 @@ var blueprints = {
       Res3a: 0,
       Res3b: 0,
       Res3c: 0,
-    }
+    },
+    desc: "Cuts travel times in half!"
   },
   thrustersMk3: {
     prev: ["thrustersMk2"],
@@ -514,7 +548,8 @@ var blueprints = {
       Res3a: 0.21,
       Res3b: 0.21,
       Res3c: 0.21
-    }
+    },
+    desc: "Cuts travel times in half, again!"
   },
   antennaMk1: {
     prev: [],
@@ -538,7 +573,8 @@ var blueprints = {
       Res3a: 0,
       Res3b: 0,
       Res3c: 0
-    }
+    },
+    desc: "With this antenna, the ship will be able scan 2 planets to go to!"
   },
   antennaMk3: {
     prev: ["antennaMk2"],
@@ -557,7 +593,8 @@ var blueprints = {
       Res3a: 1,
       Res3b: 1,
       Res3c: 1
-    }
+    },
+    desc: "With this antenna, the ship will be able scan 5 planets to go to!"
   }
 }
 
@@ -568,7 +605,8 @@ var research = {
     title: "Engineered Drone Mk2",
     bought: false,
     toCraft: false,
-    RP: 9700
+    RP: 9700,
+    desc: "Drones Mk2 doesn't require drone Mk1 anymore to be crafted."
   },
   planetAnalyzer: {
     prev: [],
@@ -587,7 +625,8 @@ var research = {
       Res3a: 0,
       Res3b: 0,
       Res3c: 0
-    }
+    },
+    desc: "Provides the composition of the planets scanned by the ship."
   },
   converterMk1: {
     prev: [],
@@ -606,7 +645,8 @@ var research = {
       Res3a: 0,
       Res3b: 0,
       Res3c: 0
-    }
+    },
+    desc: "A machine capable of rearranging the atoms that make up matter."
   },
   massReducer: {
     prev: ["planetAnalyzer", "converterMk1"],
@@ -614,7 +654,8 @@ var research = {
     title: "Mass Reducer",
     bought: false,
     toCraft: false,
-    RP: 4850
+    RP: 4850,
+    desc: "Reduces the weight of materials in the cargo bay, thereby reducing transport costs."
   },
   converterMk2: {
     prev: ["converterMk1"],
@@ -622,15 +663,17 @@ var research = {
     title: "Resource Converter Mk2",
     bought: false,
     toCraft: false,
-    RP: 29099
+    RP: 29099,
+    desc: "Improves the efficiency of the resource converter."
   },
   converterMk3: {
     prev: ["converterMk2"],
     next: [],
-    title: "Resource Converter Mk3",
+    title: "Resource Converter Mk3 (Not Implemented)",
     bought: false,
     toCraft: false,
-    RP: 43648
+    RP: 43648,
+    desc: "(Not implemented)"
   },
   tractorBeam: {
     prev: [],
@@ -649,15 +692,17 @@ var research = {
       Res3a: 0,
       Res3b: 0,
       Res3c: 0
-    }
+    },
+    desc: "Allows the ship to automatically load resources on board."
   },
   autonomousDrone: {
-    prev:[],
+    prev: [],
     next: ["miningAI"],
     title: "Autonomous Drones",
     bought: false,
     toCraft: false,
-    RP: 4850
+    RP: 4850,
+    desc: "Drones are assigned automatically."
   },
   miningAI: {
     prev: ["tractorBeam", "autonomousDrone"],
@@ -665,7 +710,8 @@ var research = {
     title: "Mining AI",
     bought: false,
     toCraft: false,
-    RP: 4850
+    RP: 4850,
+    desc: "Allows the ship and drones to mine other planets when offline."
   },
   tradingAI: {
     prev: ["miningAI"],
@@ -673,7 +719,8 @@ var research = {
     title: "Trading AI",
     bought: false,
     toCraft: false,
-    RP: 9700
+    RP: 9700,
+    desc: "Allows the ship to sell resources mined on other planets when offline."
   },
   spatialDrillingLaser: {
     prev: ["miningAI"],
@@ -692,7 +739,8 @@ var research = {
       Res3a: 3,
       Res3b: 3,
       Res3c: 3
-    }
+    },
+    desc: "With this laser, the ship can mine from orbit at a high efficiency level."
   },
   teleporter: {
     prev: ["spatialDrillingLaser"],
@@ -711,14 +759,17 @@ var research = {
       Res3a: 3,
       Res3b: 3,
       Res3c: 3
-    }
+    },
+    desc: "Nullifies all travel times."
   },
   autoPrestige: {
     prev: ["spatialDrillingLaser"],
     next: [],
-    title: "AutoPrestigeTBD",
+    title: "Auto Prestige (Not Implemented)",
     bought: false,
     toCraft: false,
+    RP: 1000000000000,
+    desc: "Automates trips to new planets."
   }
 }
 
@@ -743,7 +794,7 @@ window.onload = function() {
   prestige = {
     res: {}
   };
-  
+
   if (gamedata.newgame === true) {
     document.getElementById('loading').style.display = 'flex';
     setTimeout(
@@ -756,58 +807,60 @@ window.onload = function() {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('main').style.display = 'grid';
   }
-  
+
   document.getElementById("outermaterial").innerHTML = gamedata.outermaterial.name;
   document.getElementById("innermaterial").innerHTML = gamedata.innermaterial.name;
   document.getElementById("corematerial").innerHTML = gamedata.corematerial.name;
-  
+
   Object.entries(blueprints).forEach(([key, value]) => {
-  	if (gamedata.tech[key] === 1){
-    	blueprints[key].bought = true;
+    if (gamedata.tech[key] === 1) {
+      blueprints[key].bought = true;
     }
   });
   Object.entries(research).forEach(([key, value]) => {
-  	if (gamedata.tech[key] === 1){
-    	research[key].bought = true;
+    if (gamedata.tech[key] === 1) {
+      research[key].bought = true;
     }
   });
-  
+
   Object.entries(gamedata.rare).forEach(([key, value]) => {
-  	if (gamedata.rare[key] === false) {
-  		document.getElementById(key).parentNode.style.display = "none";
+    if (gamedata.rare[key] === false) {
+      document.getElementById(key).parentNode.style.display = "none";
     }
   });
-  
+
   Object.entries(gamedata.droneAssign).forEach(([key, value]) => {
     update(key, format(gamedata.droneAssign[key], "round"));
     update("local_" + key, format(gamedata.droneAssign[key], "round"));
   });
-  
+
   if (gamedata.tech.lab === 1) {
-  	document.getElementById("labButton").style.display = "block";
+    document.getElementById("labButton").style.display = "block";
   } else {
-  	document.getElementById("labButton").style.display = "none";
+    document.getElementById("labButton").style.display = "none";
   }
   if (gamedata.tech.droneMk1 === 1) {
-  	document.getElementById("workBenchButton").style.display = "block";
-  	setDronePrice();
-  	document.getElementById("droneMk1").style.display = "block";
+    document.getElementById("workBenchButton").style.display = "block";
+    setDronePrice(1);
+    document.getElementById("droneMk1").style.display = "block";
   } else {
-  	/* document.getElementById("workBenchButton").style.display = "none"; */
-  	document.getElementById("droneMk1").style.display = "none";
-  	document.getElementById("droneMk2").style.display = "none";
-  	document.getElementById("droneMk3").style.display = "none";
+    /* document.getElementById("workBenchButton").style.display = "none"; */
+    document.getElementById("droneMk1List").style.display = "none";
+    document.getElementById("droneMk2List").style.display = "none";
+    document.getElementById("droneMk3List").style.display = "none";
   }
   if (gamedata.tech.droneMk2 === 1) {
-  	document.getElementById("droneMk2").style.display = "block";
+    document.getElementById("droneMk2List").style.display = "block";
+    setDronePrice(2);
   }
   if (gamedata.tech.droneMk3 === 1) {
-  	document.getElementById("droneMk3").style.display = "block";
+    document.getElementById("droneMk3List").style.display = "block";
+    setDronePrice(3);
   }
-  
-  setDronePrice();
+
   setDim();
   setShop();
+  setWorkbench()
   save();
 }
 
@@ -938,7 +991,7 @@ function init() {
   gamedata.corematerial.ref = "Res3" + String.fromCharCode(97 + x);
 
   if (gamedata.newgame === false) {
-    gamedata.planetSize = Math.round(randn_bm(1,20,1));
+    gamedata.planetSize = Math.round(randn_bm(1, 20, 1));
   } else if (gamedata.newgame === true) {
     gamedata.planetSize = 10;
   }
@@ -1022,58 +1075,160 @@ function update(id, content) {
   document.getElementById(id).innerHTML = content;
 }
 
-function setDronePrice (){
+function setDronePrice(lvl) {
+	if (lvl === 1){
   gamedata.d1res1Cost = gamedata.d1base * Math.pow(gamedata.d1x, gamedata.drone1);
   gamedata.d1res2Cost = gamedata.d1base * Math.pow(gamedata.d1x, gamedata.drone1);
   gamedata.d1res3Cost = gamedata.d1base * Math.pow(gamedata.d1x, gamedata.drone1);
-  gamedata.d2res1Cost = gamedata.d2base * Math.pow(gamedata.d2x, gamedata.drone2);
-  gamedata.d2res2Cost = gamedata.d2base * Math.pow(gamedata.d2x, gamedata.drone2);
-  gamedata.d2res3Cost = gamedata.d2base * Math.pow(gamedata.d2x, gamedata.drone2);
-  gamedata.d3res1Cost = gamedata.d3base * Math.pow(gamedata.d3x, gamedata.drone3);
-  gamedata.d3res2Cost = gamedata.d3base * Math.pow(gamedata.d3x, gamedata.drone3);
-  gamedata.d3res3Cost = gamedata.d3base * Math.pow(gamedata.d3x, gamedata.drone3);
   update("d1res1Cost", format(gamedata.d1res1Cost, "standard"));
   update("d1res2Cost", format(gamedata.d1res2Cost, "standard"));
   update("d1res3Cost", format(gamedata.d1res3Cost, "standard"));
+  } else if (lvl === 2){
+  gamedata.d2res1Cost = gamedata.d2base * Math.pow(gamedata.d2x, gamedata.drone2);
+  gamedata.d2res2Cost = gamedata.d2base * Math.pow(gamedata.d2x, gamedata.drone2);
+  gamedata.d2res3Cost = gamedata.d2base * Math.pow(gamedata.d2x, gamedata.drone2);
   update("d2res1Cost", format(gamedata.d2res1Cost, "standard"));
   update("d2res2Cost", format(gamedata.d2res2Cost, "standard"));
   update("d2res3Cost", format(gamedata.d2res3Cost, "standard"));
+  } else if (lvl === 3){
+  gamedata.d3res1Cost = gamedata.d3base * Math.pow(gamedata.d3x, gamedata.drone3);
+  gamedata.d3res2Cost = gamedata.d3base * Math.pow(gamedata.d3x, gamedata.drone3);
+  gamedata.d3res3Cost = gamedata.d3base * Math.pow(gamedata.d3x, gamedata.drone3);
   update("d3res1Cost", format(gamedata.d3res1Cost, "standard"));
   update("d3res2Cost", format(gamedata.d3res2Cost, "standard"));
   update("d3res3Cost", format(gamedata.d3res3Cost, "standard"));
+  }
 }
 
-function setDim(){
+function setDim() {
   h = 3 * gamedata.planetSize;
   l = h + h / 3;
   borders();
 }
 
-function setShop(){
-	Object.entries(blueprints).forEach(([key, value]) => {
-  	if (blueprints[key].bought === true){
-    	for (let i = 0; i < blueprints[key].next.length; i++){
-      	createShopItem(blueprints[key].next[i]);
+function setShop() {
+  Object.entries(blueprints).forEach(([key, value]) => {
+    if ((blueprints[key].toCraft === false || gamedata.BP[key] === 0) && gamedata.tech[key] === 0) {
+      if (blueprints[key].prev.length === 0) {
+        createShopItem(key);
+      } else {
+        let check = 0;
+        for (let i = 0; i < blueprints[key].prev.length; i++) {
+          if (blueprints[blueprints[key].prev[i]].bought === true) {
+            check += 1;
+          }
+        }
+        if (check === blueprints[key].prev.length) {
+          createShopItem(key);
+        }
       }
     }
   });
 }
 
-function createShopItem(BP){
-	var nextItem = blueprints[BP];
+function setWorkbench() {
+  Object.entries(blueprints).forEach(([key, value]) => {
+    if (gamedata.BP[key] === 1 && gamedata.tech[key] === 0) {
+      createWorkbenchItem(blueprints[key], key);
+    }
+  });
+}
+
+function createShopItem(BP) {
+  if (document.getElementById(BP) === null) {
+    var nextItem = blueprints[BP];
+    var buyable = document.createElement("div");
+    buyable.className = "buyable";
+    buyable.id = BP;
+    document.getElementById("shop").appendChild(buyable);
+    var buyable_text = document.createElement("div");
+    buyable_text.className = "buyable_text";
+    buyable.appendChild(buyable_text);
+    let btn = document.createElement("button");
+    btn.innerText = "Buy";
+    btn.className = "buyable_button";
+    btn.addEventListener("click", function() {
+      buyShopItem(nextItem, BP);
+    });
+    buyable.appendChild(btn);
+    var tooltip = document.createElement("span");
+    tooltip.className = "tooltip";
+    tooltip.innerText = nextItem.desc;
+    buyable.appendChild(tooltip);
+    var buyable_title = document.createElement("div");
+    buyable_title.className = "buyable_title";
+    buyable_text.appendChild(buyable_title);
+    var buyable_title_text = document.createElement("span");
+    buyable_title_text.className = "buyable_title_text";
+    var buyable_title_price = document.createElement("div");
+    buyable_title_price.className = "buyable_title_price";
+    buyable_title.appendChild(buyable_title_text);
+    buyable_title.appendChild(buyable_title_price);
+    buyable_title_text.innerText = nextItem.title;
+    var cost = document.createElement("div");
+    buyable_title_price.appendChild(cost);
+    cost.innerText = "Cost :";
+    cost.className = "price";
+    var amount = document.createElement("span");
+    cost.appendChild(amount);
+    amount.innerText = format(nextItem.price, "currency");
+    if (nextItem.toCraft === true) {
+      buyable.style.background = "linear-gradient(rgba(0, 0, 255, 0.5), rgba(0, 0, 0, 1)), url('https://blueprintmarketing.fr/wp-content/uploads/2020/11/Blueprint-Marketing-Plan.jpg')";
+      buyable.style["background-size"] = "cover";
+      buyable_title_text.innerText = nextItem.title + " (BP)";
+    }
+  }
+
+}
+
+function buyShopItem(item, tech) {
+  if (gamedata.money >= 0 /* item.price */ ) {
+    item.bought = true;
+    document.getElementById("shop").removeChild(document.getElementById(tech));
+    if (item.toCraft === true) {
+    	glow(document.getElementById("workBenchButton"));
+      createWorkbenchItem(item, tech);
+    	gamedata.BP[tech] = 1;
+    } else {
+    	gamedata.tech[tech] = 1;
+    }
+  }
+  setShop();
+}
+
+function createWorkbenchItem(item, tech) {
   var buyable = document.createElement("div");
   buyable.className = "buyable";
-  document.getElementById("shop").appendChild(buyable);
+  buyable.id = tech;
+  document.getElementById("workbench").appendChild(buyable);
   var buyable_text = document.createElement("div");
   buyable_text.className = "buyable_text";
   buyable.appendChild(buyable_text);
   let btn = document.createElement("button");
-  btn.innerText = "Buy";
-  btn.className = "buyable_button";
-  btn.addEventListener("click", function () {
-    buyShopItem(false);
-  });
+  btn.innerText = "Craft";
+  btn.className = "craft_button";
+  if (tech.includes("droneMk1")){
+    btn.addEventListener("click", function() {
+      buyDrone1();
+    });
+  } else if (tech.includes("droneMk2")){
+    btn.addEventListener("click", function() {
+      buyDrone2();
+    });
+  } else if (tech.includes("droneMk3")){
+    btn.addEventListener("click", function() {
+      buyDrone3();
+    });
+  } else {
+    btn.addEventListener("click", function() {
+      craftItem(item, tech);
+    });
+  }
   buyable.appendChild(btn);
+  var tooltip = document.createElement("span");
+  tooltip.className = "tooltip";
+  tooltip.innerText = item.desc;
+  buyable.appendChild(tooltip);
   var buyable_title = document.createElement("div");
   buyable_title.className = "buyable_title";
   buyable_text.appendChild(buyable_title);
@@ -1083,59 +1238,35 @@ function createShopItem(BP){
   buyable_title_price.className = "buyable_title_price";
   buyable_title.appendChild(buyable_title_text);
   buyable_title.appendChild(buyable_title_price);
-  buyable_title_text.innerText = nextItem.title;
+  buyable_title_text.innerText = item.title;
   var cost = document.createElement("div");
   buyable_title_price.appendChild(cost);
-  cost.innerText = "Cost :";
-  cost.className = "price";
-  var amount = document.createElement("span");
-  cost.appendChild(amount);
-  amount.innerText = format(nextItem.price, "currency");
-
-  
-}
-
-function buyShopItem(){
-	
-}
-
-function createWorkshopItem(BP){
-	var nextItem = blueprints[BP];
-  var buyable = document.createElement("div");
-  buyable.className = "buyable";
-  document.getElementById("shop").appendChild(buyable);
-  var buyable_text = document.createElement("div");
-  buyable_text.className = "buyable_text";
-  buyable.appendChild(buyable_text);
-  var buyable_title = document.createElement("div");
-  buyable_title.className = "buyable_title";
-  buyable_text.appendChild(buyable_title);
-  var buyable_title_text = document.createElement("div");
-  buyable_title_text.className = "buyable_title_text";
-  var buyable_title_price = document.createElement("div");
-  buyable_title_price.className = "buyable_title_price";
-  buyable_title.appendChild(buyable_title_text);
-  buyable_title.appendChild(buyable_title_price);
-  buyable_title_text.innerText = nextItem.title;
-  if (nextItem.toCraft === true){
-    Object.entries(nextItem.res).forEach(([key, value]) => {
-    	if (value > 0){
-        var res = document.createElement("div");
-        if (key.includes("1")){
-        	res.className = "cat1";
-        } else if (key.includes("2")){
-        	res.className = "cat2";
-        } else {
-        	res.className = "cat3";
-        }
-  			buyable_title_price.appendChild(res);
-        res.innerText = gamedata.resName[key];
-  			var amount = document.createElement("span");
-  			res.appendChild(amount);
-        amount.innerText = value;
+  Object.entries(item.res).forEach(([key, value]) => {
+    if (value > 0) {
+      var res = document.createElement("div");
+      if (key.includes("1")) {
+        res.className = "cat1";
+      } else if (key.includes("2")) {
+        res.className = "cat2";
+      } else {
+        res.className = "cat3";
       }
-    });
-  }
+      res.id = item + res + "Cost";
+      buyable_title_price.appendChild(res);
+      res.innerText = gamedata.resName[key];
+      var amount = document.createElement("span");
+      res.appendChild(amount);
+      amount.innerText = value;
+    }
+  });
+}
+
+function craftItem(item, tech){
+  Object.entries(item.res).some(function(key){
+    if (gamedata.res[key]<item.res[key]){
+    	console.log("Not enough resources");
+    }
+  });
 }
 
 function randn_bm(min, max, skew) {
@@ -1185,20 +1316,20 @@ function removeItemOnce(arr, value) {
 function rareDrop() {
   if (Math.random() >= (1 - 1 / 100000)) {
     gamedata.res.Rare3 += 1;
-  	if (gamedata.rare.Rare3 == false) {
-  		document.getElementById("Rare3").parentNode.style.display = "flex";
+    if (gamedata.rare.Rare3 == false) {
+      document.getElementById("Rare3").parentNode.style.display = "flex";
       gamedata.rare.Rare3 = true;
     }
   } else if (Math.random() >= (1 - 1 / 10000)) {
     gamedata.res.Rare2 += 1;
-  	if (gamedata.rare.Rare2 == false) {
-  		document.getElementById("Rare2").parentNode.style.display = "flex";
+    if (gamedata.rare.Rare2 == false) {
+      document.getElementById("Rare2").parentNode.style.display = "flex";
       gamedata.rare.Rare2 = true;
     }
   } else if (Math.random() >= (1 - 1 / 1000)) {
     gamedata.res.Rare1 += 1;
-  	if (gamedata.rare.Rare1 == false) {
-  		document.getElementById("Rare1").parentNode.style.display = "flex";
+    if (gamedata.rare.Rare1 == false) {
+      document.getElementById("Rare1").parentNode.style.display = "flex";
       gamedata.rare.Rare1 = true;
     }
   }
@@ -1377,7 +1508,7 @@ function mining(grid, el, row, col, i, region, optReg) {
       (row === 0 && optReg.includes("1")) ||
       ((row === 0 || row === l - 1 || col === 0 || col === l - 1) && optReg.includes("core") && gamedata.reach.core != 0) ||
       (optReg.includes("2") && optReg.length === 3 && !gamedata.notMined["d1" + optReg.slice(2)].includes(i + (2 * h / 3 * (l) - l)) && row === 0) ||
-      (optReg.includes("2") && optReg.length === 4 && ((!gamedata.notMined["d1" + optReg.slice(2)].includes(h * (2 * h / 3) + 2/3*h*(row+1)) && col === 0)||(!gamedata.notMined["d1" + optReg.slice(2)].includes(h * (2 * h / 3) - h/3+(col+1)) && row === 0)))
+      (optReg.includes("2") && optReg.length === 4 && ((!gamedata.notMined["d1" + optReg.slice(2)].includes(h * (2 * h / 3) + 2 / 3 * h * (row + 1)) && col === 0) || (!gamedata.notMined["d1" + optReg.slice(2)].includes(h * (2 * h / 3) - h / 3 + (col + 1)) && row === 0)))
     ) &&
     region.includes(i)
   ) {
@@ -1547,7 +1678,7 @@ function clickableGrid(rows, cols, callback, regionArray, regionName) {
 
 function tab(tab) {
   document.getElementById("shop").style.display = "none";
-  document.getElementById("lab").style.display = "none";
+  document.getElementById("labTab").style.display = "none";
   document.getElementById("workbench").style.display = "none";
   document.getElementById(tab).style.display = "inline-block";
 }
@@ -1660,38 +1791,38 @@ function shipMenu() {
   root.setProperty("--res3GaugeH", (100 / (gamedata.shipMaxCargo / (gamedata.shipStock.Res3a + gamedata.shipStock.Res3b + gamedata.shipStock.Res3c))) + "%");
 
   Object.entries(gamedata.rare).forEach(([key, value]) => {
-  	if (gamedata.rare[key] == false) {
-  		let el = document.getElementsByClassName(key)
-    	for(var i=0; i<el.length; i++){
+    if (gamedata.rare[key] == false) {
+      let el = document.getElementsByClassName(key)
+      for (var i = 0; i < el.length; i++) {
         el[i].style.display = "none";
       }
     } else {
-  		let el = document.getElementsByClassName(key)
-    	for(var i=0; i<el.length; i++){
+      let el = document.getElementsByClassName(key)
+      for (var i = 0; i < el.length; i++) {
         el[i].style.display = "block";
       }
     }
   });
-  
+
   Object.entries(gamedata.res).forEach(([key, value]) => {
     let el = document.getElementById(key + "Ship");
     el.value = format(gamedata.shipStock[key], "standard");
     update(key + "Value", format(gamedata.resValue[key], "standard"));
   });
-  for (let i = 0; i<4; i++){
-  	if (gamedata.tech[shipTech[i] + "Mk3"] == 1){
-  	document.getElementById(shipTech[i]).innerText = "Mk3";
-    } else if (gamedata.tech[shipTech[i] + "Mk2"] == 1){
-  	document.getElementById(shipTech[i]).innerText = "Mk2";
-    } else if (gamedata.tech[shipTech[i] + "Mk1"] == 1){
-  	document.getElementById(shipTech[i]).innerText = "Mk1";
+  for (let i = 0; i < 4; i++) {
+    if (gamedata.tech[shipTech[i] + "Mk3"] == 1) {
+      document.getElementById(shipTech[i]).innerText = "Mk3";
+    } else if (gamedata.tech[shipTech[i] + "Mk2"] == 1) {
+      document.getElementById(shipTech[i]).innerText = "Mk2";
+    } else if (gamedata.tech[shipTech[i] + "Mk1"] == 1) {
+      document.getElementById(shipTech[i]).innerText = "Mk1";
     }
   }
-  for (let i = 4; i<shipTech.length; i++){
-  	if (gamedata.tech[shipTech[i]] == 0){
-  		document.getElementById(shipTech[i]).style.display = "none";
+  for (let i = 4; i < shipTech.length; i++) {
+    if (gamedata.tech[shipTech[i]] == 0) {
+      document.getElementById(shipTech[i]).style.display = "none";
     } else {
-  		document.getElementById(shipTech[i]).style.display = "block";
+      document.getElementById(shipTech[i]).style.display = "block";
     }
   }
   update("sumValue", format(gamedata.sumValue, "currency"));
@@ -1840,6 +1971,11 @@ function prestige1() {
   document.location.reload(true);
 }
 
+function glow(el) {
+  el.classList.remove("glow");
+  void el.offsetWidth;
+  el.classList.add("glow");
+}
 
 App = {};
 App.view = {};
