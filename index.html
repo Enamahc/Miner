@@ -1,55 +1,55 @@
 <html lang="en" dir="ltr">
   <head>
-      <meta name="google-site-verification" content="t7YHYNkhq9FsDg9D92XTpE6l9sS2azeGwzBQ6izsDH8" />
-      <link rel="stylesheet" type="text/css" href="stylesheet.css" />
-      <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
-    </head>
-    <header>
-      <div id="lefttopbar">
-        <p id="title">Not Satisfactory</p>
-        <p id="author">by Enamahc</p>
-        <p id="version">ver. 0.0.0.a</p>
-      </div>
-      <div id="midtopbar">
-        <p id="msg" class="hideable">This is the message of the day
-          <span class="tooltip">Hello world, this message is a test!</span>
-        </p>
-      </div>
-      <div id="righttopbar">
-        <button onclick="save()">Save</button>
-        <button>Options</button>
-        <button onclick="reset()">Reset</button>
-      </div>
-    </header>
-    <div id="loading">
-      <div id="square">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
+    <meta name="google-site-verification" content="t7YHYNkhq9FsDg9D92XTpE6l9sS2azeGwzBQ6izsDH8" />
+    <link rel="stylesheet" type="text/css" href="stylesheet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+  </head>
+  <header>
+    <div id="lefttopbar">
+      <p id="title">Universal Mining</p>
+      <p id="author">by Enamahc</p>
+      <p id="version">ver. 0.0.0.a</p>
     </div>
+    <div id="midtopbar">
+      <p id="msg" class="hideable">This is the message of the day
+        <span class="tooltip">Hello world, this message is a test!</span>
+      </p>
+    </div>
+    <div id="righttopbar">
+      <button onclick="save()">Save</button>
+      <button>Options</button>
+      <button onclick="reset()">Reset</button>
+    </div>
+  </header>
+  <div id="loading">
+    <div id="square">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
   <body>
     <main id="main">
       <div id="res">
@@ -66,19 +66,19 @@
         <div class="rare">Rare2 : <span id="Rare2"></span></div>
         <div class="rare">Rare3 : <span id="Rare3"></span></div>
         <div id="droneList">
-          <div id="droneMk1" class="drone d1">Drone Mk1 :
+          <div id="droneMk1List" class="drone d1">Drone Mk1 :
             <div>
               <span id="d1left"></span>/
               <span id="drone1"></span>
             </div>
           </div>
-          <div id="droneMk2" class="drone d2">Drone Mk2 :
+          <div id="droneMk2List" class="drone d2">Drone Mk2 :
             <div>
               <span id="d2left"></span>/
               <span id="drone2"></span>
             </div>
           </div>
-          <div id="droneMk3" class="drone d3">Drone Mk3 :
+          <div id="droneMk3List" class="drone d3">Drone Mk3 :
             <div>
               <span id="d3left"></span>/
               <span id="drone3"></span>
@@ -149,64 +149,42 @@
           </div>
           <div id="shipEquipment">
             <div class="price">Bank Account : <span id="money"></span></div>
-            <div>Storage capacity : <span id="storage"></span>100u</div>
+            <div style="display: flex; justify-content: space-between;">Storage capacity : <span id="storage">10u</span></div>
             <div>Equipment :
               <ul id="Equipment" style="margin: 0; padding: 0;">
                 <li>- Cargo <span id="cargo">Mk1</span>
-                  <!-- <div class="info">i
-                    <span class="tooltip">Affects the amount of resource that can be stored on board</span>
-                  </div> -->
+                  <span class="tooltip">Affects the amount of resource that can be stored on board</span>
                 </li>
                 <li>- Drone Bay <span id="droneBay">Mk1</span>
-                  <!-- <div class="info">i
-                    <span class="tooltip">Affects the number of drone that can be stored on board</span>
-                  </div> -->
+                  <span class="tooltip">Affects the number of drone that can be stored on board</span>
                 </li>
 
                 <li>- Thrusters <span id="thrusters">Mk1</span>
-                  <!-- <div class="info">i
-                    <span class="tooltip">Affects travel time to another planet</span>
-                  </div> -->
+                  <span class="tooltip">Affects travel time to another planet</span>
                 </li>
                 <li>- Antenna <span id="antenna">Mk1</span>
-                  <!-- <div class="info">i
-                    <span class="tooltip">Allows you to find more distant planets</span>
-                  </div> -->
+                  <span class="tooltip">Allows you to find more distant planets</span>
                 </li>
                 <li id="planetAnalyzer">- Planet Analyzer
-                  <!-- <div class="info">i
-                    <span class="tooltip">Allows you to choose the planet according to its composition</span>
-                  </div> -->
+                  <span class="tooltip">Allows you to choose the planet according to its composition</span>
                 </li>
                 <li id="tractorBeam">- Tractor Beam
-                  <!-- <div class="info">i
-                    <span class="tooltip">Automatically refills ship storage</span>
-                  </div> -->
+                  <span class="tooltip">Automatically refills ship storage</span>
                 </li>
                 <li id="miningAI">- Mining AI
-                <!-- <div class="info">i
                   <span class="tooltip">Allows the ship to mine other planets when game is closed</span>
-                </div> -->
                 </li>
                 <li id="tradingAI">- Trading AI
-                <!-- <div class="info">i
                   <span class="tooltip">Allows the ship to sell resources mined when game is closed</span>
-                </div> -->
                 </li>
                 <li id="spatialDrillingLaser">- Spatial Drilling Laser
-                <!-- <div class="info">i
-                  <span class="tooltip">Allows the ship to mine planet from orbit</span>
-                </div> -->
+                <span class="tooltip">Allows the ship to mine planet from orbit</span>
                 </li>
                 <li id="teleporter">- Teleporter
-                <!-- <div class="info">i
-                  <span class="tooltip">Reduces travel times to 0</span>
-                </div> -->
+                <span class="tooltip">Reduces travel times to 0</span>
                 </li>
                 <li id="autoPrestige">- AutoPrestige
-                <!-- <div class="info">i
-                  <span class="tooltip"Automate travels to new planets</span>
-                </div> -->
+                <span class="tooltip">Automate travels to new planets</span>
                 </li>
               </ul>
             </div>
@@ -477,65 +455,19 @@
       <div id="tabs">
 
         <button onclick="tab('shop')" id="shopButton" class="button">Shop</button>
-        <button onclick="tab('lab')" id="labButton" class="button">Lab</button>
+        <button onclick="tab('labTab')" id="labButton" class="button">Lab</button>
         <button onclick="tab('workbench')" id="workBenchButton" class="button">Workbench</button>
 
       </div>
       <div id="shop" class="menus">
         <div class="menutitle">SHOP</div>
       </div>
-      <div id="lab" class="menus">
-        <div class="menutitle"> Research Lab</div>
+      <div id="labTab" class="menus">
+        <div class="menutitle">Research Lab</div>
       </div>
       <div id="workbench" class="menus">
         <div class="menutitle">WORKBENCH</div>
-        <div class="buyable">
-          <div class="buyable_text">
-            <div class="buyable_title">
-              <span class="buyable_title_text"> Mining Drone Mk1 </span>
-              <div id="Drone1Cost" class="buyable_title_price">
-                <div class="cat1">Iron : <span id="d1res1Cost"></span></div>
-                <div class="cat1">Copper : <span id="d1res2Cost"></span></div>
-                <div class="cat1">Aluminium : <span id="d1res3Cost"></span></div>
-              </div>
-            </div>
-            <div class="buyable_description"></div>
-            <span class="tooltip"> An automated drone to mine outer layer.</span>
-          </div>
-          <button onclick="buyDrone1()" class="buyable_button"> Buy </button>
-        </div>
-        <div class="buyable">
-          <div class="buyable_text">
-            <div class="buyable_title">
-              <span class="buyable_title_text"> Mining Drone Mk2 </span>
-              <div id="drone2Cost" class="buyable_title_price">
-                <div class="cat2">Zinc : <span id="d2res1Cost"></span></div>
-                <div class="cat2">Lead : <span id="d2res2Cost"></span></div>
-                <div class="cat2">Silver : <span id="d2res3Cost"></span></div>
-              </div>
-            </div>
-            <div class="buyable_description"></div>
-            <span class="tooltip">An automated drone to mine inner layer.</span>
-          </div>
-          <button onclick="buyDrone2()" class="buyable_button"> Buy </button>
-        </div>
-        <div class="buyable">
-          <div class="buyable_text">
-            <div class="buyable_title">
-              <span class="buyable_title_text"> Mining Drone Mk3 </span>
-              <div id="drone3Cost" class="buyable_title_price">
-                <div class="cat3">Iridium : <span id="d3res1Cost"></span></div>
-                <div class="cat3">Gold : <span id="d3res2Cost"></span></div>
-                <div class="cat3">Palladium : <span id="d3res3Cost"></span></div>
-              </div>
-            </div>
-            <div class="buyable_description"></div>
-            <span class="tooltip">An automated drone to mine the core!.</span>
-          </div>
-          <button onclick="buyDrone3()" class="buyable_button"> Buy </button>
-        </div>
       </div>
     </main>
-    <script src="main.js" charset="utf-8" type="text/javascript"></script>
   </body>
 </html>
