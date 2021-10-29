@@ -11,15 +11,15 @@ var gamedata = {
   money: 0,
   planetSize: 10,
   res: {
-    Res1a: 50,
-    Res1b: 50,
-    Res1c: 50,
-    Res2a: 0,
-    Res2b: 0,
-    Res2c: 0,
-    Res3a: 0,
-    Res3b: 0,
-    Res3c: 0,
+    Res1a: 5000,
+    Res1b: 5000,
+    Res1c: 5000,
+    Res2a: 1000,
+    Res2b: 1000,
+    Res2c: 1000,
+    Res3a: 100,
+    Res3b: 100,
+    Res3c: 100,
     Rare1: 0,
     Rare2: 0,
     Rare3: 0
@@ -102,15 +102,17 @@ var gamedata = {
     d2SW: [],
     d2S: [],
     d2SE: [],
-    d3NW: [],
-    d3N: [],
-    d3NE: [],
-    d3W: [],
-    d3core: [],
-    d3E: [],
-    d3SW: [],
-    d3S: [],
-    d3SE: []
+    /* 
+        d3NW: [],
+        d3N: [],
+        d3NE: [],
+        d3W: [], */
+    d3core: []
+    /* ,
+        d3E: [],
+        d3SW: [],
+        d3S: [],
+        d3SE: [] */
   },
   possibleOuterMaterial: ["Iron", "Copper", "Aluminium"],
   outermaterial: {
@@ -213,7 +215,7 @@ var gamedata = {
     membercard1: 0,
     membercard2: 0,
     membercard3: 0,
-    lab: 0,
+    researchLab: 0,
     droneMk1: 0,
     droneMk2: 0,
     droneMk3: 0,
@@ -237,7 +239,7 @@ var gamedata = {
     converterMk3: 0,
     autonomousDrone: 0,
     massReducer: 0,
-    engineeredDroneMk2: 0,
+    engineeredDrone: 0,
     planetAnalyzer: 0,
     teleporter: 0,
     tradingAI: 0,
@@ -247,7 +249,7 @@ var gamedata = {
     autoPrestige: 0
   },
   BP: {
-    lab: 0,
+    researchLab: 0,
     droneMk1: 0,
     droneMk2: 0,
     droneMk3: 0,
@@ -274,6 +276,21 @@ var gamedata = {
     tractorBeam: 0,
     autoPrestige: 0
   },
+  RP: 0,
+  resRP: {
+    Res1a: 0.2,
+    Res1b: 0.2,
+    Res1c: 0.2,
+    Res2a: 4,
+    Res2b: 4,
+    Res2c: 4,
+    Res3a: 64,
+    Res3b: 64,
+    Res3c: 64,
+    Rare1: 12.8,
+    Rare2: 128,
+    Rare3: 1280
+  },
   prestigeTime: 10,
   lasttick: 0
 };
@@ -286,7 +303,7 @@ var blueprints = {
     bought: false,
     toCraft: false,
     price: 2500,
-    desc: "This membership card of the Universal Miners Organization reduces travel costs by 99.99%!"
+    desc: "This membership card of the Universal Mining Organization reduces travel costs by 99.99%!"
   },
   membercard2: {
     prev: ["membercard1"],
@@ -306,7 +323,7 @@ var blueprints = {
     price: 0,
     desc: "(Not implemented)"
   },
-  lab: {
+  researchLab: {
     prev: [],
     next: [],
     title: "Research Lab",
@@ -614,14 +631,14 @@ var blueprints = {
 }
 
 var research = {
-  engineeredDroneMk2: {
+  engineeredDrone: {
     prev: [],
     next: [],
-    title: "Engineered Drone Mk2",
+    title: "Engineered Drones",
     bought: false,
     toCraft: false,
     RP: 9700,
-    desc: "Drones Mk2 doesn't require drone Mk1 anymore to be crafted."
+    desc: "Drones Mk2 doesn't require Mk1 drone anymore to be crafted. And the cost of making the Mk1 drone is now based on the quantity of Mk1 drone only (instead of Mk1 + Mk2)"
   },
   planetAnalyzer: {
     prev: [],
@@ -788,7 +805,7 @@ var research = {
   }
 }
 
-window.onload = function () {
+window.onload = function() {
   chooseRegion("map", "map");
   tab("shop");
 
@@ -813,7 +830,7 @@ window.onload = function () {
   if (gamedata.newgame === true) {
     document.getElementById('loading').style.display = 'flex';
     setTimeout(
-      function () {
+      function() {
         document.getElementById('loading').style.display = 'none';
         document.getElementById('main').style.display = 'grid';
       }, 5000);
@@ -837,6 +854,12 @@ window.onload = function () {
       research[key].bought = true;
     }
   });
+  
+  Object.entries(gamedata.resRP).forEach(([key, value]) => {
+    let el = document.getElementById(key + "RP");
+    el.value = format(gamedata.resRP[key], "standard");
+    update(key + "RP", format(gamedata.resRP[key], "standard"));
+  });
 
   Object.entries(gamedata.rare).forEach(([key, value]) => {
     if (gamedata.rare[key] === false) {
@@ -849,8 +872,8 @@ window.onload = function () {
     update("local_" + key, format(gamedata.droneAssign[key], "round"));
   });
 
-  if (gamedata.tech.lab === 1) {
-    document.getElementById("labButton").style.display = "block";
+  if (gamedata.tech.researchLab === 1) {
+    researchLab();
   } else {
     document.getElementById("labButton").style.display = "none";
   }
@@ -1049,17 +1072,16 @@ function save() {
   localStorage.setItem("Save", JSON.stringify(gamedata));
 }
 
-var saveGameLoop = window.setInterval(function () {
+var saveGameLoop = window.setInterval(function() {
   save();
 }, 15000);
 
-var mainGameLoop = window.setInterval(function () {
+var mainGameLoop = window.setInterval(function() {
   droneMining();
-  /* diff = Date.now() - gamedata.lasttick; */
   gamedata.lasttick = Date.now();
 }, 1000);
 
-var refreshLoop = window.setInterval(function () {
+var refreshLoop = window.setInterval(function() {
   Object.entries(gamedata.res).forEach(([key, value]) => {
     update(key, format(gamedata.res[key], "standard"));
   });
@@ -1086,28 +1108,42 @@ function update(id, content) {
 }
 
 function setDronePrice(lvl) {
-  if (lvl === 1 || lvl === 0){
+  if (lvl === 1 || lvl === 0) {
     Object.entries(gamedata.droneMk1).forEach(([key, value]) => {
-      gamedata.droneMk1[key] = gamedata.d1base * Math.pow(gamedata.d1x, gamedata.drone1);
-      if (document.getElementById("droneMk1"+key+"Cost") != null){
-        update("droneMk1"+key+"Cost", format(gamedata.droneMk1[key], "standard"));
+      if (gamedata.tech.engineeredDrone === 0) {
+        gamedata.droneMk1[key] = gamedata.d1base * Math.pow(gamedata.d1x, gamedata.drone1 + gamedata.drone2 + gamedata.drone3);
+      } else {
+        gamedata.droneMk1[key] = gamedata.d1base * Math.pow(gamedata.d1x, gamedata.drone1);
+      }
+      if (document.getElementById("droneMk1" + key + "Cost") != null) {
+        update("droneMk1" + key + "Cost", format(gamedata.droneMk1[key], "standard"));
       }
     });
     document.getElementById("droneMk1List").style.display = "flex";
   }
-  if (lvl === 2 || lvl === 0){
+  if (lvl === 2 || lvl === 0) {
     Object.entries(gamedata.droneMk2).forEach(([key, value]) => {
       gamedata.droneMk2[key] = gamedata.d2base * Math.pow(gamedata.d2x, gamedata.drone2);
-      update("droneMk2"+key+"Cost", format(gamedata.droneMk1[key], "standard"));
+      if (document.getElementById("droneMk2" + key + "Cost") != null) {
+        update("droneMk2" + key + "Cost", format(gamedata.droneMk2[key], "standard"));
+      }
     });
+    if (gamedata.tech.engineeredDrone === 0) {
+      setDronePrice(1);
+    }
     document.getElementById("droneMk2List").style.display = "flex";
   }
-  if (lvl === 3 || lvl === 0){
+  if (lvl === 3 || lvl === 0) {
     Object.entries(gamedata.droneMk3).forEach(([key, value]) => {
-      gamedata.droneMk3[key] = gamedata.d3base * Math.pow(gamedata.d2x, gamedata.drone2);
-      update("droneMk3"+key+"Cost", format(gamedata.droneMk1[key], "standard"));
-      document.getElementById("droneMk3List").style.display = "flex";
+      gamedata.droneMk3[key] = gamedata.d3base * Math.pow(gamedata.d3x, gamedata.drone3);
+      if (document.getElementById("droneMk3" + key + "Cost") != null) {
+        update("droneMk3" + key + "Cost", format(gamedata.droneMk3[key], "standard"));
+      }
     });
+    if (gamedata.tech.engineeredDrone === 0) {
+      setDronePrice(1);
+    }
+    document.getElementById("droneMk3List").style.display = "flex";
   }
 }
 
@@ -1125,7 +1161,7 @@ function setShop() {
       } else {
         let check = 0;
         for (let i = 0; i < blueprints[key].prev.length; i++) {
-          if (blueprints[blueprints[key].prev[i]].bought === true) {
+          if (gamedata.BP[blueprints[key].prev[i]] === 1 && gamedata.tech[blueprints[key].prev[i]] === 1) {
             check += 1;
           }
         }
@@ -1135,27 +1171,6 @@ function setShop() {
       }
     }
   });
-}
-
-function setWorkbench() {
-  Object.entries(blueprints).forEach(([key, value]) => {
-    if (gamedata.BP[key] === 1 && gamedata.tech[key] === 0) {
-      createWorkbenchItem(blueprints[key], key);
-    }
-  });
-  if (gamedata.tech.droneMk1 === 1) {
-    createWorkbenchItem(blueprints.droneMk1, "droneMk1");
-    setDronePrice(1);
-  }
-  if (gamedata.tech.droneMk2 === 1) {
-    createWorkbenchItem(blueprints.droneMk2, "droneMk2");
-    setDronePrice(2);
-  }
-  if (gamedata.tech.droneMk3 === 1) {
-    createWorkbenchItem(blueprints.droneMk3, "droneMk3");
-    setDronePrice(3);
-  }
-  
 }
 
 function createShopItem(BP) {
@@ -1171,7 +1186,7 @@ function createShopItem(BP) {
     let btn = document.createElement("button");
     btn.innerText = "Buy";
     btn.className = "buyable_button";
-    btn.addEventListener("click", function () {
+    btn.addEventListener("click", function() {
       buyShopItem(nextItem, BP);
     });
     buyable.appendChild(btn);
@@ -1206,22 +1221,46 @@ function createShopItem(BP) {
 }
 
 function buyShopItem(item, tech) {
-  if (gamedata.money >= 0 /* item.price */) {
+  if (gamedata.money >= 0 /* item.price */ ) {
     item.bought = true;
+    gamedata.BP[tech] = 1;
     document.getElementById("shop").removeChild(document.getElementById(tech));
     if (item.toCraft === true) {
       glow(document.getElementById("workBenchButton"));
       createWorkbenchItem(item, tech);
-      gamedata.BP[tech] = 1;
-      console.log(tech);
-      if (tech.includes("droneMk")){
+      if (tech.includes("droneMk")) {
         gamedata.tech[tech] = 1;
       }
     } else {
       gamedata.tech[tech] = 1;
+      try {
+        window[tech]();
+      } catch (err) {}
     }
+    save();
   }
   setShop();
+}
+
+function setWorkbench() {
+  Object.entries(blueprints).forEach(([key, value]) => {
+    if (gamedata.BP[key] === 1 && gamedata.tech[key] === 0) {
+      createWorkbenchItem(blueprints[key], key);
+    }
+  });
+  if (gamedata.tech.droneMk1 === 1) {
+    createWorkbenchItem(blueprints.droneMk1, "droneMk1");
+    setDronePrice(1);
+  }
+  if (gamedata.tech.droneMk2 === 1) {
+    createWorkbenchItem(blueprints.droneMk2, "droneMk2");
+    setDronePrice(2);
+  }
+  if (gamedata.tech.droneMk3 === 1) {
+    createWorkbenchItem(blueprints.droneMk3, "droneMk3");
+    setDronePrice(3);
+  }
+
 }
 
 function createWorkbenchItem(item, tech) {
@@ -1237,36 +1276,36 @@ function createWorkbenchItem(item, tech) {
   btn.className = "craft_button";
   if (tech.includes("droneMk1")) {
     Object.entries(gamedata.droneMk1).forEach(([key, value]) => {
-      if (gamedata.droneMk1[key] === 0){
+      if (gamedata.droneMk1[key] === 0) {
         gamedata.droneMk1[key] = item.res[key];
       }
     });
-    btn.addEventListener("click", function () {
-      buyDrone1(item, tech);
+    btn.addEventListener("click", function() {
+      buyDrone1();
     });
   } else if (tech.includes("droneMk2")) {
     Object.entries(gamedata.droneMk2).forEach(([key, value]) => {
-      if (gamedata.droneMk2[key] === 0){
+      if (gamedata.droneMk2[key] === 0) {
         gamedata.droneMk2[key] = item.res[key];
       }
     });
-    btn.addEventListener("click", function () {
-      buyDrone2(item, tech);
+    btn.addEventListener("click", function() {
+      buyDrone2();
     });
   } else if (tech.includes("droneMk3")) {
     Object.entries(gamedata.droneMk3).forEach(([key, value]) => {
-      if (gamedata.droneMk3[key] === 0){
+      if (gamedata.droneMk3[key] === 0) {
         gamedata.droneMk3[key] = item.res[key];
       }
     });
-    btn.addEventListener("click", function () {
-      buyDrone3(item, tech);
+    btn.addEventListener("click", function() {
+      buyDrone3();
     });
   } else {
-    btn.addEventListener("click", function () {
+    btn.addEventListener("click", function() {
       craftItem(item, tech);
     });
-  }   
+  }
   buyable.appendChild(btn);
   var tooltip = document.createElement("span");
   tooltip.className = "tooltip";
@@ -1306,17 +1345,198 @@ function createWorkbenchItem(item, tech) {
 
 function craftItem(item, tech) {
   let x = true;
-  Object.entries(item.res).some(function (key) {
+  Object.entries(item.res).some(function(key) {
     if (gamedata.res[key[0]] < item.res[key[0]]) {
-      console.log("Not enough resources");
       x = false;
     }
   });
-  if (x = true){
+  if (x === true) {
+    if (item.next.length > 0) {
+      glow(document.getElementById("shopButton"));
+    }
     Object.entries(item.res).forEach(([key, value]) => {
       gamedata.res[key] -= item.res[key];
     });
+    document.getElementById("workbench").removeChild(document.getElementById(tech));
+    gamedata.tech[tech] = 1;
+    save();
+  } else {
+    console.log("Not enough resources");
   }
+  try {
+    window[tech]();
+  } catch (err) {}
+  setShop();
+}
+
+function researchLab() {
+  if (document.getElementById("labButton").style.display === "none") {
+    document.getElementById("labButton").style.display = "block";
+    document.getElementById("labTab").style.display = "block";
+    glow(document.getElementById("labButton"));
+  }
+  Object.entries(research).forEach(([key, value]) => {
+    if ((research[key].toCraft === false || gamedata.BP[key] === 0) && gamedata.tech[key] === 0) {
+      if (research[key].prev.length === 0) {
+        createLabItem(key);
+      } else {
+        let check = 0;
+        for (let i = 0; i < research[key].prev.length; i++) {
+          if (gamedata.BP[research[key].prev[i]] === 1 && gamedata.tech[research[key].prev[i]] === 1) {
+            check += 1;
+          }
+        }
+        if (check === research[key].prev.length) {
+          createShopItem(key);
+        }
+      }
+    }
+  });
+}
+
+function createLabItem(BP) {
+  if (document.getElementById(BP) === null) {
+    var nextItem = research[BP];
+    var buyable = document.createElement("div");
+    buyable.className = "buyable";
+    buyable.id = BP;
+    document.getElementById("labTab").appendChild(buyable);
+    var buyable_text = document.createElement("div");
+    buyable_text.className = "buyable_text";
+    buyable.appendChild(buyable_text);
+    let btn = document.createElement("button");
+    btn.innerText = "Buy";
+    btn.className = "buyable_button";
+    btn.addEventListener("click", function() {
+      buyLabItem(nextItem, BP);
+    });
+    buyable.appendChild(btn);
+    var tooltip = document.createElement("span");
+    tooltip.className = "tooltip";
+    tooltip.innerText = nextItem.desc;
+    buyable.appendChild(tooltip);
+    var buyable_title = document.createElement("div");
+    buyable_title.className = "buyable_title";
+    buyable_text.appendChild(buyable_title);
+    var buyable_title_text = document.createElement("span");
+    buyable_title_text.className = "buyable_title_text";
+    var buyable_title_price = document.createElement("div");
+    buyable_title_price.className = "buyable_title_price";
+    buyable_title.appendChild(buyable_title_text);
+    buyable_title.appendChild(buyable_title_price);
+    buyable_title_text.innerText = nextItem.title;
+    var cost = document.createElement("div");
+    buyable_title_price.appendChild(cost);
+    cost.innerText = "Cost :";
+    cost.className = "price";
+    var amount = document.createElement("span");
+    cost.appendChild(amount);
+    amount.innerText = format(nextItem.RP, "standard");
+    if (nextItem.toCraft === true) {
+      buyable.style.background = "linear-gradient(rgba(0, 0, 255, 0.5), rgba(0, 0, 0, 1)), url('https://blueprintmarketing.fr/wp-content/uploads/2020/11/Blueprint-Marketing-Plan.jpg')";
+      buyable.style["background-size"] = "cover";
+      buyable_title_text.innerText = nextItem.title + " (BP)";
+    }
+  }
+}
+
+function buyLabItem(item, tech) {
+  if (gamedata.RP >= item.RP) {
+    gamedata.RP -= item.RP;
+    document.getElementById("labTab").removeChild(document.getElementById(tech));
+    gamedata.tech[tech] = 1;
+    save();
+  } else {
+    console.log("Not enough Research Point");
+  }
+  try {
+    window[tech]();
+  } catch (err) {}
+  researchLab();
+}
+
+function exoMk2() {
+  console.log("exoMk2 function");
+}
+
+function exoMk3() {
+  console.log("exoMk3 function");
+}
+
+function cargoMk2() {
+  console.log("cargoMk2 function");
+}
+
+function cargoMk3() {
+  console.log("cargoMk3 function");
+}
+
+function droneBayMk2() {
+  console.log("droneBayMk2 function");
+}
+
+function droneBayMk3() {
+  console.log("droneBayMk3 function");
+}
+
+function thrustersMk2() {
+  console.log("thrustersMk2 function");
+}
+
+function thrustersMk3() {
+  console.log("thrustersMk3 function");
+}
+
+function antennaMk2() {
+  console.log("antennaMk2 function");
+}
+
+function antennaMk3() {
+  console.log("antennaMk3 function");
+}
+
+function converterMk1() {
+  console.log("converterMk1 function");
+}
+
+function converterMk2() {
+  console.log("converterMk2 function");
+}
+
+function converterMk3() {
+  console.log("converterMk3 function");
+}
+
+function massReducer() {
+  console.log("massReducer function");
+}
+
+function planetAnalyzer() {
+  console.log("planetAnalyzer function");
+}
+
+function teleporter() {
+  console.log("teleporter function");
+}
+
+function tradingAI() {
+  console.log("tradingAI function");
+}
+
+function miningAI() {
+  console.log("miningAI function");
+}
+
+function spatialDrillingLaser() {
+  console.log("spatialDrillingLaser function");
+}
+
+function tractorBeam() {
+  console.log("tractorBeam function");
+}
+
+function autoPrestige() {
+  console.log("autoPrestige function");
 }
 
 function randn_bm(min, max, skew) {
@@ -1417,7 +1637,7 @@ function droneMining() {
       }
       if (key.includes("core") && gamedata.reach.core != 0) {
         if (key.includes("2")) {
-          const notMinedExt = gamedata.notMined[key].filter(function (n) {
+          const notMinedExt = gamedata.notMined[key].filter(function(n) {
             if (!coreCoord.includes(n)) {
               return n;
             }
@@ -1425,7 +1645,7 @@ function droneMining() {
           toMine = notMinedExt.slice(0, gamedata.droneAssign[key]);
         } else if (key.includes("3")) {
           if (gamedata.reach.d2core != 0 && gamedata.notMined.d2core.includes(1441)) {
-            const notMinedTemp = gamedata.notMined.d2core.filter(function (n) {
+            const notMinedTemp = gamedata.notMined.d2core.filter(function(n) {
               if (coreCoord.includes(n)) {
                 if (coreBorder.includes(gamedata.reach.d2core + l)) {
                   return n >= (gamedata.reach.d2core + l);
@@ -1440,7 +1660,7 @@ function droneMining() {
             })
             toMine = notMinedTemp.slice(0, gamedata.droneAssign[key]);
           } else if (!gamedata.notMined.d2core.includes(1441)) {
-            const notMinedCore = gamedata.notMined.d2core.filter(function (n) {
+            const notMinedCore = gamedata.notMined.d2core.filter(function(n) {
               if (coreCoord.includes(n)) {
                 return n;
               }
@@ -1453,18 +1673,18 @@ function droneMining() {
       } else if (key.includes("2")) {
         if (gamedata.notMined[key].includes(1) && gamedata.reach["d1" + key.slice(2)] != 0) {
           if (key.length === 3) {
-            const notMinedReversed = gamedata.notMined[key].filter(function (n) {
+            const notMinedReversed = gamedata.notMined[key].filter(function(n) {
               return n <= (gamedata.reach["d1" + key.slice(2)] - (2 * h / 3 * (l) - l));
             })
             toMine = notMinedReversed.slice(-gamedata.droneAssign[key]);
           } else if (key.length === 4) {
             if (gamedata.reach["d1" + key.slice(2)] < (h * 2 * h / 3 + 2 * h / 3)) {
-              const notMinedReversed = gamedata.notMined[key].filter(function (n) {
+              const notMinedReversed = gamedata.notMined[key].filter(function(n) {
                 return n <= (gamedata.reach["d1" + key.slice(2)] - (h * 2 * h / 3 + 2 * h / 3 - h));
               });
               toMine = notMinedReversed.slice(-gamedata.droneAssign[key]);
             } else {
-              const notMinedReversed = gamedata.notMined[key].filter(function (n) {
+              const notMinedReversed = gamedata.notMined[key].filter(function(n) {
                 if (c2leftBorder.includes(n)) {
                   return n <= (((gamedata.reach["d1" + key.slice(2)] - (h * 2 * h / 3 + 2 * h / 3)) / 2) + 1);
                 }
@@ -1519,6 +1739,9 @@ function droneMining() {
       }
     }
   });
+  if (gamedata.tech.autonomousDrone === 1) {
+    autonomy();
+  }
 }
 
 function mining(grid, el, row, col, i, region, optReg) {
@@ -1600,6 +1823,47 @@ function mining(grid, el, row, col, i, region, optReg) {
   }
 }
 
+function autonomy() {
+  Object.entries(gamedata.notMined).forEach(([key, value]) => {
+    if (gamedata.notMined[key].length === 0) {
+      if (key.includes("1")) {
+        gamedata.d1left = gamedata.d1left + gamedata.droneAssign[key];
+        update("d1left", gamedata.d1left);
+      } else if (key.includes("2")) {
+        gamedata.d2left = gamedata.d2left + gamedata.droneAssign[key];
+        update("d2left", gamedata.d2left);
+      } else if (key.includes("3")) {
+        gamedata.d3left = gamedata.d3left + gamedata.droneAssign[key];
+        update("d3left", gamedata.d3left);
+      }
+      gamedata.droneAssign[key] = 0;
+      update(key, gamedata.droneAssign[key]);
+      update("local_" + key, gamedata.droneAssign[key]);
+    }
+  });
+  Object.entries(gamedata.notMined).forEach(([key, value]) => {
+    if (gamedata.notMined[key].length > 0) {
+      if (key.includes("1") && gamedata.d1left > 0) {
+        gamedata.droneAssign[key] = gamedata.droneAssign[key] + gamedata.d1left;
+        console.log(gamedata.droneAssign[key])
+        gamedata.d1left = 0;
+        update("d1left", gamedata.d1left);
+      } else if (key.includes("2") && gamedata.d2left > 0 && gamedata.reach["d1" + key.slice(2)] > 0) {
+        gamedata.droneAssign[key] = gamedata.droneAssign[key] + gamedata.d2left;
+        gamedata.d2left = 0;
+        update("d2left", gamedata.d2left);
+      } else if (key.includes("3") && gamedata.d3left > 0 && gamedata.reach.d2core > 0) {
+        gamedata.droneAssign[key] = gamedata.droneAssign[key] + gamedata.d3left;
+        gamedata.d3left = 0;
+        update("d3left", gamedata.d3left);
+      }
+      update(key, gamedata.droneAssign[key]);
+      update("local_" + key, gamedata.droneAssign[key]);
+    }
+  });
+
+}
+
 function chooseRegion(to, from) {
 
   if (to.length === 2) {
@@ -1664,8 +1928,8 @@ function clickableGrid(rows, cols, callback, regionArray, regionName) {
         }
         cell.addEventListener(
           "click",
-          (function (grid, el, r, c, i, reg, regionName) {
-            return function () {
+          (function(grid, el, r, c, i, reg, regionName) {
+            return function() {
               callback(grid, el, r, c, i, reg, regionName);
             };
           })(grid, cell, r, c, i, reg, regionName),
@@ -1689,8 +1953,8 @@ function clickableGrid(rows, cols, callback, regionArray, regionName) {
         }
         cell.addEventListener(
           "click",
-          (function (grid, el, r, c, i, reg, regionName) {
-            return function () {
+          (function(grid, el, r, c, i, reg, regionName) {
+            return function() {
               callback(grid, el, r, c, i, reg, regionName);
             };
           })(grid, cell, r, c, i, reg, regionName),
@@ -1713,8 +1977,8 @@ function clickableGrid(rows, cols, callback, regionArray, regionName) {
         }
         cell.addEventListener(
           "click",
-          (function (grid, el, r, c, i, reg, regionName) {
-            return function () {
+          (function(grid, el, r, c, i, reg, regionName) {
+            return function() {
               callback(grid, el, r, c, i, reg, regionName);
             };
           })(grid, cell, r, c, i, reg, regionName),
@@ -1728,94 +1992,130 @@ function clickableGrid(rows, cols, callback, regionArray, regionName) {
 
 function tab(tab) {
   document.getElementById("shop").style.display = "none";
-  document.getElementById("labTab").style.display = "none";
+  document.getElementById("lab").style.display = "none";
   document.getElementById("workbench").style.display = "none";
+  document.getElementById("labTab").style.display = "none";
+  document.getElementById("machineTab").style.display = "none";
   document.getElementById(tab).style.display = "inline-block";
+  if (tab === "lab") {
+    document.getElementById("labTab").style.display = "inline-block";
+  }
+  if (tab.includes("Tab")) {
+    document.getElementById("lab").style.display = "inline-block";
+  }
+  Object.entries(gamedata.rare).forEach(([key, value]) => {
+    if (gamedata.rare[key] == false) {
+      let el = document.getElementsByClassName(key)
+      for (var i = 0; i < el.length; i++) {
+        el[i].style.display = "none";
+      }
+    } else {
+      let el = document.getElementsByClassName(key)
+      for (var i = 0; i < el.length; i++) {
+        el[i].style.display = "block";
+      }
+    }
+  });
 }
 
-function buyDrone1(item, tech) {
+function buyDrone1() {
   let x = true;
-  Object.entries(gamedata.droneMk1).some(function (key) {
+  Object.entries(gamedata.droneMk1).some(function(key) {
     if (gamedata.res[key[0]] < gamedata.droneMk1[key[0]]) {
-      console.log("Not enough resources");
       x = false;
     }
   });
-  if (x === true){
+  if (x === true) {
     gamedata.drone1 += 1;
     gamedata.d1left += 1;
     Object.entries(gamedata.droneMk1).forEach(([key, value]) => {
-      if (gamedata.droneMk1[key] > 0){
+      if (gamedata.droneMk1[key] > 0) {
         gamedata.res[key] -= gamedata.droneMk1[key];
       }
     });
     setDronePrice(1);
+  } else {
+    console.log("Not enough resources");
   }
 }
 
 function buyDrone2() {
-  if (gamedata.d2res1Cost < gamedata.d2base) {
-    gamedata.d1res1Cost = gamedata.d1base;
-    gamedata.d1res2Cost = gamedata.d1base;
-    gamedata.d1res3Cost = gamedata.d1base;
-    gamedata.d2res1Cost = gamedata.d2base;
-    gamedata.d2res2Cost = gamedata.d2base;
-    gamedata.d2res3Cost = gamedata.d2base;
-    gamedata.d3res1Cost = gamedata.d3base;
-    gamedata.d3res2Cost = gamedata.d3base;
-    gamedata.d3res3Cost = gamedata.d3base;
+  let x = true;
+  Object.entries(gamedata.droneMk2).some(function(key) {
+    if (gamedata.res[key[0]] < gamedata.droneMk2[key[0]]) {
+      x = false;
+    }
+  });
+  if (x === false) {
+    console.log("Not enough resources");
   }
-  if (
-    gamedata.res.Res2a >= gamedata.d2res1Cost &&
-    gamedata.res.Res2b >= gamedata.d2res2Cost &&
-    gamedata.res.Res2c >= gamedata.d2res3Cost
-  ) {
-    gamedata.res.Res2a -= gamedata.d2res1Cost;
-    gamedata.res.Res2b -= gamedata.d2res2Cost;
-    gamedata.res.Res2c -= gamedata.d2res3Cost;
+
+  if (gamedata.tech.engineeredDrone === 0 && gamedata.drone1 === 0) {
+    console.log("Not enough Mk1 drone");
+    x = false;
+  }
+  if (x === true) {
     gamedata.drone2 += 1;
     gamedata.d2left += 1;
-    gamedata.d2res1Cost = gamedata.d2base * Math.pow(gamedata.d2x, gamedata.drone2);
-    gamedata.d2res2Cost = gamedata.d2base * Math.pow(gamedata.d2x, gamedata.drone2);
-    gamedata.d2res3Cost = gamedata.d2base * Math.pow(gamedata.d2x, gamedata.drone2);
-    update("d2res1Cost", format(gamedata.d2res1Cost, "standard"));
-    update("d2res2Cost", format(gamedata.d2res2Cost, "standard"));
-    update("d2res3Cost", format(gamedata.d2res3Cost, "standard"));
-  } else {
-    console.log("Not enough resources");
+    Object.entries(gamedata.droneMk2).forEach(([key, value]) => {
+      if (gamedata.droneMk2[key] > 0) {
+        gamedata.res[key] -= gamedata.droneMk2[key];
+      }
+    });
+    if (gamedata.tech.engineeredDrone === 0) {
+      gamedata.drone1 -= 1;
+      if (gamedata.d1left === 0) {
+        for (const [key, value] of Object.entries(gamedata.droneAssign)) {
+          if (value > 0 && key.includes("d1")) {
+            gamedata.droneAssign[key] -= 1;
+            gamedata.d1left += 1;
+            update(key, format(gamedata.droneAssign[key], "round"));
+            update("local_" + key, format(gamedata.droneAssign[key], "round"));
+            break;
+          }
+        }
+      }
+      gamedata.d1left -= 1;
+    }
+    setDronePrice(2);
   }
 }
 
 function buyDrone3() {
-  if (gamedata.d3res1Cost < gamedata.d3base) {
-    gamedata.d1res1Cost = gamedata.d1base;
-    gamedata.d1res2Cost = gamedata.d1base;
-    gamedata.d1res3Cost = gamedata.d1base;
-    gamedata.d2res1Cost = gamedata.d2base;
-    gamedata.d2res2Cost = gamedata.d2base;
-    gamedata.d2res3Cost = gamedata.d2base;
-    gamedata.d3res1Cost = gamedata.d3base;
-    gamedata.d3res2Cost = gamedata.d3base;
-    gamedata.d3res3Cost = gamedata.d3base;
+  let x = true;
+  Object.entries(gamedata.droneMk3).some(function(key) {
+    if (gamedata.res[key[0]] < gamedata.droneMk3[key[0]]) {
+      console.log("Not enough resources");
+      x = false;
+    }
+  });
+
+  if (gamedata.tech.engineeredDrone === 0 && gamedata.drone2 === 0) {
+    console.log("Not enough Mk2 drone");
+    x = false;
   }
-  if (
-    gamedata.res.Res3a >= gamedata.d3res1Cost &&
-    gamedata.res.Res3b >= gamedata.d3res2Cost &&
-    gamedata.res.Res3c >= gamedata.d3res3Cost
-  ) {
-    gamedata.res.Res3a -= gamedata.d3res1Cost;
-    gamedata.res.Res3b -= gamedata.d3res2Cost;
-    gamedata.res.Res3c -= gamedata.d3res3Cost;
+  if (x === true) {
     gamedata.drone3 += 1;
     gamedata.d3left += 1;
-    gamedata.d3res1Cost = gamedata.d3base * Math.pow(gamedata.d3x, gamedata.drone3);
-    gamedata.d3res2Cost = gamedata.d3base * Math.pow(gamedata.d3x, gamedata.drone3);
-    gamedata.d3res3Cost = gamedata.d3base * Math.pow(gamedata.d3x, gamedata.drone3);
-    update("d3res1Cost", format(gamedata.d3res1Cost, "standard"));
-    update("d3res2Cost", format(gamedata.d3res2Cost, "standard"));
-    update("d3res3Cost", format(gamedata.d3res3Cost, "standard"));
-  } else {
-    console.log("Not enough resources");
+    Object.entries(gamedata.droneMk3).forEach(([key, value]) => {
+      if (gamedata.droneMk3[key] > 0) {
+        gamedata.res[key] -= gamedata.droneMk3[key];
+      }
+    });
+    gamedata.drone2 -= 1;
+    if (gamedata.d2left === 0) {
+      for (const [key, value] of Object.entries(gamedata.droneAssign)) {
+        if (value > 0 && key.includes("d2")) {
+          gamedata.droneAssign[key] -= 1;
+          gamedata.d2left += 1;
+          update(key, format(gamedata.droneAssign[key], "round"));
+          update("local_" + key, format(gamedata.droneAssign[key], "round"));
+          break;
+        }
+      }
+    }
+    gamedata.d2left -= 1;
+    setDronePrice(3);
   }
 }
 
@@ -1954,7 +2254,7 @@ function sellRessources() {
 function selling() {
   document.getElementById("ship").style.display = "none";
   document.getElementById("timer").style.display = "block";
-  var x = setInterval(function () {
+  var x = setInterval(function() {
     gamedata.timeLeft -= 1;
     var m = Math.floor(gamedata.timeLeft / 60);
     var s = gamedata.timeLeft % 60;
@@ -2026,7 +2326,7 @@ App.control = {};
 App.model = {};
 
 App.model.nbStars = 100;
-App.model.colors = function () {
+App.model.colors = function() {
   do {
     App.model.red = Math.floor(Math.random() * 255);
   }
@@ -2048,13 +2348,13 @@ App.model.colors = function () {
   while (App.model.opacity == 0 || App.model.opacity > 0.75);
 }
 
-App.view.init = function () {
-  App.view.zone = function () {
+App.view.init = function() {
+  App.view.zone = function() {
     App.view.zone = document.createElement("div");
     document.body.appendChild(App.view.zone);
     App.view.zone.id = "zone";
   }
-  App.view.createStar = function () {
+  App.view.createStar = function() {
     App.view.star = document.createElement("div");
     App.view.zone.appendChild(App.view.star);
     App.view.star.className = "stars";
@@ -2068,7 +2368,7 @@ App.view.init = function () {
     App.view.star.style.height = tmp + "rem";
   }
 
-  App.view.multiStars = function () {
+  App.view.multiStars = function() {
     for (var i = 0; i < App.model.nbStars; i++) {
       App.view.createStar();
     }
@@ -2077,7 +2377,7 @@ App.view.init = function () {
   App.view.multiStars();
 }
 
-App.start = function () {
+App.start = function() {
   App.view.init();
 }
 App.start();
