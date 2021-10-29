@@ -455,15 +455,74 @@
       <div id="tabs">
 
         <button onclick="tab('shop')" id="shopButton" class="button">Shop</button>
-        <button onclick="tab('labTab')" id="labButton" class="button">Lab</button>
+        <button onclick="tab('lab')" id="labButton" class="button">Lab</button>
         <button onclick="tab('workbench')" id="workBenchButton" class="button">Workbench</button>
 
       </div>
       <div id="shop" class="menus">
         <div class="menutitle">SHOP</div>
       </div>
-      <div id="labTab" class="menus">
+      <div id="lab" class="menus">
         <div class="menutitle">Research Lab</div>
+        <div id="labTab" class="submenus">
+          <button onclick="tab('machineTab')" id="machineButton" class="button">Research Machine</button>
+        </div>
+        <div id="machineTab" class="submenus">
+          <button onclick="tab('labTab')" id="labTabButton" class="button">Access Research</button>
+          <div id="labMachine">
+            <div></div>
+            <span>Qty to convert/s</span>
+            <span>RP/u</span>
+            <span class="resName cat1">Iron :</span>
+            <input type="number" id="Res1aLab" value="0" min="0" step="0.1" onchange="changeRP('Res1a', 1)">
+            <span id="Res1aRP" class="cat1">0</span>
+            <span class="resName cat1">Copper :</span>
+            <input type="number" id="Res1bLab" value="0" min="0" step="0.1" onchange="changeRP('Res1b', 1)">
+            <span id="Res1bRP" class="cat1">0</span>
+            <span class="resName cat1">Aluminium :</span>
+            <input type="number" id="Res1cLab" value="0" min="0" step="0.1" onchange="changeRP('Res1c', 1)">
+            <span id="Res1cRP" class="cat1">0</span>
+            <span class="resName cat2">Zinc :</span>
+            <input type="number" id="Res2aLab" value="0" min="0" step="0.01" onchange="changeRP('Res2a', 2)">
+            <span id="Res2aRP" class="cat2">0</span>
+            <span class="resName cat2">Lead :</span>
+            <input type="number" id="Res2bLab" value="0" min="0" step="0.01" onchange="changeRP('Res2b', 2)">
+            <span id="Res2bRP" class="cat2">0</span>
+            <span class="resName cat2">Silver :</span>
+            <input type="number" id="Res2cLab" value="0" min="0" step="0.01" onchange="changeRP('Res2c', 2)">
+            <span id="Res2cRP" class="cat2">0</span>
+            <span class="resName cat3">Iridium :</span>
+            <input type="number" id="Res3aLab" value="0" min="0" step="0.001" onchange="changeRP('Res3a', 3)">
+            <span id="Res3aRP" class="cat3">0</span>
+            <span class="resName cat3">Gold :</span>
+            <input type="number" id="Res3bLab" value="0" min="0" step="0.001" onchange="changeRP('Res3b', 3)">
+            <span id="Res3bRP" class="cat3">0</span>
+            <span class="resName cat3">Palladium :</span>
+            <input type="number" id="Res3cLab" value="0" min="0" step="0.001" onchange="changeRP('Res3c', 3)">
+            <span id="Res3cRP" class="cat3">0</span>
+            <span class="resName rare Rare1">Rare1 :</span>
+            <input type="number" id="Rare1Lab" class="Rare1" value="0" min="0" step="1" onchange="changeRP('Rare1', 4)">
+            <span id="Rare1RP" class="rare Rare1">0</span>
+            <span class="resName rare  Rare2">Rare2 :</span>
+            <input type="number" id="Rare2Lab" class="Rare2" value="0" min="0" step="1" onchange="changeRP('Rare2', 4)">
+            <span id="Rare2RP" class="rare Rare2">0</span>
+            <span class="resName rare  Rare2">Rare3 :</span>
+            <input type="number" id="Rare3Lab" class="Rare3" value="0" min="0" step="1" onchange="changeRP('Rare3', 4)">
+            <span id="Rare3RP" class="rare Rare3">0</span>
+
+            <span style="display: flex; justify-content: left;">Total (RP/s)</span>
+            <button id="totalRP" onclick="resetRP()">Reset</button>
+            <span id="sumRP">0</span>
+          </div>
+          <label class='toggle-label'>
+           <input type='checkbox'/>
+             <span class='back'>
+              <span class='toggle'></span>
+              <span class='label on'>ON</span>
+              <span class='label off'>OFF</span>  
+            </span>
+          </label>
+        </div>
       </div>
       <div id="workbench" class="menus">
         <div class="menutitle">WORKBENCH</div>
