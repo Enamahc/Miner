@@ -475,7 +475,6 @@ button {
   display: flex;
   width: 100%;
   justify-content: space-between;
-  background-color: black;
   border-bottom: solid 1px #002b35;
   color: var(--rarecolor);
 }
@@ -1420,6 +1419,17 @@ td {
   border-left: solid 1px #002b35;
 }
 
+.submenus {
+  display: flex;
+  overflow: auto;
+  color: ghostwhite;
+  min-width: 200px;
+  width: 99%;
+  height: 100%;
+  /* background-color: hsl(155, 15%, 70%); */
+  border-left: solid 1px #002b35;
+}
+
 .submenus > button{
   display: flex;
   margin: auto;
@@ -1488,6 +1498,12 @@ td {
   color: gold;
   justify-content: space-between;
 }
+.RPprice {
+  display: flex;
+  color: rgb(152, 9, 209);
+  justify-content: space-between;
+}
+
 
 .buyable_button {
   align-self: center;
@@ -1509,17 +1525,18 @@ td {
 
 #labMachine  {
   display: grid;
-  grid-template-columns: 2fr 2fr 1fr;
-  grid-template-rows: repeat(11, auto);
-  white-space: nowrap;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: 1.5em repeat(1, auto);
   justify-content: end;
   font-size: 0.8em;
   width: 100%;
+  min-width: 200px;
 }
 
 #labMachine span {
   display: flex;
   justify-content: end;
+  align-items: center;
 }
 
 #labMachine input {
@@ -1580,6 +1597,8 @@ td {
   display: flex;
   align-items: center;
   width: 40%;
+  max-width: 150px;
+  min-width: 100px;
   aspect-ratio: 2/1;
   margin: auto;
   margin-top: 10%;

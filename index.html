@@ -65,6 +65,7 @@
         <div class="rare">Rare1 : <span id="Rare1"></span></div>
         <div class="rare">Rare2 : <span id="Rare2"></span></div>
         <div class="rare">Rare3 : <span id="Rare3"></span></div>
+        <div class="RPprice">RP : <span id="RP"></span></div>
         <div id="droneList">
           <div id="droneMk1List" class="drone d1">Drone Mk1 :
             <div>
@@ -133,7 +134,7 @@
               <span class="resName rare  Rare2">Rare2 :</span>
               <input type="number" id="Rare2Ship" class="Rare2" value="0" min="0" step="1" onchange="changeStock('Rare2', 4)">
               <span id="Rare2Value" class="rare Rare2">0</span>
-              <span class="resName rare  Rare2">Rare3 :</span>
+              <span class="resName rare Rare3">Rare3 :</span>
               <input type="number" id="Rare3Ship" class="Rare3" value="0" min="0" step="1" onchange="changeStock('Rare3', 4)">
               <span id="Rare3Value" class="rare Rare3">0</span>
 
@@ -474,40 +475,40 @@
             <span>Qty to convert/s</span>
             <span>RP/u</span>
             <span class="resName cat1">Iron :</span>
-            <input type="number" id="Res1aLab" value="0" min="0" step="0.1" onchange="changeRP('Res1a', 1)">
+            <input type="number" id="Res1aLab" value="0" min="0" step="0.1">
             <span id="Res1aRP" class="cat1">0</span>
             <span class="resName cat1">Copper :</span>
-            <input type="number" id="Res1bLab" value="0" min="0" step="0.1" onchange="changeRP('Res1b', 1)">
+            <input type="number" id="Res1bLab" value="0" min="0" step="0.1">
             <span id="Res1bRP" class="cat1">0</span>
             <span class="resName cat1">Aluminium :</span>
-            <input type="number" id="Res1cLab" value="0" min="0" step="0.1" onchange="changeRP('Res1c', 1)">
+            <input type="number" id="Res1cLab" value="0" min="0" step="0.1">
             <span id="Res1cRP" class="cat1">0</span>
             <span class="resName cat2">Zinc :</span>
-            <input type="number" id="Res2aLab" value="0" min="0" step="0.01" onchange="changeRP('Res2a', 2)">
+            <input type="number" id="Res2aLab" value="0" min="0" step="0.01">
             <span id="Res2aRP" class="cat2">0</span>
             <span class="resName cat2">Lead :</span>
-            <input type="number" id="Res2bLab" value="0" min="0" step="0.01" onchange="changeRP('Res2b', 2)">
+            <input type="number" id="Res2bLab" value="0" min="0" step="0.01">
             <span id="Res2bRP" class="cat2">0</span>
             <span class="resName cat2">Silver :</span>
-            <input type="number" id="Res2cLab" value="0" min="0" step="0.01" onchange="changeRP('Res2c', 2)">
+            <input type="number" id="Res2cLab" value="0" min="0" step="0.01">
             <span id="Res2cRP" class="cat2">0</span>
             <span class="resName cat3">Iridium :</span>
-            <input type="number" id="Res3aLab" value="0" min="0" step="0.001" onchange="changeRP('Res3a', 3)">
+            <input type="number" id="Res3aLab" value="0" min="0" step="0.001">
             <span id="Res3aRP" class="cat3">0</span>
             <span class="resName cat3">Gold :</span>
-            <input type="number" id="Res3bLab" value="0" min="0" step="0.001" onchange="changeRP('Res3b', 3)">
+            <input type="number" id="Res3bLab" value="0" min="0" step="0.001">
             <span id="Res3bRP" class="cat3">0</span>
             <span class="resName cat3">Palladium :</span>
-            <input type="number" id="Res3cLab" value="0" min="0" step="0.001" onchange="changeRP('Res3c', 3)">
+            <input type="number" id="Res3cLab" value="0" min="0" step="0.001">
             <span id="Res3cRP" class="cat3">0</span>
             <span class="resName rare Rare1">Rare1 :</span>
-            <input type="number" id="Rare1Lab" class="Rare1" value="0" min="0" step="1" onchange="changeRP('Rare1', 4)">
+            <input type="number" id="Rare1Lab" class="Rare1" value="0" min="0" step="1">
             <span id="Rare1RP" class="rare Rare1">0</span>
             <span class="resName rare  Rare2">Rare2 :</span>
-            <input type="number" id="Rare2Lab" class="Rare2" value="0" min="0" step="1" onchange="changeRP('Rare2', 4)">
+            <input type="number" id="Rare2Lab" class="Rare2" value="0" min="0" step="1">
             <span id="Rare2RP" class="rare Rare2">0</span>
-            <span class="resName rare  Rare2">Rare3 :</span>
-            <input type="number" id="Rare3Lab" class="Rare3" value="0" min="0" step="1" onchange="changeRP('Rare3', 4)">
+            <span class="resName rare Rare3">Rare3 :</span>
+            <input type="number" id="Rare3Lab" class="Rare3" value="0" min="0" step="1">
             <span id="Rare3RP" class="rare Rare3">0</span>
 
             <span style="display: flex; justify-content: left;">Total (RP/s)</span>

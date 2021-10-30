@@ -11,18 +11,18 @@ var gamedata = {
   money: 0,
   planetSize: 10,
   res: {
-    Res1a: 0,
-    Res1b: 0,
-    Res1c: 0,
-    Res2a: 0,
-    Res2b: 0,
-    Res2c: 0,
-    Res3a: 0,
-    Res3b: 0,
-    Res3c: 0,
-    Rare1: 0,
-    Rare2: 0,
-    Rare3: 0
+    Res1a: 1000,
+    Res1b: 1000,
+    Res1c: 1000,
+    Res2a: 1000,
+    Res2b: 1000,
+    Res2c: 1000,
+    Res3a: 1000,
+    Res3b: 1000,
+    Res3c: 1000,
+    Rare1: 1000,
+    Rare2: 1000,
+    Rare3: 1000
   },
   resName: {
     Res1a: "Iron",
@@ -249,6 +249,9 @@ var gamedata = {
     autoPrestige: 0
   },
   BP: {
+    membercard1: 0,
+    membercard2: 0,
+    membercard3: 0,
     researchLab: 0,
     droneMk1: 0,
     droneMk2: 0,
@@ -269,9 +272,15 @@ var gamedata = {
     antennaMk2: 0,
     antennaMk3: 0,
     converterMk1: 0,
+    converterMk2: 0,
+    converterMk3: 0,
     autonomousDrone: 0,
+    massReducer: 0,
+    engineeredDrone: 0,
     planetAnalyzer: 0,
     teleporter: 0,
+    tradingAI: 0,
+    miningAI: 0,
     spatialDrillingLaser: 0,
     tractorBeam: 0,
     autoPrestige: 0
@@ -1085,6 +1094,7 @@ var refreshLoop = window.setInterval(function() {
   Object.entries(gamedata.res).forEach(([key, value]) => {
     update(key, format(gamedata.res[key], "standard"));
   });
+  update("RP", format(gamedata.RP, "standard"));
   update("drone1", format(gamedata.drone1, "round"));
   update("d1left", format(gamedata.d1left, "round"));
   update("drone2", format(gamedata.drone2, "round"));
@@ -1221,13 +1231,13 @@ function createShopItem(BP) {
 }
 
 function buyShopItem(item, tech) {
-  if (gamedata.money >= 0 /* item.price */ ) {
+  if (gamedata.money >= item.price) {
     item.bought = true;
     gamedata.BP[tech] = 1;
     document.getElementById("shop").removeChild(document.getElementById(tech));
     if (item.toCraft === true) {
       glow(document.getElementById("workBenchButton"));
-      createWorkbenchItem(item, tech);
+      createWorkbenchItem(item, tech, "shop");
       if (tech.includes("droneMk")) {
         gamedata.tech[tech] = 1;
       }
@@ -1245,25 +1255,25 @@ function buyShopItem(item, tech) {
 function setWorkbench() {
   Object.entries(blueprints).forEach(([key, value]) => {
     if (gamedata.BP[key] === 1 && gamedata.tech[key] === 0) {
-      createWorkbenchItem(blueprints[key], key);
+      createWorkbenchItem(blueprints[key], key, "shop");
     }
   });
   if (gamedata.tech.droneMk1 === 1) {
-    createWorkbenchItem(blueprints.droneMk1, "droneMk1");
+    createWorkbenchItem(blueprints.droneMk1, "droneMk1", "shop");
     setDronePrice(1);
   }
   if (gamedata.tech.droneMk2 === 1) {
-    createWorkbenchItem(blueprints.droneMk2, "droneMk2");
+    createWorkbenchItem(blueprints.droneMk2, "droneMk2", "shop");
     setDronePrice(2);
   }
   if (gamedata.tech.droneMk3 === 1) {
-    createWorkbenchItem(blueprints.droneMk3, "droneMk3");
+    createWorkbenchItem(blueprints.droneMk3, "droneMk3", "shop");
     setDronePrice(3);
   }
 
 }
 
-function createWorkbenchItem(item, tech) {
+function createWorkbenchItem(item, tech, from) {
   var buyable = document.createElement("div");
   buyable.className = "buyable";
   buyable.id = tech;
@@ -1303,7 +1313,7 @@ function createWorkbenchItem(item, tech) {
     });
   } else {
     btn.addEventListener("click", function() {
-      craftItem(item, tech);
+      craftItem(item, tech, from);
     });
   }
   buyable.appendChild(btn);
@@ -1343,7 +1353,7 @@ function createWorkbenchItem(item, tech) {
   });
 }
 
-function craftItem(item, tech) {
+function craftItem(item, tech, from) {
   let x = true;
   Object.entries(item.res).some(function(key) {
     if (gamedata.res[key[0]] < item.res[key[0]]) {
@@ -1352,7 +1362,8 @@ function craftItem(item, tech) {
   });
   if (x === true) {
     if (item.next.length > 0) {
-      glow(document.getElementById("shopButton"));
+      console.log(from+"Button");
+      glow(document.getElementById(from + "Button"));
     }
     Object.entries(item.res).forEach(([key, value]) => {
       gamedata.res[key] -= item.res[key];
@@ -1367,6 +1378,7 @@ function craftItem(item, tech) {
     window[tech]();
   } catch (err) {}
   setShop();
+  researchLab();
 }
 
 function researchLab() {
@@ -1376,7 +1388,7 @@ function researchLab() {
     glow(document.getElementById("labButton"));
   }
   Object.entries(research).forEach(([key, value]) => {
-    if ((research[key].toCraft === false || gamedata.BP[key] === 0) && gamedata.tech[key] === 0) {
+    if (gamedata.BP[key] === 0) {
       if (research[key].prev.length === 0) {
         createLabItem(key);
       } else {
@@ -1387,7 +1399,7 @@ function researchLab() {
           }
         }
         if (check === research[key].prev.length) {
-          createShopItem(key);
+          createLabItem(key);
         }
       }
     }
@@ -1428,7 +1440,7 @@ function createLabItem(BP) {
     var cost = document.createElement("div");
     buyable_title_price.appendChild(cost);
     cost.innerText = "Cost :";
-    cost.className = "price";
+    cost.className = "RPprice";
     var amount = document.createElement("span");
     cost.appendChild(amount);
     amount.innerText = format(nextItem.RP, "standard");
@@ -1441,50 +1453,97 @@ function createLabItem(BP) {
 }
 
 function buyLabItem(item, tech) {
-  if (gamedata.RP >= item.RP) {
-    gamedata.RP -= item.RP;
+  if (gamedata.RP >= item.RP ) {
+    item.bought = true;
     document.getElementById("labTab").removeChild(document.getElementById(tech));
-    gamedata.tech[tech] = 1;
+    if (item.toCraft === true) {
+      glow(document.getElementById("workBenchButton"));
+      createWorkbenchItem(item, tech, "lab");
+    } else {
+      gamedata.tech[tech] = 1;
+      try {
+        window[tech]();
+      } catch (err) {}
+    }
+    gamedata.BP[tech] = 1;
     save();
-  } else {
-    console.log("Not enough Research Point");
   }
-  try {
-    window[tech]();
-  } catch (err) {}
   researchLab();
+}
+
+var labMachineButton = document.querySelector('input[type="checkbox"]');
+labMachineButton.checked = false;
+var convert;
+
+labMachineButton.onchange = function() {
+  if(labMachineButton.checked) {
+    console.log("checked");
+    convert = setInterval(changeRP, 1000);
+  } else {
+    console.log("unchecked");
+    clearInterval(convert);
+  }
+};
+
+function changeRP(){
+  Object.entries(gamedata.resRP).forEach(([key, value]) => {
+    let el = document.getElementById(key + "Lab");
+    if (el.value > 0 && gamedata.res[key] >= el.value){
+      gamedata.RP += el.value * value;
+      gamedata.res[key] -= el.value;
+    } else if (el.value > 0 && gamedata.res[key] < el.value){
+      el.value = gamedata.res[key]
+      gamedata.RP += el.value * value;
+      gamedata.res[key] -= el.value;
+      el.value = 0;
+    }
+  });
 }
 
 function exoMk2() {
   console.log("exoMk2 function");
+  gamedata.minePower = 2;
+  save();
 }
 
 function exoMk3() {
   console.log("exoMk3 function");
+  gamedata.minePower = 3;
+  save();
 }
 
 function cargoMk2() {
   console.log("cargoMk2 function");
+  gamedata.shipCargoLvl = 2;
+  gamedata.shipMaxCargo = 100;
 }
 
 function cargoMk3() {
   console.log("cargoMk3 function");
+  gamedata.shipCargoLvl = 3;
+  gamedata.shipMaxCargo = 1000;
 }
 
 function droneBayMk2() {
   console.log("droneBayMk2 function");
+  gamedata.shipBayCapacity = 20;
 }
 
 function droneBayMk3() {
   console.log("droneBayMk3 function");
+  gamedata.shipBayCapacity = 50;
 }
 
 function thrustersMk2() {
   console.log("thrustersMk2 function");
+  gamedata.sellingTime = 75;
+  gamedata.prestigeTime = 5;
 }
 
 function thrustersMk3() {
   console.log("thrustersMk3 function");
+  gamedata.sellingTime = 30;
+  gamedata.prestigeTime = 5;
 }
 
 function antennaMk2() {
@@ -1584,9 +1643,17 @@ function removeItemOnce(arr, value) {
 }
 
 function rareDrop() {
+  gamedata.res.Rare3 += 1;
+  if (gamedata.rare.Rare3 == false) {
+    document.getElementById("Rare3").parentNode.style.display = "flex";
+    document.getElementById("Rare3").parentNode.style.display = "flex";
+    gamedata.rare.Rare3 = true;
+  }
+  console.log("debug")
   if (Math.random() >= (1 - 1 / 100000)) {
     gamedata.res.Rare3 += 1;
     if (gamedata.rare.Rare3 == false) {
+      document.getElementById("Rare3").parentNode.style.display = "flex";
       document.getElementById("Rare3").parentNode.style.display = "flex";
       gamedata.rare.Rare3 = true;
     }
@@ -1594,12 +1661,14 @@ function rareDrop() {
     gamedata.res.Rare2 += 1;
     if (gamedata.rare.Rare2 == false) {
       document.getElementById("Rare2").parentNode.style.display = "flex";
+      document.getElementById("Rare3").parentNode.style.display = "flex";
       gamedata.rare.Rare2 = true;
     }
   } else if (Math.random() >= (1 - 1 / 1000)) {
     gamedata.res.Rare1 += 1;
     if (gamedata.rare.Rare1 == false) {
       document.getElementById("Rare1").parentNode.style.display = "flex";
+      document.getElementById("Rare3").parentNode.style.display = "flex";
       gamedata.rare.Rare1 = true;
     }
   }
@@ -2012,7 +2081,7 @@ function tab(tab) {
     } else {
       let el = document.getElementsByClassName(key)
       for (var i = 0; i < el.length; i++) {
-        el[i].style.display = "block";
+        el[i].style.display = "flex";
       }
     }
   });
@@ -2136,7 +2205,7 @@ function shipMenu() {
     } else {
       let el = document.getElementsByClassName(key)
       for (var i = 0; i < el.length; i++) {
-        el[i].style.display = "block";
+        el[i].style.display = "flex";
       }
     }
   });
