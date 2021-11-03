@@ -1,4 +1,5 @@
 <html lang="en" dir="ltr">
+
   <head>
     <meta name="google-site-verification" content="t7YHYNkhq9FsDg9D92XTpE6l9sS2azeGwzBQ6izsDH8" />
     <link rel="stylesheet" type="text/css" href="stylesheet.css" />
@@ -50,9 +51,13 @@
       <span></span>
     </div>
   </div>
+  <div id="prestigeAnimation">
+  
+  </div>
   <body>
     <main id="main">
       <div id="res">
+        <div class="money">Money : <span id="money"></span></div>
         <div class="cat1">Iron : <span id="Res1a"></span></div>
         <div class="cat1">Copper : <span id="Res1b"></span></div>
         <div class="cat1">Aluminium : <span id="Res1c"></span></div>
@@ -88,7 +93,7 @@
         </div>
       </div>
       <div id="shipMenu">
-        <div onclick="chooseRegion('map', 'map');" id="shipBackground">
+        <div onclick="chooseRegion('map', 'map');" class="background">
         </div>
         <div id="shipContainer">
           <button onclick="chooseRegion('map', 'map');" class="closeButton">x</button>
@@ -149,8 +154,9 @@
             </div>
           </div>
           <div id="shipEquipment">
-            <div class="price">Bank Account : <span id="money"></span></div>
+            <div class="price">Bank Account : <span id="moneyShip"></span></div>
             <div style="display: flex; justify-content: space-between;">Storage capacity : <span id="storage">10u</span></div>
+            <div style="display: flex; justify-content: space-between;">Drone capacity : <span id="storageDrone">5 drones</span></div>
             <div>Equipment :
               <ul id="Equipment" style="margin: 0; padding: 0;">
                 <li>- Cargo <span id="cargo">Mk1</span>
@@ -166,33 +172,33 @@
                 <li>- Antenna <span id="antenna">Mk1</span>
                   <span class="tooltip">Allows you to find more distant planets</span>
                 </li>
-                <li id="planetAnalyzer">- Planet Analyzer
+                <li id="planetAnalyzerItem">- Planet Analyzer
                   <span class="tooltip">Allows you to choose the planet according to its composition</span>
                 </li>
-                <li id="tractorBeam">- Tractor Beam
+                <li id="tractorBeamItem">- Tractor Beam
                   <span class="tooltip">Automatically refills ship storage</span>
                 </li>
-                <li id="miningAI">- Mining AI
+                <li id="miningAIItem">- Mining AI
                   <span class="tooltip">Allows the ship to mine other planets when game is closed</span>
                 </li>
-                <li id="tradingAI">- Trading AI
+                <li id="tradingAIItem">- Trading AI
                   <span class="tooltip">Allows the ship to sell resources mined when game is closed</span>
                 </li>
-                <li id="spatialDrillingLaser">- Spatial Drilling Laser
-                <span class="tooltip">Allows the ship to mine planet from orbit</span>
+                <li id="spatialDrillingLaserItem">- Spatial Drilling Laser
+                  <span class="tooltip">Allows the ship to mine planet from orbit</span>
                 </li>
-                <li id="teleporter">- Teleporter
-                <span class="tooltip">Reduces travel times to 0</span>
+                <li id="teleporterItem">- Teleporter
+                  <span class="tooltip">Reduces travel times to 0</span>
                 </li>
-                <li id="autoPrestige">- AutoPrestige
-                <span class="tooltip">Automate travels to new planets</span>
+                <li id="autoPrestigeItem">- AutoPrestige
+                  <span class="tooltip">Automate travels to new planets</span>
                 </li>
               </ul>
             </div>
           </div>
           <div id="shipGauge">
             <div id="gauge">
-              <div id="res3Gauge" class="core"></div>
+              <div id="res3Gauge" class="couche3"></div>
               <div id="res2Gauge" class="couche2"></div>
               <div id="res1Gauge" class="couche1"></div>
             </div>
@@ -201,13 +207,262 @@
             <button id="sell" class="shipButton" onclick="sellRessources()">
               SELL
             </button>
-            <button id="prestige" class="shipButton" onclick="prestige1()">
+            <button id="prestige" class="shipButton" onclick="planetMenu()">
               /!\ Find New Planet /!\
-            <span class="tooltip">Leave this planet and find another one to mine</span>
+              <div id="prestigeCost" class="price">Cost : </div>
+              <span class="tooltip">Leave this planet and find another one to mine</span>
             </button>
           </div>
         </div>
-
+      </div>
+      <div id="planetMenu">
+        <div onclick="document.getElementById('planetMenu').style.display = 'none';" class="background">
+        </div>
+        <div id="planetMenuContainer">
+          <button onclick="document.getElementById('planetMenu').style.display = 'none';" class="closeButton">x</button>
+          <div id="planetMenuTitle">
+            Planets Available
+          </div>
+          <div class="planetMenuItem">Storage : <div><span id="planetMenuStorage">0 u</span>/<span id="planetMenuStorageMax"></span></div>
+          </div>
+          <div class="planetMenuItem">Drones : <div><span id="planetMenuDrone">0</span>/<span id="planetMenuDroneMax"></span></div>
+          </div>
+          <div class="planetMenuItem">Travel time : <span id="travelTime">10s</span></div>
+          <div class="planetMenuItem price">Travel cost : <span id="travelCost">$10</span></div>
+          <div id="planetSelectorArea">
+            <div id="planetShop" class="planetOverview" onclick="prestige1('Shop')">
+              <div class="planetName">Bought coordinates</div>
+              <div class="miniPlanetContainer hideable">
+                <div class="miniPlanetC1 couche1">
+                  <div class="miniPlanetC2 couche2">
+                    <div class="miniPlanetC3 couche3"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="miniPlanetRes">
+                <div class="miniPlanetResItem">
+                  <div class="miniPlanetcaption couche1"></div>
+                  <div id="PShopoutermaterial">???</div>
+                </div>
+                <div class="miniPlanetResItem">
+                  <div class="miniPlanetcaption couche2"></div>
+                  <div id="PShopinnermaterial">???</div>
+                </div>
+                <div class="miniPlanetResItem">
+                  <div class="miniPlanetcaption couche3"></div>
+                  <div id="PShopcorematerial">???</div>
+                </div>
+                <div class="miniPlanetResItem">
+                  <div>Planet size :</div>
+                  <div id="PShopsize">???</div>
+                </div>
+              </div>
+            </div>
+            <div id="Planet1" class="planetOverview" onclick="prestige1(1)">
+              <div class="planetName">Planet N°1</div>
+              <div class="miniPlanetContainer hideable">
+                <div class="miniPlanetC1 couche1">
+                  <div class="miniPlanetC2 couche2">
+                    <div class="miniPlanetC3 couche3"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="miniPlanetRes">
+                <div class="miniPlanetResItem">
+                  <div class="miniPlanetcaption couche1"></div>
+                  <div id="P1outermaterial">???</div>
+                </div>
+                <div class="miniPlanetResItem">
+                  <div class="miniPlanetcaption couche2"></div>
+                  <div id="P1innermaterial">???</div>
+                </div>
+                <div class="miniPlanetResItem">
+                  <div class="miniPlanetcaption couche3"></div>
+                  <div id="P1corematerial">???</div>
+                </div>
+                <div class="miniPlanetResItem">
+                  <div>Planet size :</div>
+                  <div id="P1size">???</div>
+                </div>
+              </div>
+            </div>
+            <div id="Planet2" class="planetOverview" onclick="prestige1(2)">
+              <div class="planetName">Planet N°2</div>
+              <div class="miniPlanetContainer hideable">
+                <div class="miniPlanetC1 couche1">
+                  <div class="miniPlanetC2 couche2">
+                    <div class="miniPlanetC3 couche3"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="miniPlanetRes">
+                <div class="miniPlanetResItem">
+                  <div class="miniPlanetcaption couche1"></div>
+                  <div id="P2outermaterial">???</div>
+                </div>
+                <div class="miniPlanetResItem">
+                  <div class="miniPlanetcaption couche2"></div>
+                  <div id="P2innermaterial">???</div>
+                </div>
+                <div class="miniPlanetResItem">
+                  <div class="miniPlanetcaption couche3"></div>
+                  <div id="P2corematerial">???</div>
+                </div>
+                <div class="miniPlanetResItem">
+                  <div>Planet size :</div>
+                  <div id="P2size">???</div>
+                </div>
+              </div>
+            </div>
+            <div id="Planet3" class="planetOverview" onclick="prestige1(3)">
+              <div class="planetName">Planet N°3</div>
+              <div class="miniPlanetContainer hideable">
+                <div class="miniPlanetC1 couche1">
+                  <div class="miniPlanetC2 couche2">
+                    <div class="miniPlanetC3 couche3"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="miniPlanetRes">
+                <div class="miniPlanetResItem">
+                  <div class="miniPlanetcaption couche1"></div>
+                  <div id="P3outermaterial">???</div>
+                </div>
+                <div class="miniPlanetResItem">
+                  <div class="miniPlanetcaption couche2"></div>
+                  <div id="P3innermaterial">???</div>
+                </div>
+                <div class="miniPlanetResItem">
+                  <div class="miniPlanetcaption couche3"></div>
+                  <div id="P3corematerial">???</div>
+                </div>
+                <div class="miniPlanetResItem">
+                  <div>Planet size :</div>
+                  <div id="P3size">???</div>
+                </div>
+              </div>
+            </div>
+            <div id="Planet4" class="planetOverview" onclick="prestige1(4)">
+              <div class="planetName">Planet N°4</div>
+              <div class="miniPlanetContainer hideable">
+                <div class="miniPlanetC1 couche1">
+                  <div class="miniPlanetC2 couche2">
+                    <div class="miniPlanetC3 couche3"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="miniPlanetRes">
+                <div class="miniPlanetResItem">
+                  <div class="miniPlanetcaption couche1"></div>
+                  <div id="P4outermaterial">???</div>
+                </div>
+                <div class="miniPlanetResItem">
+                  <div class="miniPlanetcaption couche2"></div>
+                  <div id="P4innermaterial">???</div>
+                </div>
+                <div class="miniPlanetResItem">
+                  <div class="miniPlanetcaption couche3"></div>
+                  <div id="P4corematerial">???</div>
+                </div>
+                <div class="miniPlanetResItem">
+                  <div>Planet size :</div>
+                  <div id="P4size">???</div>
+                </div>
+              </div>
+            </div>
+            <div id="Planet5" class="planetOverview" onclick="prestige1(5)">
+              <div class="planetName">Planet N°5</div>
+              <div class="miniPlanetContainer hideable">
+                <div class="miniPlanetC1 couche1">
+                  <div class="miniPlanetC2 couche2">
+                    <div class="miniPlanetC3 couche3"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="miniPlanetRes">
+                <div class="miniPlanetResItem">
+                  <div class="miniPlanetcaption couche1"></div>
+                  <div id="P5outermaterial">???</div>
+                </div>
+                <div class="miniPlanetResItem">
+                  <div class="miniPlanetcaption couche2"></div>
+                  <div id="P5innermaterial">???</div>
+                </div>
+                <div class="miniPlanetResItem">
+                  <div class="miniPlanetcaption couche3"></div>
+                  <div id="P5corematerial">???</div>
+                </div>
+                <div class="miniPlanetResItem">
+                  <div>Planet size :</div>
+                  <div id="P5size">???</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="coordinatesMenu">
+        <div onclick="chooseRegion('map', 'map');" class="background">
+        </div>
+        <div id=coordinatesMenuContainer>
+          <button onclick="chooseRegion('map', 'map');" class="closeButton">x</button>
+          <div class="menutitle">
+            Planet configurator
+          </div>
+          <div class="selector">Outer material:
+            <select id="outermaterialSelector" onchange="coordinatesPrice()">
+              <option value="Res1any" selected>Any</option>
+              <option value="Res1a">Iron</option>
+              <option value="Res1b">Copper</option>
+              <option value="Res1c">Aluminium</option>
+            </select>
+          </div>
+          <div class="selector">Inner material:
+            <select id="innermaterialSelector" onchange="coordinatesPrice()">
+              <option value="Res2any" selected>Any</option>
+              <option value="Res2a">Zinc</option>
+              <option value="Res2b">Lead</option>
+              <option value="Res2c">Silver</option>
+            </select>
+          </div>
+          <div class="selector">Core material:
+            <select id="corematerialSelector" onchange="coordinatesPrice()">
+              <option value="Res3any" selected>Any</option>
+              <option value="Res3a">Iridium</option>
+              <option value="Res3b">Gold</option>
+              <option value="Res3c">Palladium</option>
+            </select>
+          </div>
+          <div class="selector">Planet size:
+            <select id="sizeSelector" onchange="coordinatesPrice()">
+              <option value="sizeany" selected>Any</option>
+              <option value="size1">1</option>
+              <option value="size2">2</option>
+              <option value="size3">3</option>
+              <option value="size4">4</option>
+              <option value="size5">5</option>
+              <option value="size6">6</option>
+              <option value="size7">7</option>
+              <option value="size8">8</option>
+              <option value="size9">9</option>
+              <option value="size10">10</option>
+              <option value="size11">11</option>
+              <option value="size12">12</option>
+              <option value="size13">13</option>
+              <option value="size14">14</option>
+              <option value="size15">15</option>
+              <option value="size16">16</option>
+              <option value="size17">17</option>
+              <option value="size18">18</option>
+              <option value="size19">19</option>
+              <option value="size20">20</option>
+            </select>
+          </div>
+          <div id="coordinatesCostContainer" class="price">Coordinates cost :
+            <div id="coordinatesCost">00</div>
+          </div>
+          <button id="buyCoordBtn" onclick="buyCoord()">Buy</button>
+        </div>
       </div>
       <div id="map">
         <p style="font-size: 120%;text-align:center;margin-left: 2%;">Choose a region to start mining:</p>
@@ -289,11 +544,14 @@
               <div class="couche3"></div>
             </div>
             <ul style="position: relative; right: 10%;">
-              <li><span class="hideable">Outer layer : </span><div id="outermaterial"></div>
+              <li><span class="hideable">Outer layer : </span>
+                <div id="outermaterial"></div>
               </li>
-              <li><span class="hideable">Inner layer : </span><div id="innermaterial"></div>
+              <li><span class="hideable">Inner layer : </span>
+                <div id="innermaterial"></div>
               </li>
-              <li><span class="hideable">Core1 : </span><div id="corematerial"></div>
+              <li><span class="hideable">Core1 : </span>
+                <div id="corematerial"></div>
               </li>
             </ul>
           </div>
@@ -511,16 +769,16 @@
             <input type="number" id="Rare3Lab" class="Rare3" value="0" min="0" step="1">
             <span id="Rare3RP" class="rare Rare3">0</span>
 
-            <span style="display: flex; justify-content: left;">Total (RP/s)</span>
+            <span style="display: flex; justify-content: left;"></span>
             <button id="totalRP" onclick="resetRP()">Reset</button>
-            <span id="sumRP">0</span>
+            <span id="sumRP"></span>
           </div>
           <label class='toggle-label'>
-           <input type='checkbox'/>
-             <span class='back'>
+            <input type='checkbox' />
+            <span class='back'>
               <span class='toggle'></span>
               <span class='label on'>ON</span>
-              <span class='label off'>OFF</span>  
+              <span class='label off'>OFF</span>
             </span>
           </label>
         </div>
@@ -531,4 +789,5 @@
     </main>
     <script src="main.js" charset="utf-8" type="text/javascript"></script>
   </body>
+
 </html>
