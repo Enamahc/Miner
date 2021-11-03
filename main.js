@@ -11,18 +11,18 @@ var gamedata = {
   money: 0,
   planetSize: 10,
   res: {
-    Res1a: 1000,
-    Res1b: 1000,
-    Res1c: 1000,
-    Res2a: 1000,
-    Res2b: 1000,
-    Res2c: 1000,
-    Res3a: 1000,
-    Res3b: 1000,
-    Res3c: 1000,
-    Rare1: 1000,
-    Rare2: 1000,
-    Rare3: 1000
+    Res1a: 0,
+    Res1b: 0,
+    Res1c: 0,
+    Res2a: 0,
+    Res2b: 0,
+    Res2c: 0,
+    Res3a: 0,
+    Res3b: 0,
+    Res3c: 0,
+    Rare1: 0,
+    Rare2: 0,
+    Rare3: 0
   },
   resName: {
     Res1a: "Iron",
@@ -301,6 +301,100 @@ var gamedata = {
     Rare3: 1280
   },
   prestigeTime: 10,
+  prestigeCost: 0,
+  prestigeNb: 0,
+  coordinatesNb: 0,
+  coordinatesPrice: 0,
+  planetShop: {
+    c1: {
+      name: "",
+      ref: ""
+    },
+    c2: {
+      name: "",
+      ref: ""
+    },
+    c3: {
+      name: "",
+      ref: ""
+    },
+    size: 0,
+  },
+  planet1: {
+    c1: {
+      name: "",
+      ref: ""
+    },
+    c2: {
+      name: "",
+      ref: ""
+    },
+    c3: {
+      name: "",
+      ref: ""
+    },
+    size: 0,
+  },
+  planet2: {
+    c1: {
+      name: "",
+      ref: ""
+    },
+    c2: {
+      name: "",
+      ref: ""
+    },
+    c3: {
+      name: "",
+      ref: ""
+    },
+    size: 0,
+  },
+  planet3: {
+    c1: {
+      name: "",
+      ref: ""
+    },
+    c2: {
+      name: "",
+      ref: ""
+    },
+    c3: {
+      name: "",
+      ref: ""
+    },
+    size: 0,
+  },
+  planet4: {
+    c1: {
+      name: "",
+      ref: ""
+    },
+    c2: {
+      name: "",
+      ref: ""
+    },
+    c3: {
+      name: "",
+      ref: ""
+    },
+    size: 0,
+  },
+  planet5: {
+    c1: {
+      name: "",
+      ref: ""
+    },
+    c2: {
+      name: "",
+      ref: ""
+    },
+    c3: {
+      name: "",
+      ref: ""
+    },
+    size: 0,
+  },
   lasttick: 0
 };
 
@@ -615,7 +709,7 @@ var blueprints = {
       Res3b: 0,
       Res3c: 0
     },
-    desc: "With this antenna, the ship will be able scan 2 planets to go to!"
+    desc: "With this antenna, the ship will be able to scan 2 planets to go to!"
   },
   antennaMk3: {
     prev: ["antennaMk2"],
@@ -635,7 +729,7 @@ var blueprints = {
       Res3b: 1,
       Res3c: 1
     },
-    desc: "With this antenna, the ship will be able scan 5 planets to go to!"
+    desc: "With this antenna, the ship will be able to scan 5 planets to go to!"
   }
 }
 
@@ -853,6 +947,9 @@ window.onload = function() {
   document.getElementById("innermaterial").innerHTML = gamedata.innermaterial.name;
   document.getElementById("corematerial").innerHTML = gamedata.corematerial.name;
 
+
+  update("money", format(gamedata.money, "currency"));
+
   Object.entries(blueprints).forEach(([key, value]) => {
     if (gamedata.tech[key] === 1) {
       blueprints[key].bought = true;
@@ -863,7 +960,7 @@ window.onload = function() {
       research[key].bought = true;
     }
   });
-  
+
   Object.entries(gamedata.resRP).forEach(([key, value]) => {
     let el = document.getElementById(key + "RP");
     el.value = format(gamedata.resRP[key], "standard");
@@ -1022,23 +1119,24 @@ function offlineProgress() {
 }
 
 function init() {
-  let x = Math.floor(Math.random() * 3);
-  gamedata.outermaterial.name = gamedata.possibleOuterMaterial[x];
-  gamedata.outermaterial.ref = "Res1" + String.fromCharCode(97 + x);
-  x = Math.floor(Math.random() * 3);
-  gamedata.innermaterial.name = gamedata.possibleInnerMaterial[x];
-  gamedata.innermaterial.ref = "Res2" + String.fromCharCode(97 + x);
-  x = Math.floor(Math.random() * 3);
-  gamedata.corematerial.name = gamedata.possibleCoreMaterial[x];
-  gamedata.corematerial.ref = "Res3" + String.fromCharCode(97 + x);
+	if (gamedata.outermaterial.name === ""){
+    let x = Math.floor(Math.random() * 3);
+    gamedata.outermaterial.name = gamedata.possibleOuterMaterial[x];
+    gamedata.outermaterial.ref = "Res1" + String.fromCharCode(97 + x);
+    x = Math.floor(Math.random() * 3);
+    gamedata.innermaterial.name = gamedata.possibleInnerMaterial[x];
+    gamedata.innermaterial.ref = "Res2" + String.fromCharCode(97 + x);
+    x = Math.floor(Math.random() * 3);
+    gamedata.corematerial.name = gamedata.possibleCoreMaterial[x];
+    gamedata.corematerial.ref = "Res3" + String.fromCharCode(97 + x);
+  }
 
-  if (gamedata.newgame === false) {
-    gamedata.planetSize = Math.round(randn_bm(1, 20, 1));
-  } else if (gamedata.newgame === true) {
+  if (gamedata.newgame === true) {
     gamedata.planetSize = 10;
   }
   h = 3 * gamedata.planetSize;
   l = h + h / 3;
+  planetGenerator();
 
   Object.entries(gamedata.notMined).forEach(([key, value]) => {
     let x = 0;
@@ -1067,6 +1165,29 @@ function init() {
     gamedata.resValue[key] = Math.random() * (((gamedata.baseValue[key] * 0.25) + gamedata.baseValue[key]) - gamedata.baseValue[key] * 0.75) + gamedata.baseValue[key] * 0.75;
   });
   gamedata.newgame = false;
+}
+
+function planetGenerator() {
+  let x = 0;
+  if (gamedata.tech.antennaMk3 === 1) {
+    x = 5;
+  } else if (gamedata.tech.antennaMk2 === 1) {
+    x = 2;
+  } else {
+    x = 1;
+  }
+  for (let i = 1; i <= x; i++) {
+    let n = Math.floor(Math.random() * 3);
+    gamedata["planet" + i].c1.name = gamedata.possibleOuterMaterial[n];
+    gamedata["planet" + i].c1.ref = "Res1" + String.fromCharCode(97 + n);
+    n = Math.floor(Math.random() * 3);
+    gamedata["planet" + i].c2.name = gamedata.possibleInnerMaterial[n];
+    gamedata["planet" + i].c2.ref = "Res2" + String.fromCharCode(97 + n);
+    n = Math.floor(Math.random() * 3);
+    gamedata["planet" + i].c3.name = gamedata.possibleCoreMaterial[n];
+    gamedata["planet" + i].c3.ref = "Res3" + String.fromCharCode(97 + n);
+    gamedata["planet" + i].size = Math.round(randn_bm(1, 20, 1));
+  }
 }
 
 function reset() {
@@ -1104,6 +1225,17 @@ var refreshLoop = window.setInterval(function() {
   Object.entries(gamedata.shipStock).forEach(([key, value]) => {
     update((key + "Ship"), format(gamedata.shipStock[key], "standard"));
   });
+
+  Object.entries(blueprints).forEach(([key, value]) => {
+    if (document.getElementById(key) != null) {
+      if (gamedata.money >= blueprints[key].price / 10 || blueprints[key].price <= 100) {
+        document.getElementById(key).style.display = "flex"
+      } else {
+        document.getElementById(key).style.display = "none"
+      }
+    }
+  });
+
 
   if (gamedata.shipCapacity <= 0) {
     document.getElementById("cargoFull").style.display = "grid";
@@ -1164,6 +1296,7 @@ function setDim() {
 }
 
 function setShop() {
+  createShopItem("planetCoordinates");
   Object.entries(blueprints).forEach(([key, value]) => {
     if ((blueprints[key].toCraft === false || gamedata.BP[key] === 0) && gamedata.tech[key] === 0) {
       if (blueprints[key].prev.length === 0) {
@@ -1184,41 +1317,87 @@ function setShop() {
 }
 
 function createShopItem(BP) {
-  if (document.getElementById(BP) === null) {
+  let buyable;
+  let buyable_text;
+  let btn;
+  let tooltip;
+  let buyable_title;
+  let buyable_title_text;
+  let buyable_title_price;
+  let cost;
+  let amount;
+  if (BP === "planetCoordinates" && document.getElementById(BP) === null) {
+    buyable = document.createElement("div");
+    buyable.className = "buyable";
+    buyable.id = BP;
+    buyable_text = document.createElement("div");
+    buyable_text.className = "buyable_text";
+    buyable.appendChild(buyable_text);
+    btn = document.createElement("button");
+    btn.innerText = "Set";
+    btn.className = "buyable_button";
+    btn.addEventListener("click", function() {
+      coordinatesPrice();
+      document.getElementById("coordinatesMenu").style.display = "flex";
+    });
+    buyable.appendChild(btn);
+    tooltip = document.createElement("span");
+    tooltip.className = "tooltip";
+    tooltip.innerText = "Buy coordinates of a planet with specific caracteristics.";
+    buyable.appendChild(tooltip);
+    buyable_title = document.createElement("div");
+    buyable_title.className = "buyable_title";
+    buyable_text.appendChild(buyable_title);
+    buyable_title_text = document.createElement("span");
+    buyable_title_text.className = "buyable_title_text";
+    buyable_title_price = document.createElement("div");
+    buyable_title_price.className = "buyable_title_price";
+    buyable_title.appendChild(buyable_title_text);
+    buyable_title.appendChild(buyable_title_price);
+    buyable_title_text.innerText = "Planet Coordinates";
+    cost = document.createElement("div");
+    buyable_title_price.appendChild(cost);
+    cost.innerText = "Cost :";
+    cost.className = "price";
+    amount = document.createElement("span");
+    cost.appendChild(amount);
+    amount.innerText = "variable";
+    document.getElementById("shop").appendChild(buyable);
+  } else if (document.getElementById(BP) === null) {
     var nextItem = blueprints[BP];
-    var buyable = document.createElement("div");
+    buyable = document.createElement("div");
     buyable.className = "buyable";
     buyable.id = BP;
     document.getElementById("shop").appendChild(buyable);
-    var buyable_text = document.createElement("div");
+    buyable_text = document.createElement("div");
     buyable_text.className = "buyable_text";
     buyable.appendChild(buyable_text);
-    let btn = document.createElement("button");
+    btn = document.createElement("button");
     btn.innerText = "Buy";
     btn.className = "buyable_button";
     btn.addEventListener("click", function() {
       buyShopItem(nextItem, BP);
     });
     buyable.appendChild(btn);
-    var tooltip = document.createElement("span");
+    tooltip = document.createElement("span");
     tooltip.className = "tooltip";
     tooltip.innerText = nextItem.desc;
     buyable.appendChild(tooltip);
-    var buyable_title = document.createElement("div");
+    buyable_title = document.createElement("div");
     buyable_title.className = "buyable_title";
     buyable_text.appendChild(buyable_title);
-    var buyable_title_text = document.createElement("span");
+    buyable_title_text = document.createElement("span");
     buyable_title_text.className = "buyable_title_text";
-    var buyable_title_price = document.createElement("div");
+    buyable_title_price = document.createElement("div");
     buyable_title_price.className = "buyable_title_price";
     buyable_title.appendChild(buyable_title_text);
     buyable_title.appendChild(buyable_title_price);
     buyable_title_text.innerText = nextItem.title;
-    var cost = document.createElement("div");
+    cost = document.createElement("div");
     buyable_title_price.appendChild(cost);
     cost.innerText = "Cost :";
     cost.className = "price";
-    var amount = document.createElement("span");
+    amount = document.createElement("span");
     cost.appendChild(amount);
     amount.innerText = format(nextItem.price, "currency");
     if (nextItem.toCraft === true) {
@@ -1227,7 +1406,6 @@ function createShopItem(BP) {
       buyable_title_text.innerText = nextItem.title + " (BP)";
     }
   }
-
 }
 
 function buyShopItem(item, tech) {
@@ -1240,9 +1418,11 @@ function buyShopItem(item, tech) {
       createWorkbenchItem(item, tech, "shop");
       if (tech.includes("droneMk")) {
         gamedata.tech[tech] = 1;
+        gamedata.money -= item.price;
       }
     } else {
       gamedata.tech[tech] = 1;
+      gamedata.money -= item.price;
       try {
         window[tech]();
       } catch (err) {}
@@ -1250,6 +1430,86 @@ function buyShopItem(item, tech) {
     save();
   }
   setShop();
+}
+
+function coordinatesPrice() {
+  let c1 = document.getElementById("outermaterialSelector");
+  let c2 = document.getElementById("innermaterialSelector");
+  let c3 = document.getElementById("corematerialSelector");
+  let size = document.getElementById("sizeSelector");
+  let cost = 0;
+  if (c1.value != "Res1any") {
+    cost += Math.pow(1.2, gamedata.coordinatesNb)
+  }
+  if (c2.value != "Res2any") {
+    cost += Math.pow(1.2, gamedata.coordinatesNb) * 10
+  }
+  if (c3.value != "Res3any") {
+    cost += Math.pow(1.2, gamedata.coordinatesNb) * 100
+  }
+  if (size.value != "sizeany") {
+    console.log(size.selectedIndex)
+    cost += Math.pow(1.2, gamedata.coordinatesNb) * (parseInt(size.selectedIndex, 10) - 10)
+  }
+  if (cost > 0) {
+    update("coordinatesCost", format(cost, "currency"));
+  } else {
+    cost = 0 - cost
+    update("coordinatesCost", format(cost, "currency"));
+  }
+  gamedata.coordinatesPrice = cost;
+}
+
+function buyCoord() {
+  let c1 = document.getElementById("outermaterialSelector");
+  let c2 = document.getElementById("innermaterialSelector");
+  let c3 = document.getElementById("corematerialSelector");
+  let size = document.getElementById("sizeSelector");
+  let x = true;
+  if (gamedata.money >= gamedata.coordinatesPrice) {
+    if (gamedata.planetShop.size != 0) {
+      if (confirm("These new coordinates will overwrite those you already have. Do you want to proceed?")) {
+        x = true;
+      } else {
+        x = false;
+      }
+    }
+    if (x === true) {
+      gamedata.money -= gamedata.coordinatesPrice;
+      if (!c1.value.includes("any")) {
+        gamedata.planetShop.c1.name = c1.options[c1.selectedIndex].text;
+        gamedata.planetShop.c1.ref = c1.value;
+      } else {
+        let n = Math.floor(Math.random() * 3);
+        gamedata.planetShop.c1.name = gamedata.possibleOuterMaterial[n];
+        gamedata.planetShop.c1.ref = "Res1" + String.fromCharCode(97 + n);
+      }
+      if (!c2.value.includes("any")) {
+        gamedata.planetShop.c2.name = c2.options[c2.selectedIndex].text;
+        gamedata.planetShop.c2.ref = c2.value;
+      } else {
+        let n = Math.floor(Math.random() * 3);
+        gamedata.planetShop.c2.name = gamedata.possibleInnerMaterial[n];
+        gamedata.planetShop.c2.ref = "Res2" + String.fromCharCode(97 + n);
+      }
+      if (!c3.value.includes("any")) {
+        gamedata.planetShop.c3.name = c3.options[c3.selectedIndex].text;
+        gamedata.planetShop.c3.ref = c3.value;
+      } else {
+        let n = Math.floor(Math.random() * 3);
+        gamedata.planetShop.c3.name = gamedata.possibleInnerMaterial[n];
+        gamedata.planetShop.c3.ref = "Res3" + String.fromCharCode(97 + n);
+      }
+      if (!size.value.includes("any")) {
+        gamedata.planetShop.size = parseInt(size.selectedIndex, 10);
+      } else {
+        gamedata.planetShop.size = Math.round(randn_bm(1, 20, 1));
+      }
+      console.log("Coordinates bought!")
+    }
+    save();
+    chooseRegion('map', 'map');
+  }
 }
 
 function setWorkbench() {
@@ -1362,7 +1622,6 @@ function craftItem(item, tech, from) {
   });
   if (x === true) {
     if (item.next.length > 0) {
-      console.log(from+"Button");
       glow(document.getElementById(from + "Button"));
     }
     Object.entries(item.res).forEach(([key, value]) => {
@@ -1371,14 +1630,16 @@ function craftItem(item, tech, from) {
     document.getElementById("workbench").removeChild(document.getElementById(tech));
     gamedata.tech[tech] = 1;
     save();
+    try {
+      window[tech]();
+    } catch (err) {}
   } else {
     console.log("Not enough resources");
   }
-  try {
-    window[tech]();
-  } catch (err) {}
   setShop();
-  researchLab();
+  if (document.getElementById("labButton").style.display === "block") {
+    researchLab();
+  }
 }
 
 function researchLab() {
@@ -1453,14 +1714,16 @@ function createLabItem(BP) {
 }
 
 function buyLabItem(item, tech) {
-  if (gamedata.RP >= item.RP ) {
+  if (gamedata.RP >= item.RP) {
     item.bought = true;
     document.getElementById("labTab").removeChild(document.getElementById(tech));
     if (item.toCraft === true) {
       glow(document.getElementById("workBenchButton"));
       createWorkbenchItem(item, tech, "lab");
+      gamedata.RP -= item.RP;
     } else {
       gamedata.tech[tech] = 1;
+      gamedata.RP -= item.RP;
       try {
         window[tech]();
       } catch (err) {}
@@ -1476,7 +1739,7 @@ labMachineButton.checked = false;
 var convert;
 
 labMachineButton.onchange = function() {
-  if(labMachineButton.checked) {
+  if (labMachineButton.checked) {
     console.log("checked");
     convert = setInterval(changeRP, 1000);
   } else {
@@ -1485,18 +1748,25 @@ labMachineButton.onchange = function() {
   }
 };
 
-function changeRP(){
+function changeRP() {
   Object.entries(gamedata.resRP).forEach(([key, value]) => {
     let el = document.getElementById(key + "Lab");
-    if (el.value > 0 && gamedata.res[key] >= el.value){
+    if (el.value > 0 && gamedata.res[key] >= el.value) {
       gamedata.RP += el.value * value;
       gamedata.res[key] -= el.value;
-    } else if (el.value > 0 && gamedata.res[key] < el.value){
+    } else if (el.value > 0 && gamedata.res[key] < el.value) {
       el.value = gamedata.res[key]
       gamedata.RP += el.value * value;
       gamedata.res[key] -= el.value;
       el.value = 0;
     }
+  });
+}
+
+function resetRP() {
+  Object.entries(gamedata.resRP).forEach(([key, value]) => {
+    let el = document.getElementById(key + "Lab");
+    el.value = 0;
   });
 }
 
@@ -1516,42 +1786,48 @@ function cargoMk2() {
   console.log("cargoMk2 function");
   gamedata.shipCargoLvl = 2;
   gamedata.shipMaxCargo = 100;
+  gamedata.shipCapacity += 90;
+  update("storage", gamedata.shipMaxCargo + "u", "standard");
 }
 
 function cargoMk3() {
   console.log("cargoMk3 function");
   gamedata.shipCargoLvl = 3;
   gamedata.shipMaxCargo = 1000;
+  gamedata.shipCapacity += 900;
+  update("storage", gamedata.shipMaxCargo + "u", "standard");
 }
 
 function droneBayMk2() {
   console.log("droneBayMk2 function");
   gamedata.shipBayCapacity = 20;
+  update("storageDrone", gamedata.shipBayCapacity + " drones", "standard");
 }
 
 function droneBayMk3() {
   console.log("droneBayMk3 function");
   gamedata.shipBayCapacity = 50;
+  update("storageDrone", gamedata.shipBayCapacity + " drones", "standard");
 }
 
 function thrustersMk2() {
   console.log("thrustersMk2 function");
-  gamedata.sellingTime = 75;
+  gamedata.sellingTime = 60;
   gamedata.prestigeTime = 5;
 }
 
 function thrustersMk3() {
   console.log("thrustersMk3 function");
   gamedata.sellingTime = 30;
-  gamedata.prestigeTime = 5;
+  gamedata.prestigeTime = 3;
 }
 
 function antennaMk2() {
-  console.log("antennaMk2 function");
+  planetGenerator();
 }
 
 function antennaMk3() {
-  console.log("antennaMk3 function");
+  planetGenerator();
 }
 
 function converterMk1() {
@@ -1643,13 +1919,6 @@ function removeItemOnce(arr, value) {
 }
 
 function rareDrop() {
-  gamedata.res.Rare3 += 1;
-  if (gamedata.rare.Rare3 == false) {
-    document.getElementById("Rare3").parentNode.style.display = "flex";
-    document.getElementById("Rare3").parentNode.style.display = "flex";
-    gamedata.rare.Rare3 = true;
-  }
-  console.log("debug")
   if (Math.random() >= (1 - 1 / 100000)) {
     gamedata.res.Rare3 += 1;
     if (gamedata.rare.Rare3 == false) {
@@ -1969,6 +2238,7 @@ function chooseRegion(to, from) {
   }
   document.getElementById(to).style.display = "grid";
   document.getElementById("shipMenu").style.display = "none";
+  document.getElementById("coordinatesMenu").style.display = "none";
 }
 
 function clickableGrid(rows, cols, callback, regionArray, regionName) {
@@ -2226,13 +2496,18 @@ function shipMenu() {
   }
   for (let i = 4; i < shipTech.length; i++) {
     if (gamedata.tech[shipTech[i]] == 0) {
-      document.getElementById(shipTech[i]).style.display = "none";
+      document.getElementById(shipTech[i] + "Item").style.display = "none";
     } else {
-      document.getElementById(shipTech[i]).style.display = "block";
+      document.getElementById(shipTech[i] + "Item").style.display = "flex";
     }
   }
   update("sumValue", format(gamedata.sumValue, "currency"));
   update("money", format(gamedata.money, "currency"));
+  update("moneyShip", format(gamedata.money, "currency"));
+  update("storageDrone", gamedata.shipBayCapacity + " drones", "standard");
+  update("storage", gamedata.shipMaxCargo + " u", "standard");
+  gamedata.prestigeCost = Math.pow(1.3, gamedata.prestigeNb) * ((gamedata.shipMaxCargo - gamedata.shipCapacity) / gamedata.shipMaxCargo) + 1;
+  update("prestigeCost", "Cost : " + format(gamedata.prestigeCost, "currency"));
 }
 
 function changeStock(res, resCat) {
@@ -2281,6 +2556,8 @@ function changeStock(res, resCat) {
     gamedata.sumValue = gamedata.sumValue + gamedata.shipStock[key] * gamedata.resValue[key];
   });
   update("sumValue", format(gamedata.sumValue, "currency"));
+  gamedata.prestigeCost = Math.pow(1.3, gamedata.prestigeNb) * ((gamedata.shipMaxCargo - gamedata.shipCapacity) / gamedata.shipMaxCargo) + 1;
+  update("prestigeCost", "Cost : " + format(gamedata.prestigeCost, "currency"));
 }
 
 function resetAmounts(sale) {
@@ -2299,6 +2576,8 @@ function resetAmounts(sale) {
   root.style.setProperty("--res3GaugeH", (100 / (gamedata.shipMaxCargo / (gamedata.shipStock.Res3a + gamedata.shipStock.Res3b + gamedata.shipStock.Res3c))) + "%");
   gamedata.sumValue = 0;
   update("sumValue", format(gamedata.sumValue, "currency"));
+  gamedata.prestigeCost = Math.pow(1.3, gamedata.prestigeNb) * ((gamedata.shipMaxCargo - gamedata.shipCapacity) / gamedata.shipMaxCargo) + 1;
+  update("prestigeCost", "Cost : " + format(gamedata.prestigeCost, "currency"));
 }
 
 function sellRessources() {
@@ -2311,6 +2590,7 @@ function sellRessources() {
       gamedata.money = gamedata.money + gamedata.sumValue;
       resetAmounts(true);
       update("money", format(gamedata.money, "currency"));
+      update("moneyShip", format(gamedata.money, "currency"));
       chooseRegion('map', 'map');
       gamedata.timeLeft = gamedata.sellingTime;
       selling();
@@ -2337,50 +2617,168 @@ function selling() {
   }, 1000)
 }
 
-function prestige1() {
-  clearInterval(saveGameLoop);
-  Object.entries(gamedata.shipStock).forEach(([key, value]) => {
-    prestige.res[key] = gamedata.shipStock[key];
+function planetMenu() {
+  let x = 0;
+  Object.entries(gamedata.res).forEach(([key, value]) => {
+    x += gamedata.res[key];
   });
-  prestige.tech = gamedata.tech;
-  prestige.BP = gamedata.BP;
-  prestige.droneMk1 = gamedata.droneMk1;
-  prestige.droneMk2 = gamedata.droneMk2;
-  prestige.droneMk3 = gamedata.droneMk3;
+  if (gamedata.shipCapacity > 0 && x > 0 && (gamedata.drone1 + gamedata.drone2 + gamedata.drone3) <= gamedata.shipBayCapacity) {
+    if (confirm("Ship is not fully loaded.\nDo you want to proceed?")) {
+      x = 1;
+    } else {
+      x = 0;
+    }
+  } else if (gamedata.shipCapacity > 0 && x > 0 && (gamedata.drone1 + gamedata.drone2 + gamedata.drone3) > gamedata.shipBayCapacity) {
+    if (confirm("Ship is not fully loaded. And the ship cannot carry all the drones.\nDo you want to proceed?")) {
+      x = 1;
+    } else {
+      x = 0;
+    }
+  } else if ((gamedata.drone1 + gamedata.drone2 + gamedata.drone3) > gamedata.shipBayCapacity) {
+    if (confirm("The ship cannot carry all the drones.\nDo you want to proceed?")) {
+      x = 1;
+    } else {
+      x = 0;
+    }
+  } else {
+    x = 1;
+  }
+
+  var d = gamedata.shipBayCapacity;
   if ((gamedata.drone1 + gamedata.drone2 + gamedata.drone3) <= gamedata.shipBayCapacity) {
     prestige.drone1 = gamedata.drone1;
     prestige.drone2 = gamedata.drone2;
     prestige.drone3 = gamedata.drone3;
+    d -= (gamedata.drone1 + gamedata.drone2 + gamedata.drone3);
   } else {
-    let x = gamedata.shipBayCapacity;
     let d1 = gamedata.drone1;
     let d2 = gamedata.drone2;
     let d3 = gamedata.drone3;
     prestige.drone1 = 0;
     prestige.drone2 = 0;
     prestige.drone3 = 0;
-    while (x > 0) {
+    while (d > 0) {
       if (d3 > 0) {
         d3 -= 1;
-        x -= 1;
+        d -= 1;
         prestige.drone3 += 1;
       } else if (d2 > 0) {
         d2 -= 1;
-        x -= 1;
+        d -= 1;
         prestige.drone2 += 1;
       } else if (d1 > 0) {
         d1 -= 1;
-        x -= 1;
+        d -= 1;
         prestige.drone1 += 1;
       }
     }
   }
-  prestige.money = gamedata.money;
-  prestige.newgame = false;
-  localStorage.clear();
-  localStorage.setItem("PrestigeSave", JSON.stringify(prestige));
-  chooseRegion('map', 'map');
-  document.location.reload(true);
+
+  if (x > 0) {
+    document.getElementById("planetMenu").style.display = "grid";
+    update("planetMenuStorageMax", gamedata.shipMaxCargo + " u", "standard");
+    update("planetMenuStorage", (gamedata.shipMaxCargo - gamedata.shipCapacity) + " u", "standard");
+    update("planetMenuDrone", (gamedata.shipBayCapacity - d), "standard");
+    update("planetMenuDroneMax", gamedata.shipBayCapacity + " drones", "standard");
+    update("travelTime", gamedata.prestigeTime + "s", "standard");
+    update("travelCost", format(gamedata.prestigeCost, "currency"));
+
+    if (gamedata.planetShop.size > 0) {
+      document.getElementById("PShopoutermaterial").innerHTML = gamedata.planetShop.c1.name;
+      document.getElementById("PShopinnermaterial").innerHTML = gamedata.planetShop.c2.name;
+      document.getElementById("PShopcorematerial").innerHTML = gamedata.planetShop.c3.name;
+      document.getElementById("PShopsize").innerHTML = gamedata.planetShop.size;
+      document.getElementById("planetShop").style.display = "flex";
+    } else {
+      document.getElementById("planetShop").style.display = "none";
+    }
+    if (gamedata.tech.planetAnalyzer === 0) {
+      document.getElementById("P1outermaterial").innerHTML = "???";
+      document.getElementById("P1innermaterial").innerHTML = "???";
+      document.getElementById("P1corematerial").innerHTML = "???";
+      document.getElementById("P1size").innerHTML = "???";
+      document.getElementById("P2outermaterial").innerHTML = "???";
+      document.getElementById("P2innermaterial").innerHTML = "???";
+      document.getElementById("P2corematerial").innerHTML = "???";
+      document.getElementById("P2size").innerHTML = "???";
+      document.getElementById("P2outermaterial").innerHTML = "???";
+      document.getElementById("P2innermaterial").innerHTML = "???";
+      document.getElementById("P2corematerial").innerHTML = "???";
+      document.getElementById("P2size").innerHTML = "???";
+      document.getElementById("P4outermaterial").innerHTML = "???";
+      document.getElementById("P4innermaterial").innerHTML = "???";
+      document.getElementById("P4corematerial").innerHTML = "???";
+      document.getElementById("P4size").innerHTML = "???";
+      document.getElementById("P5outermaterial").innerHTML = "???";
+      document.getElementById("P5innermaterial").innerHTML = "???";
+      document.getElementById("P5corematerial").innerHTML = "???";
+      document.getElementById("P5size").innerHTML = "???";
+    } else {
+      document.getElementById("P1outermaterial").innerHTML = gamedata.planet1.c1.name;
+      document.getElementById("P1innermaterial").innerHTML = gamedata.planet1.c2.name;
+      document.getElementById("P1corematerial").innerHTML = gamedata.planet1.c3.name;
+      document.getElementById("P1size").innerHTML = gamedata.planet1.size;
+      document.getElementById("P2outermaterial").innerHTML = gamedata.planet2.c1.name;
+      document.getElementById("P2innermaterial").innerHTML = gamedata.planet2.c2.name;
+      document.getElementById("P2corematerial").innerHTML = gamedata.planet2.c3.name;
+      document.getElementById("P2size").innerHTML = gamedata.planet2.size;
+      document.getElementById("P3outermaterial").innerHTML = gamedata.planet3.c1.name;
+      document.getElementById("P3innermaterial").innerHTML = gamedata.planet3.c2.name;
+      document.getElementById("P3corematerial").innerHTML = gamedata.planet3.c3.name;
+      document.getElementById("P3size").innerHTML = gamedata.planet3.size;
+      document.getElementById("P4outermaterial").innerHTML = gamedata.planet4.c1.name;
+      document.getElementById("P4innermaterial").innerHTML = gamedata.planet4.c2.name;
+      document.getElementById("P4corematerial").innerHTML = gamedata.planet4.c3.name;
+      document.getElementById("P4size").innerHTML = gamedata.planet4.size;
+      document.getElementById("P5outermaterial").innerHTML = gamedata.planet5.c1.name;
+      document.getElementById("P5innermaterial").innerHTML = gamedata.planet5.c2.name;
+      document.getElementById("P5corematerial").innerHTML = gamedata.planet5.c3.name;
+      document.getElementById("P5size").innerHTML = gamedata.planet5.size;
+    }
+
+    if (gamedata.tech.antennaMk3 === 1) {
+      document.getElementById("Planet1").style.display = "flex";
+      document.getElementById("Planet2").style.display = "flex";
+      document.getElementById("Planet3").style.display = "flex";
+      document.getElementById("Planet4").style.display = "flex";
+      document.getElementById("Planet5").style.display = "flex";
+    } else if (gamedata.tech.antennaMk2 === 1) {
+      document.getElementById("Planet1").style.display = "flex";
+      document.getElementById("Planet2").style.display = "flex";
+      document.getElementById("Planet3").style.display = "none";
+      document.getElementById("Planet4").style.display = "none";
+      document.getElementById("Planet5").style.display = "none";
+    } else {
+      document.getElementById("Planet1").style.display = "flex";
+      document.getElementById("Planet2").style.display = "none";
+      document.getElementById("Planet3").style.display = "none";
+      document.getElementById("Planet4").style.display = "none";
+      document.getElementById("Planet5").style.display = "none";
+    }
+  }
+
+}
+
+function prestige1(n) {
+  if (confirm("Are you sure you want to travel to this planet?")) {
+    clearInterval(saveGameLoop);
+    
+    Object.entries(gamedata.shipStock).forEach(([key, value]) => {
+      prestige.res[key] = gamedata.shipStock[key];
+    });
+    prestige.tech = gamedata.tech;
+    prestige.BP = gamedata.BP;
+    prestige.outermaterial = gamedata["planet" + n].c1;
+    prestige.innermaterial = gamedata["planet" + n].c2;
+    prestige.corematerial = gamedata["planet" + n].c3;
+    prestige.planetSize = gamedata["planet" + n].size;
+    prestige.money = gamedata.money;
+    prestige.newgame = false;
+    localStorage.clear();
+    localStorage.setItem("PrestigeSave", JSON.stringify(prestige));
+    chooseRegion('map', 'map');
+    document.location.reload(true);
+  }
 }
 
 function glow(el) {
