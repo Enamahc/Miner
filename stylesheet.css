@@ -377,6 +377,7 @@ header {
 #lefttopbar {
   display: flex;
   align-items: baseline;
+  white-space: nowrap;
 }
 
 #title {
@@ -403,7 +404,7 @@ header {
   font-size: 75%;
 }
 
-#msg:hover .tooltip{
+#msg:hover .tooltip {
   display: block;
   position: absolute;
 }
@@ -437,7 +438,7 @@ button {
   height: calc(100% - 26px);
   display: none;
   grid-template-columns: 22% 23% 30% 25%;
-  grid-template-rows: auto 1fr 1fr;
+  grid-template-rows: auto 2fr 1fr;
 }
 
 #res {
@@ -540,6 +541,14 @@ button {
   white-space: nowrap;
 }
 
+ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 80%;
+
+}
+
 li {
   display: flex;
   align-items: center;
@@ -548,7 +557,7 @@ li {
 }
 
 #caption {
-  height: 70%;
+  height: 80%;
   width: 100%;
   display: grid;
 }
@@ -620,7 +629,7 @@ li {
   overflow: auto;
 }
 
-#shipStorage > * {
+#shipStorage>* {
   width: 100%;
 }
 
@@ -680,7 +689,7 @@ li {
   overflow: auto;
 }
 
-#shipEquipment > * {
+#shipEquipment>* {
   margin: 3% 0 0 0;
 }
 
@@ -688,16 +697,16 @@ li {
   width: 100%;
 }
 
-#Equipment > * {
+#Equipment>* {
   font-size: 0.8em;
   margin-top: 1%;
 }
 
-#Equipment > *:hover{
+#Equipment>*:hover {
   background-color: #002b35;
 }
 
-#Equipment > *:hover .tooltip {
+#Equipment>*:hover .tooltip {
   display: block;
   position: absolute;
   left: 35%;
@@ -765,7 +774,7 @@ li {
 }
 
 
-#prestigeCost{
+#prestigeCost {
   position: absolute;
   display: flex;
   justify-content: center;
@@ -812,7 +821,7 @@ li {
   white-space: nowrap;
 }
 
-#planetSelectorArea{
+#planetSelectorArea {
   grid-row: 4/6;
   grid-column: 1/3;
   display: flex;
@@ -846,33 +855,36 @@ li {
   align-items: center;
 }
 
-.miniPlanetContainer{
+.miniPlanetContainer {
   width: 50%;
   height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.miniPlanetC1{
+
+.miniPlanetC1 {
   height: 90%;
   aspect-ratio: 1/1;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.miniPlanetC2{
+
+.miniPlanetC2 {
   height: 60%;
   aspect-ratio: 1/1;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.miniPlanetC3{
+
+.miniPlanetC3 {
   height: 33%;
   aspect-ratio: 1/1;
 }
 
-.miniPlanetRes{
+.miniPlanetRes {
   width: 50%;
   font-size: 0.8em;
   display: flex;
@@ -881,7 +893,7 @@ li {
   flex-direction: column;
 }
 
-.miniPlanetResItem{
+.miniPlanetResItem {
   display: flex;
   width: 100%;
   align-items: center;
@@ -928,7 +940,7 @@ li {
   align-items: center;
 }
 
-#coordinatesMenuContainer select{
+#coordinatesMenuContainer select {
   width: 30%;
   min-width: 50px;
 }
@@ -1594,9 +1606,9 @@ td {
   border-bottom: solid 1px #002b35;
 }
 
-.menus{
+.menus {
   grid-column: 4/5;
-  grid-row: 2/4;
+  grid-row: 2/3;
   color: ghostwhite;
   /* background-color: hsl(155, 15%, 70%); */
   border-left: solid 1px #002b35;
@@ -1612,7 +1624,7 @@ td {
   height: auto;
 }
 
-.submenus > button{
+.submenus>button {
   display: flex;
   margin: auto;
 }
@@ -1629,6 +1641,7 @@ td {
   border-block-end: 3px double #002b35;
   align-items: center;
   justify-content: center;
+  min-width: 200px;
 }
 
 .buyable {
@@ -1679,6 +1692,7 @@ td {
   color: gold;
   justify-content: space-between;
 }
+
 .RPprice {
   display: flex;
   color: rgb(152, 9, 209);
@@ -1704,7 +1718,7 @@ td {
   margin: 0.5em;
 }
 
-#labMachine  {
+#labMachine {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
   grid-template-rows: 3em repeat(10, auto);
@@ -1747,23 +1761,25 @@ td {
 
 @keyframes glow {
   0% {
-    color: lightskyblue;
     box-shadow: none;
   }
+
   25% {
-    color: yellow;
+    color: gold;
     box-shadow: inset 0 0 1em gold;
   }
+
   50% {
-    color: lightskyblue;
+    color: ghostwhite;
     box-shadow: none;
   }
+
   75% {
-    color: yellow;
+    color: gold;
     box-shadow: inset 0 0 1em gold;
   }
+
   100% {
-    color: lightskyblue;
     box-shadow: none;
   }
 }
@@ -1771,6 +1787,25 @@ td {
 .glow {
   animation: glow 2s ease-out 0s 1;
   -webkit-animation: glow 2s ease-out 0s 1;
+}
+
+@keyframes blink {
+  25% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  75% {
+    opacity: 0.5;
+  }
+}
+
+.blink {
+  animation: blink 2s ease-out 0s 1;
+  -webkit-animation: blink 2s ease-out 0s 1;
 }
 
 .toggle-label {
@@ -1796,20 +1831,20 @@ td {
   height: 100%;
 }
 
-.toggle-label input[type=checkbox] + .back {
+.toggle-label input[type=checkbox]+.back {
   position: absolute;
   width: 100%;
   height: 100%;
   background: darkred;
   transition: background 150ms linear;
-  
+
 }
 
-.toggle-label input[type=checkbox]:checked + .back {
+.toggle-label input[type=checkbox]:checked+.back {
   background: darkgreen;
 }
 
-.toggle-label input[type=checkbox] + .back .toggle {
+.toggle-label input[type=checkbox]+.back .toggle {
   display: block;
   position: absolute;
   content: ' ';
@@ -1819,9 +1854,11 @@ td {
   transition: margin 150ms linear;
   border-radius: 0;
 }
-.toggle-label input[type=checkbox]:checked + .back .toggle {
+
+.toggle-label input[type=checkbox]:checked+.back .toggle {
   margin-left: 50%;
 }
+
 .toggle-label .label {
   position: absolute;
   display: flex;
@@ -1831,15 +1868,61 @@ td {
   height: 100%;
   color: #ddd;
 }
-.toggle-label .label.on { left: 0px; }
-.toggle-label .label.off { right: 0px; }
 
-.toggle-label input[type=checkbox]:checked + .back .label.on {
+.toggle-label .label.on {
+  left: 0px;
+}
+
+.toggle-label .label.off {
+  right: 0px;
+}
+
+.toggle-label input[type=checkbox]:checked+.back .label.on {
   color: #fff;
 }
-.toggle-label input[type=checkbox] + .back .label.off {
+
+.toggle-label input[type=checkbox]+.back .label.off {
   color: #fff;
 }
-.toggle-label input[type=checkbox]:checked + .back .label.off {
+
+.toggle-label input[type=checkbox]:checked+.back .label.off {
   color: #ddd;
+}
+
+.logbook-area {
+  grid-column: 4/5;
+  grid-row: 3/4;
+  display: flex;
+  flex-direction: column;
+  align-content: left;
+  text-align: left;
+  border-top: 1px solid #002b35;
+  border-left: 1px solid #002b35;
+  color: ghostwhite;
+  height: auto;
+  min-height: 100px;
+  width: 100%;
+  overflow: auto;
+}
+
+.logbooktitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  height: 1.5em;
+  min-width: 200px;
+  border-block-end: 3px double #002b35;
+}
+
+.logbook {
+  color: ghostwhite;
+  font-size: 0.9em;
+  background-color: black;
+  height: 100%;
+  border: none;
+  width: 100%;
+  min-width: 200px;
+  box-sizing: border-box;
+  resize: none;
 }
