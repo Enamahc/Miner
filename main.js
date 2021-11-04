@@ -302,6 +302,7 @@ var gamedata = {
   },
   prestigeTime: 10,
   prestigeCost: 0,
+  prestigeCreep: 1.3,
   prestigeNb: 0,
   coordinatesNb: 0,
   coordinatesPrice: 0,
@@ -452,7 +453,7 @@ var blueprints = {
     title: "Mining Drone Mk1",
     bought: false,
     toCraft: true,
-    price: 10,
+    price: 8,
     res: {
       Res1a: 2,
       Res1b: 2,
@@ -938,6 +939,7 @@ window.onload = function() {
         document.getElementById('main').style.display = 'grid';
       }, 5000);
     init();
+    log();
   } else {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('main').style.display = 'grid';
@@ -1119,7 +1121,7 @@ function offlineProgress() {
 }
 
 function init() {
-	if (gamedata.outermaterial.name === ""){
+  if (gamedata.outermaterial.name === "") {
     let x = Math.floor(Math.random() * 3);
     gamedata.outermaterial.name = gamedata.possibleOuterMaterial[x];
     gamedata.outermaterial.ref = "Res1" + String.fromCharCode(97 + x);
@@ -1162,7 +1164,7 @@ function init() {
   gamedata.d3left = gamedata.drone3;
 
   Object.entries(gamedata.resValue).forEach(([key, value]) => {
-    gamedata.resValue[key] = Math.random() * (((gamedata.baseValue[key] * 0.25) + gamedata.baseValue[key]) - gamedata.baseValue[key] * 0.75) + gamedata.baseValue[key] * 0.75;
+    gamedata.resValue[key] = randn_bm(0, 1, 1) * (((gamedata.baseValue[key] * 0.2) + gamedata.baseValue[key]) - gamedata.baseValue[key] * 0.8) + gamedata.baseValue[key] * 0.8;
   });
   gamedata.newgame = false;
 }
@@ -1191,10 +1193,15 @@ function planetGenerator() {
 }
 
 function reset() {
-  clearInterval(saveGameLoop);
-  window.localStorage.clear();
-  document.location.reload(true);
-  gamedata.newgame = true;
+  if (confirm("This will erase any saved game. Are you sure?")) {
+    clearInterval(saveGameLoop);
+    window.localStorage.clear();
+    document.location.reload(true);
+    gamedata.newgame = true;
+    document.getElementById("logs").value = ">";
+  } else {
+    console.log("Reset aborted.")
+  }
 }
 
 function save() {
@@ -1244,6 +1251,35 @@ var refreshLoop = window.setInterval(function() {
   }
 
 }, 10);
+
+function log() {
+  var startDelay = 1000;
+  var interval = 5000;
+  setTimeout(function() {
+    document.getElementById("logs").value = "> Good morning Miner! Please follow this quick guide to start your journey:";
+    glow(document.getElementById("logs"));
+  }, startDelay);
+  setTimeout(function() {
+    document.getElementById("logs").value = document.getElementById("logs").value + "\n> First, click on a region of the planet.";
+    glow(document.getElementById("logs"));
+    glow(document.getElementById("planet"));
+    for (let i = 0; i < document.getElementsByClassName("region").length; i++) {
+      document.getElementsByClassName("region")[i].addEventListener("click", step1);
+      document.getElementById("planet").classList.remove("glow");
+    }
+  }, startDelay + interval);
+}
+log();
+
+function step1() {
+  document.getElementById("logs").value = "> Great! Now click the surface (the frontier of the green area and the night sky)";
+  glow(document.getElementById("logs"));
+  document.getElementById("planet").classList.remove("glow");
+  blink(document.getElementsByClassName("grid")[0].firstChild);
+  for (let i = 0; i < document.getElementsByClassName("region").length; i++) {
+    document.getElementsByClassName("region")[i].removeEventListener("click", step1)
+  }
+}
 
 function update(id, content) {
   document.getElementById(id).innerHTML = content;
@@ -1328,78 +1364,115 @@ function createShopItem(BP) {
   let amount;
   if (BP === "planetCoordinates" && document.getElementById(BP) === null) {
     buyable = document.createElement("div");
-    buyable.className = "buyable";
-    buyable.id = BP;
+    Object.assign(buyable, {
+      className: "buyable",
+      id: BP
+    });
     buyable_text = document.createElement("div");
-    buyable_text.className = "buyable_text";
+    Object.assign(buyable_text, {
+      className: "buyable_text"
+    });
     buyable.appendChild(buyable_text);
     btn = document.createElement("button");
-    btn.innerText = "Set";
-    btn.className = "buyable_button";
-    btn.addEventListener("click", function() {
-      coordinatesPrice();
-      document.getElementById("coordinatesMenu").style.display = "flex";
+    Object.assign(btn, {
+      className: "buyable_button",
+      innerText: "Set",
+      onclick: function() {
+        coordinatesPrice();
+        document.getElementById("coordinatesMenu").style.display = "flex";
+      }
     });
     buyable.appendChild(btn);
     tooltip = document.createElement("span");
-    tooltip.className = "tooltip";
-    tooltip.innerText = "Buy coordinates of a planet with specific caracteristics.";
+    Object.assign(tooltip, {
+      className: "tooltip",
+      innerText: "Buy coordinates of a planet with specific characteristics.",
+    });
     buyable.appendChild(tooltip);
     buyable_title = document.createElement("div");
-    buyable_title.className = "buyable_title";
+    Object.assign(buyable_title, {
+      className: "buyable_title"
+    });
     buyable_text.appendChild(buyable_title);
     buyable_title_text = document.createElement("span");
-    buyable_title_text.className = "buyable_title_text";
+    Object.assign(buyable_title_text, {
+      className: "buyable_title_text",
+      innerText: "Planet Coordinates"
+    });
     buyable_title_price = document.createElement("div");
-    buyable_title_price.className = "buyable_title_price";
+    Object.assign(buyable_title_price, {
+      className: "buyable_title_price"
+    });
     buyable_title.appendChild(buyable_title_text);
     buyable_title.appendChild(buyable_title_price);
-    buyable_title_text.innerText = "Planet Coordinates";
     cost = document.createElement("div");
     buyable_title_price.appendChild(cost);
-    cost.innerText = "Cost :";
-    cost.className = "price";
+    buyable_title_text = document.createElement("span");
+    Object.assign(cost, {
+      className: "price",
+      innerText: "Cost :"
+    });
     amount = document.createElement("span");
     cost.appendChild(amount);
-    amount.innerText = "variable";
+    Object.assign(amount, {
+      innerText: "variable"
+    });
     document.getElementById("shop").appendChild(buyable);
   } else if (document.getElementById(BP) === null) {
     var nextItem = blueprints[BP];
     buyable = document.createElement("div");
-    buyable.className = "buyable";
-    buyable.id = BP;
+    Object.assign(buyable, {
+      className: "buyable",
+      id: BP
+    });
     document.getElementById("shop").appendChild(buyable);
     buyable_text = document.createElement("div");
-    buyable_text.className = "buyable_text";
+    Object.assign(buyable_text, {
+      className: "buyable_text"
+    });
     buyable.appendChild(buyable_text);
     btn = document.createElement("button");
-    btn.innerText = "Buy";
-    btn.className = "buyable_button";
-    btn.addEventListener("click", function() {
-      buyShopItem(nextItem, BP);
+    Object.assign(btn, {
+      className: "buyable_button",
+      innerText: "Buy",
+      onclick: function() {
+        buyShopItem(nextItem, BP);
+      }
     });
     buyable.appendChild(btn);
     tooltip = document.createElement("span");
-    tooltip.className = "tooltip";
-    tooltip.innerText = nextItem.desc;
+    Object.assign(tooltip, {
+      className: "tooltip",
+      innerText: nextItem.desc,
+    });
     buyable.appendChild(tooltip);
     buyable_title = document.createElement("div");
-    buyable_title.className = "buyable_title";
+    Object.assign(buyable_title, {
+      className: "buyable_title",
+    });
     buyable_text.appendChild(buyable_title);
     buyable_title_text = document.createElement("span");
-    buyable_title_text.className = "buyable_title_text";
+    Object.assign(buyable_title_text, {
+      className: "buyable_title_text",
+      innerText: nextItem.title
+    });
     buyable_title_price = document.createElement("div");
-    buyable_title_price.className = "buyable_title_price";
+    Object.assign(buyable_title_price, {
+      className: "buyable_title_price",
+    });
     buyable_title.appendChild(buyable_title_text);
     buyable_title.appendChild(buyable_title_price);
-    buyable_title_text.innerText = nextItem.title;
     cost = document.createElement("div");
     buyable_title_price.appendChild(cost);
-    cost.innerText = "Cost :";
-    cost.className = "price";
+    Object.assign(cost, {
+      className: "price",
+      innerText: "Cost :"
+    });
     amount = document.createElement("span");
     cost.appendChild(amount);
-    amount.innerText = format(nextItem.price, "currency");
+    Object.assign(amount, {
+      innerText: format(nextItem.price, "currency")
+    });
     if (nextItem.toCraft === true) {
       buyable.style.background = "linear-gradient(rgba(0, 0, 255, 0.5), rgba(0, 0, 0, 1)), url('https://blueprintmarketing.fr/wp-content/uploads/2020/11/Blueprint-Marketing-Plan.jpg')";
       buyable.style["background-size"] = "cover";
@@ -1839,11 +1912,13 @@ function converterMk2() {
 }
 
 function converterMk3() {
+  //antimatter for TP
   console.log("converterMk3 function");
 }
 
 function massReducer() {
   console.log("massReducer function");
+  gamedata.prestigeCreep = 1.2;
 }
 
 function planetAnalyzer() {
@@ -1852,6 +1927,8 @@ function planetAnalyzer() {
 
 function teleporter() {
   console.log("teleporter function");
+  gamedata.sellingTime = 0;
+  gamedata.prestigeTime = 0;
 }
 
 function tradingAI() {
@@ -1921,18 +1998,21 @@ function removeItemOnce(arr, value) {
 function rareDrop() {
   if (Math.random() >= (1 - 1 / 100000)) {
     gamedata.res.Rare3 += 1;
+    console.log("Rare3 crystal found!");
     if (gamedata.rare.Rare3 == false) {
       document.getElementById("Rare3").parentNode.style.display = "flex";
       gamedata.rare.Rare3 = true;
     }
   } else if (Math.random() >= (1 - 1 / 10000)) {
     gamedata.res.Rare2 += 1;
+    console.log("Rare2 crystal found!");
     if (gamedata.rare.Rare2 == false) {
       document.getElementById("Rare2").parentNode.style.display = "flex";
       gamedata.rare.Rare2 = true;
     }
   } else if (Math.random() >= (1 - 1 / 1000)) {
     gamedata.res.Rare1 += 1;
+    console.log("Rare1 crystal found!");
     if (gamedata.rare.Rare1 == false) {
       document.getElementById("Rare1").parentNode.style.display = "flex";
       gamedata.rare.Rare1 = true;
@@ -2503,7 +2583,7 @@ function shipMenu() {
   update("moneyShip", format(gamedata.money, "currency"));
   update("storageDrone", gamedata.shipBayCapacity + " drones", "standard");
   update("storage", gamedata.shipMaxCargo + " u", "standard");
-  gamedata.prestigeCost = Math.pow(1.3, gamedata.prestigeNb) * ((gamedata.shipMaxCargo - gamedata.shipCapacity) / gamedata.shipMaxCargo) + 1;
+  gamedata.prestigeCost = Math.pow(gamedata.prestigeCreep, gamedata.prestigeNb) * ((gamedata.shipMaxCargo - gamedata.shipCapacity) / gamedata.shipMaxCargo) + 1;
   update("prestigeCost", "Cost : " + format(gamedata.prestigeCost, "currency"));
 }
 
@@ -2579,11 +2659,13 @@ function resetAmounts(sale) {
 
 function sellRessources() {
   if (gamedata.sumValue > 0) {
-    var minutes = Math.floor(gamedata.sellingTime / 60);
-    var seconds = gamedata.sellingTime % 60;
-    var msg = "Ship won't be in orbit for " + minutes + "m" + seconds + "s";
+    var msg = "";
+    if (gamedata.tech.teleporter === 0) {
+      var minutes = Math.floor(gamedata.sellingTime / 60);
+      var seconds = gamedata.sellingTime % 60;
+      msg = "Ship won't be in orbit for " + minutes + "m" + seconds + "s";
+    }
     if (confirm("Are you sure you want to sell resources stocked in ship?\n" + msg)) {
-
       gamedata.money = gamedata.money + gamedata.sumValue;
       resetAmounts(true);
       update("money", format(gamedata.money, "currency"));
@@ -2759,7 +2841,7 @@ function planetMenu() {
 function prestige1(n) {
   if (confirm("Are you sure you want to travel to this planet?")) {
     clearInterval(saveGameLoop);
-    
+
     Object.entries(gamedata.shipStock).forEach(([key, value]) => {
       prestige.res[key] = gamedata.shipStock[key];
     });
@@ -2782,6 +2864,12 @@ function glow(el) {
   el.classList.remove("glow");
   void el.offsetWidth;
   el.classList.add("glow");
+}
+
+function blink(el) {
+  el.classList.remove("blink");
+  void el.offsetWidth;
+  el.classList.add("blink");
 }
 
 App = {};
