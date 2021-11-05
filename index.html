@@ -52,7 +52,8 @@
     </div>
   </div>
   <div id="prestigeAnimation">
-
+    <img id="prestigeShip" src="https://iili.io/RrpQLl.png" alt="SHIP" class="wobble">
+    <span id="prestigeText">TRAVELLING THROUGH SPACE</span>
   </div>
 
   <body>
@@ -68,9 +69,9 @@
         <div class="cat3">Iridium : <span id="Res3a"></span></div>
         <div class="cat3">Gold : <span id="Res3b"></span></div>
         <div class="cat3">Palladium : <span id="Res3c"></span></div>
-        <div class="rare">Rare1 : <span id="Rare1"></span></div>
-        <div class="rare">Rare2 : <span id="Rare2"></span></div>
-        <div class="rare">Rare3 : <span id="Rare3"></span></div>
+        <div class="rare">Cassiterite : <span id="Rare1"></span></div>
+        <div class="rare">Red beryl : <span id="Rare2"></span></div>
+        <div class="rare">Taaffeite : <span id="Rare3"></span></div>
         <div class="RPprice">RP : <span id="RP"></span></div>
         <div id="droneList">
           <div id="droneMk1List" class="drone d1">Drone Mk1 :
@@ -134,13 +135,13 @@
               <span class="resName cat3">Palladium :</span>
               <input type="number" id="Res3cShip" value="0" min="0" step="0.001" onchange="changeStock('Res3c', 3)">
               <span id="Res3cValue" class="cat3">0</span>
-              <span class="resName rare Rare1">Rare1 :</span>
+              <span class="resName rare Rare1">Cassiterite :</span>
               <input type="number" id="Rare1Ship" class="Rare1" value="0" min="0" step="1" onchange="changeStock('Rare1', 4)">
               <span id="Rare1Value" class="rare Rare1">0</span>
-              <span class="resName rare  Rare2">Rare2 :</span>
+              <span class="resName rare  Rare2">Red beryl :</span>
               <input type="number" id="Rare2Ship" class="Rare2" value="0" min="0" step="1" onchange="changeStock('Rare2', 4)">
               <span id="Rare2Value" class="rare Rare2">0</span>
-              <span class="resName rare Rare3">Rare3 :</span>
+              <span class="resName rare Rare3">Taaffeite :</span>
               <input type="number" id="Rare3Ship" class="Rare3" value="0" min="0" step="1" onchange="changeStock('Rare3', 4)">
               <span id="Rare3Value" class="rare Rare3">0</span>
 
@@ -209,10 +210,9 @@
               SELL
             </button>
             <button id="prestige" class="shipButton" onclick="planetMenu()">
-              /!\ Find New Planet /!\
-              <div id="prestigeCost" class="price">Cost : </div>
-              <span class="tooltip">Leave this planet and find another one to mine</span>
+              Leave this planet
             </button>
+            <div id="prestigeCost" class="price">Cost : </div>
           </div>
         </div>
       </div>
@@ -760,13 +760,13 @@
             <span class="resName cat3">Palladium :</span>
             <input type="number" id="Res3cLab" value="0" min="0" step="0.001">
             <span id="Res3cRP" class="cat3">0</span>
-            <span class="resName rare Rare1">Rare1 :</span>
+            <span class="resName rare Rare1">Cassiterite :</span>
             <input type="number" id="Rare1Lab" class="Rare1" value="0" min="0" step="1">
             <span id="Rare1RP" class="rare Rare1">0</span>
-            <span class="resName rare  Rare2">Rare2 :</span>
+            <span class="resName rare  Rare2">Red beryl :</span>
             <input type="number" id="Rare2Lab" class="Rare2" value="0" min="0" step="1">
             <span id="Rare2RP" class="rare Rare2">0</span>
-            <span class="resName rare Rare3">Rare3 :</span>
+            <span class="resName rare Rare3">Taaffeite :</span>
             <input type="number" id="Rare3Lab" class="Rare3" value="0" min="0" step="1">
             <span id="Rare3RP" class="rare Rare3">0</span>
 
@@ -787,11 +787,12 @@
       <div id="workbench" class="menus">
         <div class="menutitle">WORKBENCH</div>
       </div>
-      <div class="logbook-area">
+      <div id="logarea" class="logbook-area">
         <div class="logbooktitle">LOGBOOK</div>
         <textarea id="logs" class="logbook" disabled>></textarea>
       </div>
     </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.1.0/gl-matrix.js" charset="utf-8" type="text/javascript"></script>
     <script src="main.js" charset="utf-8" type="text/javascript"></script>
   </body>
 
