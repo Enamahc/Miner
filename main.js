@@ -2,27 +2,29 @@ var locales = "en-EN";
 var currency = "USD";
 
 var savegame = JSON.parse(localStorage.getItem("Save"));
+var saveBP = JSON.parse(localStorage.getItem("BPSave"));
+var saveResearch = JSON.parse(localStorage.getItem("RSave"));
 
 var prestige = JSON.parse(localStorage.getItem("PrestigeSave"));
 
 var gamedata = {
   version: "0.0.0.a",
   newgame: true,
-  money: 0,
+  money: 1000000,
   planetSize: 10,
   res: {
-    Res1a: 0,
-    Res1b: 0,
-    Res1c: 0,
-    Res2a: 0,
-    Res2b: 0,
-    Res2c: 0,
-    Res3a: 0,
-    Res3b: 0,
-    Res3c: 0,
-    Rare1: 0,
-    Rare2: 0,
-    Rare3: 0
+    Res1a: 10000,
+    Res1b: 10000,
+    Res1c: 10000,
+    Res2a: 10000,
+    Res2b: 10000,
+    Res2c: 10000,
+    Res3a: 10000,
+    Res3b: 10000,
+    Res3c: 10000,
+    Rare1: 10,
+    Rare2: 10,
+    Rare3: 10
   },
   resName: {
     Res1a: "Iron",
@@ -494,7 +496,7 @@ var blueprints = {
     title: "Mining Drone Mk3",
     bought: false,
     toCraft: true,
-    price: 0,
+    price: 1000,
     res: {
       Res1a: 0,
       Res1b: 0,
@@ -511,7 +513,8 @@ var blueprints = {
   exoMk1: {
     prev: [],
     next: ["exoMk2"],
-    bought: true
+    bought: true,
+    toCraft: false
   },
   exoMk2: {
     prev: ["exoMk1", "droneMk1"],
@@ -912,11 +915,15 @@ var research = {
 
 window.onload = function() {
   chooseRegion("map", "map");
-  tab("shop");
-
   if (savegame != null) {
     Object.entries(gamedata).forEach(([key, value]) => {
       gamedata[key] = savegame[key];
+    });
+    Object.entries(blueprints).forEach(([key, value]) => {
+      blueprints[key] = saveBP[key];
+    });
+    Object.entries(research).forEach(([key, value]) => {
+      research[key] = saveResearch[key];
     });
     offlineProgress();
     if (gamedata.prestigeTimeLeft > 0) {
@@ -953,6 +960,7 @@ window.onload = function() {
     init();
     tuto();
   }
+  tab("shop");
   prestige = {
     res: {}
   };
@@ -981,6 +989,8 @@ window.onload = function() {
   Object.entries(gamedata.rare).forEach(([key, value]) => {
     if (gamedata.rare[key] === false) {
       document.getElementById(key).parentNode.style.display = "none";
+    } else {
+      document.getElementById(key).parentNode.style.display = "flex";
     }
   });
 
@@ -1010,7 +1020,7 @@ window.onload = function() {
 
   setDim();
   setShop();
-  setWorkbench()
+  setWorkbench();
   save();
 }
 
@@ -1234,6 +1244,8 @@ function reset() {
 function save() {
   gamedata.lasttick = Date.now();
   localStorage.setItem("Save", JSON.stringify(gamedata));
+  localStorage.setItem("BPSave", JSON.stringify(blueprints));
+  localStorage.setItem("RSave", JSON.stringify(research));
 }
 
 const waitUntil = (condition) => {
@@ -1355,7 +1367,7 @@ async function step4() {
   document.getElementById("workBenchButton").removeEventListener("click", step4);
   log("As you can see, you need three differents resources. However, you will only find " + gamedata.outermaterial.name + " on this planet. So go back to a region of your choice and mine until you get the required amount of this resource.", false);
   await waitUntil(() => gamedata.res[gamedata.outermaterial.ref] >= 2)
-  log("Good. Now go back to the ship menu, load your resources into the storage, and go to another planet buy clicking on the 'Leave this planet' button. If your ship isn't back yet, you can mine more " + gamedata.outermaterial.name + ". Ship speed depends on thrusters level. Moreover, you can't load more than 10 units of ore in your ship storage for now. This depends on Cargo bay level.", false);
+  log("Good. Now go back to the ship menu, load your resources into the storage, and go to another planet by clicking on the 'Leave this planet' button. If your ship isn't back yet, you can mine more " + gamedata.outermaterial.name + ". Ship speed depends on thrusters level. Moreover, you can't load more than 10 units of ore in your ship storage for now. This depends on Cargo bay level.", false);
   document.getElementById("prestige").addEventListener("click", step5);
 
 }
@@ -1578,10 +1590,8 @@ function buyShopItem(item, tech) {
     if (item.toCraft === true) {
       glow(document.getElementById("workBenchButton"));
       createWorkbenchItem(item, tech, "shop");
-      if (tech.includes("droneMk")) {
-        gamedata.tech[tech] = 1;
-        gamedata.money -= item.price;
-      }
+      gamedata.money -= item.price;
+      
     } else {
       gamedata.tech[tech] = 1;
       gamedata.money -= item.price;
@@ -1610,7 +1620,7 @@ function coordinatesPrice() {
     cost += Math.pow(1.2, gamedata.coordinatesNb) * 100
   }
   if (size.value != "sizeany") {
-    cost += Math.pow(1.2, gamedata.coordinatesNb) * (parseInt(size.selectedIndex, 10) - 10)
+    cost += Math.pow(1.2, gamedata.coordinatesNb) * Math.abs((parseInt(size.selectedIndex, 10) - 10))
   }
   if (cost > 0) {
     update("coordinatesCost", format(cost, "currency"));
@@ -1658,7 +1668,7 @@ function buyCoord() {
         gamedata.planetShop.c3.ref = c3.value;
       } else {
         let n = Math.floor(Math.random() * 3);
-        gamedata.planetShop.c3.name = gamedata.possibleInnerMaterial[n];
+        gamedata.planetShop.c3.name = gamedata.possibleCoreMaterial[n];
         gamedata.planetShop.c3.ref = "Res3" + String.fromCharCode(97 + n);
       }
       if (!size.value.includes("any")) {
@@ -1676,20 +1686,20 @@ function buyCoord() {
 
 function setWorkbench() {
   Object.entries(blueprints).forEach(([key, value]) => {
-    if (gamedata.BP[key] === 1 && gamedata.tech[key] === 0) {
+    if (gamedata.BP[key] === 1 && gamedata.tech[key] === 0 && document.getElementById(key) == null) {
       createWorkbenchItem(blueprints[key], key, "shop");
     }
   });
   if (gamedata.tech.droneMk1 === 1) {
-    createWorkbenchItem(blueprints.droneMk1, "droneMk1", "shop");
+    if(document.getElementById("droneMk1") == null){createWorkbenchItem(blueprints.droneMk1, "droneMk1", "shop")};
     setDronePrice(1);
   }
   if (gamedata.tech.droneMk2 === 1) {
-    createWorkbenchItem(blueprints.droneMk2, "droneMk2", "shop");
+    if(document.getElementById("droneMk2") == null){createWorkbenchItem(blueprints.droneMk2, "droneMk2", "shop")};
     setDronePrice(2);
   }
   if (gamedata.tech.droneMk3 === 1) {
-    createWorkbenchItem(blueprints.droneMk3, "droneMk3", "shop");
+    if(document.getElementById("droneMk3") == null){createWorkbenchItem(blueprints.droneMk3, "droneMk3", "shop")};
     setDronePrice(3);
   }
 
@@ -1740,9 +1750,15 @@ function createWorkbenchItem(item, tech, from) {
   }
   buyable.appendChild(btn);
   var tooltip = document.createElement("span");
-  tooltip.className = "tooltip";
+  tooltip.className = "tooltip hideable";
   tooltip.innerText = item.desc;
   buyable.appendChild(tooltip);
+  // buyable.addEventListener("mouseover", () => {
+  //   tooltip.style.display = "block";
+  // }, false);
+  // buyable.addEventListener("mouseleave", () => {
+  //   tooltip.style.display = "none";
+  // }, false);
   var buyable_title = document.createElement("div");
   buyable_title.className = "buyable_title";
   buyable_text.appendChild(buyable_title);
@@ -2071,7 +2087,7 @@ function format(number, type) {
       "e" +
       Math.floor(exponent / 3) * 3
     );
-  if (type == "standard") return new Intl.NumberFormat([locales, "en-EN"]).format(number);
+  if (type == "standard") return new Intl.NumberFormat([locales, "en-EN"]).format(Math.abs(number));
   if (type == "currency") return new Intl.NumberFormat([locales, "en-EN"], {
     style: "currency",
     currency: currency,
@@ -2497,6 +2513,9 @@ function clickableGrid(rows, cols, callback, regionArray, regionName) {
 }
 
 function tab(tab) {
+  
+  setWorkbench();
+  setShop();
   document.getElementById("shop").style.display = "none";
   document.getElementById("lab").style.display = "none";
   document.getElementById("workbench").style.display = "none";
@@ -2535,6 +2554,7 @@ function buyDrone1() {
     if (gamedata.drone1 === 0) {
       log("You now have a Mining drone, click on any region of the planet and assign it to this region. It will then mine automatically.", false);
     }
+    gamedata.tech.droneMk1 = 1;
     gamedata.drone1 += 1;
     gamedata.d1left += 1;
     Object.entries(gamedata.droneMk1).forEach(([key, value]) => {
@@ -2564,6 +2584,7 @@ function buyDrone2() {
     x = false;
   }
   if (x === true) {
+    gamedata.tech.droneMk12 = 1;
     gamedata.drone2 += 1;
     gamedata.d2left += 1;
     Object.entries(gamedata.droneMk2).forEach(([key, value]) => {
@@ -2604,6 +2625,7 @@ function buyDrone3() {
     x = false;
   }
   if (x === true) {
+    gamedata.tech.droneMk3 = 1;
     gamedata.drone3 += 1;
     gamedata.d3left += 1;
     Object.entries(gamedata.droneMk3).forEach(([key, value]) => {
@@ -2635,6 +2657,7 @@ function shipMenu() {
   root.setProperty("--res1GaugeH", (100 / (gamedata.shipMaxCargo / (gamedata.shipStock.Res1a + gamedata.shipStock.Res1b + gamedata.shipStock.Res1c))) + "%");
   root.setProperty("--res2GaugeH", (100 / (gamedata.shipMaxCargo / (gamedata.shipStock.Res2a + gamedata.shipStock.Res2b + gamedata.shipStock.Res2c))) + "%");
   root.setProperty("--res3GaugeH", (100 / (gamedata.shipMaxCargo / (gamedata.shipStock.Res3a + gamedata.shipStock.Res3b + gamedata.shipStock.Res3c))) + "%");
+  root.setProperty("--resRGaugeH", (100 / (gamedata.shipMaxCargo / (gamedata.shipStock.Rare1 + gamedata.shipStock.Rare2 + gamedata.shipStock.Rare3))) + "%");
 
   Object.entries(gamedata.rare).forEach(([key, value]) => {
     if (gamedata.rare[key] == false) {
@@ -2674,8 +2697,8 @@ function shipMenu() {
   update("sumValue", format(gamedata.sumValue, "currency"));
   update("money", format(gamedata.money, "currency"));
   update("moneyShip", format(gamedata.money, "currency"));
-  update("storageDrone", gamedata.shipBayCapacity + " drones", "standard");
-  update("storage", gamedata.shipMaxCargo + " u", "standard");
+  update("storageDrone", format(gamedata.shipBayCapacity, "standard") + " drones");
+  update("storage", format(gamedata.shipMaxCargo, "standard") + " u");
   gamedata.prestigeCost = Math.pow(gamedata.prestigeCreep, gamedata.prestigeNb) * ((gamedata.shipMaxCargo - gamedata.shipCapacity) / gamedata.shipMaxCargo) + 1;
   update("prestigeCost", "Cost : " + format(gamedata.prestigeCost, "currency"));
 }
@@ -2719,6 +2742,7 @@ function changeStock(res, resCat) {
   root.setProperty("--res1GaugeH", (100 / (gamedata.shipMaxCargo / (gamedata.shipStock.Res1a + gamedata.shipStock.Res1b + gamedata.shipStock.Res1c))) + "%");
   root.setProperty("--res2GaugeH", (100 / (gamedata.shipMaxCargo / (gamedata.shipStock.Res2a + gamedata.shipStock.Res2b + gamedata.shipStock.Res2c))) + "%");
   root.setProperty("--res3GaugeH", (100 / (gamedata.shipMaxCargo / (gamedata.shipStock.Res3a + gamedata.shipStock.Res3b + gamedata.shipStock.Res3c))) + "%");
+  root.setProperty("--resRGaugeH", (100 / (gamedata.shipMaxCargo / (gamedata.shipStock.Rare1 + gamedata.shipStock.Rare2 + gamedata.shipStock.Rare3))) + "%");
 
   gamedata.sumValue = 0;
   Object.entries(gamedata.shipStock).forEach(([key, value]) => {
@@ -2744,6 +2768,7 @@ function resetAmounts(sale) {
   root.style.setProperty("--res1GaugeH", (100 / (gamedata.shipMaxCargo / (gamedata.shipStock.Res1a + gamedata.shipStock.Res1b + gamedata.shipStock.Res1c))) + "%");
   root.style.setProperty("--res2GaugeH", (100 / (gamedata.shipMaxCargo / (gamedata.shipStock.Res2a + gamedata.shipStock.Res2b + gamedata.shipStock.Res2c))) + "%");
   root.style.setProperty("--res3GaugeH", (100 / (gamedata.shipMaxCargo / (gamedata.shipStock.Res3a + gamedata.shipStock.Res3b + gamedata.shipStock.Res3c))) + "%");
+  root.style.setProperty("--res3GaugeH", (100 / (gamedata.shipMaxCargo / (gamedata.shipStock.Rare1 + gamedata.shipStock.Rare2 + gamedata.shipStock.Rare3))) + "%");
   gamedata.sumValue = 0;
   update("sumValue", format(gamedata.sumValue, "currency"));
   gamedata.prestigeCost = Math.pow(1.3, gamedata.prestigeNb) * ((gamedata.shipMaxCargo - gamedata.shipCapacity) / gamedata.shipMaxCargo) + 1;
@@ -2852,11 +2877,11 @@ function planetMenu() {
 
     if (x > 0) {
       document.getElementById("planetMenu").style.display = "grid";
-      update("planetMenuStorageMax", gamedata.shipMaxCargo + " u", "standard");
-      update("planetMenuStorage", (gamedata.shipMaxCargo - gamedata.shipCapacity) + " u", "standard");
-      update("planetMenuDrone", (gamedata.shipBayCapacity - d), "standard");
-      update("planetMenuDroneMax", gamedata.shipBayCapacity + " drones", "standard");
-      update("travelTime", gamedata.prestigeTime + "s", "standard");
+      update("planetMenuStorageMax", format(gamedata.shipMaxCargo, "standard") + " u");
+      update("planetMenuStorage", format((gamedata.shipMaxCargo - gamedata.shipCapacity), "standard") + " u");
+      update("planetMenuDrone", format((gamedata.shipBayCapacity - d), "standard"));
+      update("planetMenuDroneMax", format(gamedata.shipBayCapacity, "standard") + " drones");
+      update("travelTime", format(gamedata.prestigeTime, "standard") + "s");
       update("travelCost", format(gamedata.prestigeCost, "currency"));
 
       if (gamedata.planetShop.size > 0) {
@@ -2948,6 +2973,13 @@ function prestige1(n) {
     gamedata.prestigeNb += 1;
     prestige.tech = gamedata.tech;
     prestige.BP = gamedata.BP;
+    prestige.RP = gamedata.RP;
+    prestige.shipCargoLvl = gamedata.shipCargoLvl,
+    prestige.shipMaxCargo = gamedata.shipMaxCargo,
+    //prestige.shipCapacity = gamedata.shipCapacity,
+    //prestige.shipBayCapacity = gamedata.shipBayCapacity,    
+    prestige.minePower = gamedata.minePower;
+    prestige.rare = gamedata.rare;
     prestige.outermaterial = gamedata["planet" + n].c1;
     prestige.innermaterial = gamedata["planet" + n].c2;
     prestige.corematerial = gamedata["planet" + n].c3;
