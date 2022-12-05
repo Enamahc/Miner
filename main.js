@@ -518,7 +518,7 @@ var blueprints = {
   },
   exoMk2: {
     prev: ["exoMk1", "droneMk1"],
-    next: ["exoMk2", "droneMk2"],
+    next: ["exoMk3", "droneMk2"],
     title: "Exoskeleton Mk1",
     bought: false,
     toCraft: true,
@@ -2169,7 +2169,7 @@ function droneMining() {
           })
           toMine = notMinedExt.slice(0, gamedata.droneAssign[key]);
         } else if (key.includes("3")) {
-          if (gamedata.reach.d2core != 0 && gamedata.notMined.d2core.includes(1441)) {
+          if (gamedata.reach.d2core != 0 && gamedata.notMined.d2core.includes(coreBorder.slice(-1)[0])) {
             const notMinedTemp = gamedata.notMined.d2core.filter(function(n) {
               if (coreCoord.includes(n)) {
                 if (coreBorder.includes(gamedata.reach.d2core + l)) {
@@ -2184,7 +2184,7 @@ function droneMining() {
               }
             })
             toMine = notMinedTemp.slice(0, gamedata.droneAssign[key]);
-          } else if (!gamedata.notMined.d2core.includes(1441)) {
+          } else if (!gamedata.notMined.d2core.includes(coreBorder.slice(-1)[0])) {
             const notMinedCore = gamedata.notMined.d2core.filter(function(n) {
               if (coreCoord.includes(n)) {
                 return n;
@@ -2202,12 +2202,14 @@ function droneMining() {
               return n <= (gamedata.reach["d1" + key.slice(2)] - (2 * h / 3 * (l) - l));
             })
             toMine = notMinedReversed.slice(-gamedata.droneAssign[key]);
+            toMineReversed = toMine.reverse();
           } else if (key.length === 4) {
             if (gamedata.reach["d1" + key.slice(2)] < (h * 2 * h / 3 + 2 * h / 3)) {
               const notMinedReversed = gamedata.notMined[key].filter(function(n) {
                 return n <= (gamedata.reach["d1" + key.slice(2)] - (h * 2 * h / 3 + 2 * h / 3 - h));
               });
               toMine = notMinedReversed.slice(-gamedata.droneAssign[key]);
+              toMineReversed = toMine.reverse();
             } else {
               const notMinedReversed = gamedata.notMined[key].filter(function(n) {
                 if (c2leftBorder.includes(n)) {
@@ -2215,6 +2217,7 @@ function droneMining() {
                 }
               });
               toMine = notMinedReversed.slice(-gamedata.droneAssign[key]);
+              toMineReversed = toMine.reverse();
             }
           }
         } else if (!gamedata.notMined[key].includes(1)) {
@@ -2584,7 +2587,7 @@ function buyDrone2() {
     x = false;
   }
   if (x === true) {
-    gamedata.tech.droneMk12 = 1;
+    gamedata.tech.droneMk2 = 1;
     gamedata.drone2 += 1;
     gamedata.d2left += 1;
     Object.entries(gamedata.droneMk2).forEach(([key, value]) => {

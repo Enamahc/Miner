@@ -27,13 +27,13 @@ body {
   --resRGaugeH: 1%;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1350px) {
   body {
     font-size: 1.2em;
   }
 }
 
-@media (max-width: 1250px) {
+@media (max-width: 1200px) {
   .localAssign .hideable {
     font-size: 0.7em;
   }
@@ -482,6 +482,7 @@ button {
   display: flex;
   color: gold;
   justify-content: space-between;
+  /* white-space: pre; */
   margin-bottom: 1em;
 }
 
@@ -1678,7 +1679,7 @@ td {
   border-block-end: 3px double #002b35;
   align-items: center;
   justify-content: center;
-  min-width: 200px;
+  /* min-width: 200px; */
 }
 
 .buyable {
@@ -1695,10 +1696,11 @@ td {
   width: 95%;
 }
 
-.buyable .tooltip {
-  display: flex;
-  width: 25%;
-  height: 100%;
+.buyable:hover .tooltip {
+  display: block;
+  position: absolute;
+  top: 100%;
+  width: 100%;
   font-size: 0.8em;
 }
 
@@ -1966,8 +1968,8 @@ td {
   grid-row: 3/4;
   display: flex;
   flex-direction: column;
-  align-content: left;
-  text-align: left;
+  align-content: right;
+  text-align: right;
   border-top: 1px solid #002b35;
   color: ghostwhite;
   height: 100%;
@@ -1983,7 +1985,7 @@ td {
   justify-content: center;
   text-align: left;
   height: 1.5em;
-  min-width: 200px;
+  /* min-width: 200px; */
   border-block-end: 3px double #002b35;
 }
 
@@ -1994,7 +1996,7 @@ td {
   height: 100%;
   border: none;
   width: 100%;
-  min-width: 200px;
+  /* min-width: 200px; */
   /* box-sizing: border-box; */
   resize: none;
 }
