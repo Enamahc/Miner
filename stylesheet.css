@@ -1700,7 +1700,8 @@ td {
   display: block;
   position: absolute;
   top: 100%;
-  width: 100%;
+  right: 25%;
+  width: 75%;
   font-size: 0.8em;
 }
 
@@ -1997,6 +1998,6 @@ td {
   border: none;
   width: 100%;
   /* min-width: 200px; */
-  /* box-sizing: border-box; */
+  box-sizing: border-box;
   resize: none;
 }
