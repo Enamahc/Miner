@@ -19,6 +19,7 @@
     </p>
   </div>
   <div id="righttopbar">
+    <button onclick="cheat()">Cheat</button>
     <button onclick="save()">Save</button>
     <button>Options</button>
     <button onclick="reset()">Reset</button>
@@ -95,9 +96,58 @@
           </div>
         </div>
       </div>
+      <div id="converterArea">
+        <button onclick="converterMenu()" id="converterButton" class="button">Resource converter</button>
+      </div>
       <div id="logarea" class="logbook-area">
         <div class="logbooktitle">LOGBOOK</div>
         <textarea id="logs" class="logbook" disabled>></textarea>
+      </div>
+    </div>
+    <div id="converterMenu">
+      <div onclick="chooseRegion('map', 'map');" class="background">
+      </div>
+      <div id="converterContainer">
+        <button onclick="chooseRegion('map', 'map');" class="closeButton">x</button>
+        <div class="menutitle">
+          Resource Converter Mk1
+        </div>
+        <div class="convertSelectorArea">
+          <select id="c1Input" style="display: flex; justify-self: center; width: 80%;" onchange="c1Output()">
+            <option value="Res1any" selected>--Choose a resource--</option>
+            <option value="Res1a">Iron</option>
+            <option value="Res1b">Copper</option>
+            <option value="Res1c">Aluminium</option>
+            <option value="Res2a">Zinc</option>
+            <option value="Res2b">Lead</option>
+            <option value="Res2c">Silver</option>
+            <option value="Res3a">Iridium</option>
+            <option value="Res3b">Gold</option>
+            <option value="Res3c">Palladium</option>
+          </select>
+          <div style="display: flex; justify-content: center;">
+            <input type="checkbox" id="c1Auto" name="c1Auto">
+            <label for="c1Auto">Automate ?</label>
+          </div>
+          <div style="display: flex; height: 100%; justify-content: space-around; align-items:center;">
+            <div class="ratio">Ratio : <span id="ratio1">0:0</span></div>
+            <div style = "display: flex; position: relative; height: 80%; width: 20%; justify-self: right;">
+              <img class="arrow" src="https://img.icons8.com/material-outlined/384/reply-arrow.png" style="display: block; position: absolute; transform: rotate(180deg); filter: invert(100%); height: 100%; width: 100%;">
+            </div>
+          </div>
+          <select id="c2Output" style="display: flex; justify-self: center; width: 80%;" onchange="c1Ratio()">
+            <option value="Res1any" selected>--Choose a resource--</option>
+            <option value="Res1a">Iron</option>
+            <option value="Res1b">Copper</option>
+            <option value="Res1c">Aluminium</option>
+            <option value="Res2a">Zinc</option>
+            <option value="Res2b">Lead</option>
+            <option value="Res2c">Silver</option>
+            <option value="Res3a">Iridium</option>
+            <option value="Res3b">Gold</option>
+            <option value="Res3c">Palladium</option>
+          </select>
+        </div>
       </div>
     </div>
     <div id="shipMenu">
@@ -788,7 +838,7 @@
           <span id="sumRP"></span>
         </div>
         <label class='toggle-label'>
-          <input type='checkbox' />
+          <input type='checkbox' id="labCheckbox"/>
           <span class='back'>
             <span class='toggle'></span>
             <span class='label on'>ON</span>

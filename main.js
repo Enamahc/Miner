@@ -2021,7 +2021,7 @@ function buyLabItem(item, tech) {
   researchLab();
 }
 
-var labMachineButton = document.querySelector('input[type="checkbox"]');
+var labMachineButton = document.getElementById("labCheckbox");
 labMachineButton.checked = false;
 var convert;
 
@@ -2552,6 +2552,7 @@ function chooseRegion(to, from) {
   }
   document.getElementById(to).style.display = "grid";
   document.getElementById("shipMenu").style.display = "none";
+  document.getElementById("converterMenu").style.display = "none";
   document.getElementById("coordinatesMenu").style.display = "none";
 }
 
@@ -2789,6 +2790,10 @@ function buyDrone3() {
   }
 }
 
+function converterMenu() {
+  document.getElementById("converterMenu").style.display = "flex";
+}
+
 function shipMenu() {
   var shipTech = ["cargo", "droneBay", "thrusters", "antenna", "planetAnalyzer", "tractorBeam", "miningAI", "tradingAI", "spatialDrillingLaser", "teleporter", "autoPrestige"];
   document.getElementById("shipMenu").style.display = "grid";
@@ -2953,7 +2958,6 @@ function selling() {
     }
   }, 1000)
 }
-
 
 function planetMenu() {
   if (gamedata.money >= gamedata.prestigeCost) {
@@ -3191,3 +3195,12 @@ App.start = function() {
   App.view.init();
 }
 App.start();
+
+
+function cheat(){
+  Object.entries(gamedata.res).forEach(([key, value]) => {
+    gamedata.res[key] += 10000;
+  });
+  gamedata.money += 10000;
+  gamedata.RP += 10000;
+}
