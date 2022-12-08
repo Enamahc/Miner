@@ -1328,10 +1328,18 @@ var refreshLoop = window.setInterval(function() {
 
 }, 10);
 
+var errLog;
 function log(msg, keep) {
   var logBox = document.getElementById("logs");
+  if (errLog > 1){logBox.value = logBox.value.slice(0, logBox.value.length-4-String(errLog).length)}
   if (keep === true) {
-    logBox.value = logBox.value + "\n> " + msg;
+    if (logBox.value.slice(logBox.value.length-msg.length) != msg){
+      logBox.value = logBox.value + "\n> " + msg;
+      errLog = 1;
+    } else {
+      errLog += 1;
+      logBox.value = logBox.value + " (x" + errLog + ")";
+    }
   } else {
     logBox.value = "> " + msg;
   }
@@ -1341,14 +1349,16 @@ function log(msg, keep) {
 
 function tuto() {
   var startDelay = 6000;
-  var interval = 5000;
+  var interval = 3000;
   setTimeout(function() {
     log("Good morning Miner! Please follow this quick guide to start your journey:", false);
     setTimeout(function() {
-      log("First, click on a region of the planet.", true);
+      log("First, click on an external region of the planet.", true);
       blink(document.getElementById("planet"));
       for (let i = 0; i < document.getElementsByClassName("region").length; i++) {
-        document.getElementsByClassName("region")[i].addEventListener("click", step1);
+        if (i != 4){
+          document.getElementsByClassName("region")[i].addEventListener("click", step1);
+        }
       }
     }, interval);
   }, startDelay);
@@ -1359,13 +1369,15 @@ function step1() {
   document.getElementById("planet").classList.remove("glow");
   blink(document.getElementsByClassName("grid")[0].firstChild);
   for (let i = 0; i < document.getElementsByClassName("region").length; i++) {
-    document.getElementsByClassName("region")[i].removeEventListener("click", step1)
+    if (i != 4){
+      document.getElementsByClassName("region")[i].removeEventListener("click", step1)
+    }
   }
   document.getElementsByClassName("grid")[0].firstChild.addEventListener("click", step2);
 }
 async function step2() {
   document.getElementById("planet").classList.remove("blink");
-  log("You have now mined your first ore. Keep mining until you've reach 10 units of this ore.", false);
+  log("You now have mined your first ore. Keep mining until you've reach 10 units of this ore.", false);
   document.getElementsByClassName("grid")[0].firstChild.removeEventListener("click", step2);
   await waitUntil(() => gamedata.res[gamedata.outermaterial.ref] >= 5)
   log("Quite boring huh? Don't worry, this won't last long.", false);
@@ -1654,6 +1666,8 @@ function buyShopItem(item, tech) {
       } catch (err) {}
     }
     save();
+  } else {
+    log("Not enough money.", true);
   }
   setShop();
 }
@@ -1735,6 +1749,8 @@ function buyCoord() {
     }
     save();
     chooseRegion('map', 'map');
+  } else {
+    log("Not enough money.", true);
   }
 }
 
@@ -2433,7 +2449,6 @@ function mining(grid, el, row, col, i, region, optReg) {
         removeItemOnce(region, i, 3);
         el.className = "clicked";
         gamedata.res[gamedata.corematerial.ref] = gamedata.res[gamedata.corematerial.ref] + gamedata.yield3;
-
       }
     } else if (grid.parentNode.id.includes("1")) {
       removeItemOnce(region, i, 1);
@@ -2446,6 +2461,18 @@ function mining(grid, el, row, col, i, region, optReg) {
       removeItemOnce(region, i, 2);
       el.className = "clicked";
       gamedata.res[gamedata.innermaterial.ref] = gamedata.res[gamedata.innermaterial.ref] + gamedata.yield2;
+    } else if (
+      grid.parentNode.id.includes("2") &&
+      gamedata.minePower <= 1
+    ) {
+      log("You're not strong enough to mine this layer. Research Exoskeleton Mk1 first.", true);
+    }
+  }
+  if (optReg.includes("core")){
+    if (gamedata.reach.core === 0){
+      log("Can't mine here. You must reach this region by mining outer regions first.", true);
+    } else if (coreCoord.includes(i) && gamedata.minePower <= 2) {
+      log("You're not strong enough to mine this layer. Research Exoskeleton Mk2 first.", true);
     }
   }
 }
