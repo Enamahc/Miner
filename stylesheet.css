@@ -1701,7 +1701,7 @@ td {
   color: ghostwhite;
   /* background-color: hsl(155, 15%, 70%); */
   border-left: solid 1px #002b35;
-  overflow: auto;
+  /* overflow: auto; */
 }
 
 .submenus {
@@ -1745,9 +1745,10 @@ td {
 .buyable:hover .tooltip {
   display: block;
   position: absolute;
-  top: 100%;
-  right: 25%;
-  width: 75%;
+  /* top: 100%;
+  right: 25%; */
+  right: 100%;
+  width: 50%;
   font-size: 0.8em;
 }
 
