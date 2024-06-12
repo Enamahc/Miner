@@ -97,7 +97,7 @@
         </div>
       </div>
       <div id="converterArea">
-        <button onclick="converterMenu()" id="converterButton" class="button">Resource converter</button>
+        <button onclick="converterMenu()" id="converterButton" class="button" style = "Display : none">Resource converter</button>
       </div>
       <div id="logarea" class="logbook-area">
         <div class="logbooktitle">LOGBOOK</div>
@@ -105,16 +105,19 @@
       </div>
     </div>
     <div id="converterMenu">
-      <div onclick="chooseRegion('map', 'map');" class="background">
+      <div onclick="document.getElementById('converterMenu').style.display = 'none';" class="background">
       </div>
       <div id="converterContainer">
-        <button onclick="chooseRegion('map', 'map');" class="closeButton">x</button>
+        <button onclick="document.getElementById('converterMenu').style.display = 'hidden';" class="closeButton">x</button>
         <div class="menutitle">
           Resource Converter Mk1
         </div>
-        <div class="convertSelectorArea">
-          <select id="c1Input" style="display: flex; justify-self: center; width: 80%;" onchange="c1Output()">
-            <option value="Res1any" selected>--Choose a resource--</option>
+        <div id="converter1" class="convertSelectorArea">
+          <div style="display: flex; height: 100%; justify-content: space-around; align-items:end; border-right: solid 1px #002b35">
+            <span>INPUT</span>
+          </div>
+          <select id="c1Input" style="display: flex; justify-self: center; align-self: end; width: 80%;" onchange="cOutput(1)">
+            <option value="Res1any">--Choose a resource--</option>
             <option value="Res1a">Iron</option>
             <option value="Res1b">Copper</option>
             <option value="Res1c">Aluminium</option>
@@ -125,18 +128,35 @@
             <option value="Res3b">Gold</option>
             <option value="Res3c">Palladium</option>
           </select>
-          <div style="display: flex; justify-content: center;">
+          <div style="display: flex; justify-content: center; align-self: stretch; align-items: end; border-right: solid 1px #002b35">
             <input type="checkbox" id="c1Auto" name="c1Auto">
             <label for="c1Auto">Automate ?</label>
           </div>
+          <div style="display: flex; height: 100%; justify-content: center; align-items:end; text-align: center;">
+            <div>OUPUT : <br><span id="c1OutputValue">0 u</span></div>
+          </div>
+          <div style="display: flex; height: 100%; justify-content: center; align-items:center; border-right: solid 1px #002b35">
+            <input type="text" id="c1InputValue" size="10" onchange="outputCalc(1)"><br>
+          </div>
           <div style="display: flex; height: 100%; justify-content: space-around; align-items:center;">
-            <div class="ratio">Ratio : <span id="ratio1">0:0</span></div>
+            <div>Ratio : <span id="ratio1">0:0</span></div>
             <div style = "display: flex; position: relative; height: 80%; width: 20%; justify-self: right;">
               <img class="arrow" src="https://img.icons8.com/material-outlined/384/reply-arrow.png" style="display: block; position: absolute; transform: rotate(180deg); filter: invert(100%); height: 100%; width: 100%;">
             </div>
           </div>
-          <select id="c2Output" style="display: flex; justify-self: center; width: 80%;" onchange="c1Ratio()">
-            <option value="Res1any" selected>--Choose a resource--</option>
+          <div style="display: flex; height: 100%; justify-self: stretch; justify-content: center; align-items:center; border-right: solid 1px #002b35">
+            <select id="c1Output" style="width: 80%; height: fit-content;" onchange="outputCalc(1)">
+              <option value="Res1any">--Choose a resource--</option>
+            </select>
+          </div>
+          <button onclick=conversion(1) class="button" style="display: flex; justify-self: center;" >CONVERT</button>
+        </div>
+        <div id="converter2" class="convertSelectorArea">
+          <div style="display: flex; height: 100%; justify-content: space-around; align-items:end; border-right: solid 1px #002b35">
+            <span>INPUT</span>
+          </div>
+          <select id="c2Input" style="display: flex; justify-self: center; align-self: end; width: 80%;" onchange="cOutput(2)">
+            <option value="Res1any">--Choose a resource--</option>
             <option value="Res1a">Iron</option>
             <option value="Res1b">Copper</option>
             <option value="Res1c">Aluminium</option>
@@ -147,6 +167,67 @@
             <option value="Res3b">Gold</option>
             <option value="Res3c">Palladium</option>
           </select>
+          <div style="display: flex; justify-content: center; align-self: stretch; align-items: end; border-right: solid 1px #002b35">
+            <input type="checkbox" id="c2Auto" name="c2Auto">
+            <label for="c2Auto">Automate ?</label>
+          </div>
+          <div style="display: flex; height: 100%; justify-content: center; align-items:end; text-align: center;">
+            <div>OUPUT : <br><span id="c2OutputValue">0 u</span></div>
+          </div>
+          <div style="display: flex; height: 100%; justify-content: center; align-items:center; border-right: solid 1px #002b35">
+            <input type="text" id="c2InputValue" size="10"><br>
+          </div>
+          <div style="display: flex; height: 100%; justify-content: space-around; align-items:center;">
+            <div>Ratio : <span id="ratio2">0:0</span></div>
+            <div style = "display: flex; position: relative; height: 80%; width: 20%; justify-self: right;">
+              <img class="arrow" src="https://img.icons8.com/material-outlined/384/reply-arrow.png" style="display: block; position: absolute; transform: rotate(180deg); filter: invert(100%); height: 100%; width: 100%;">
+            </div>
+          </div>
+          <div style="display: flex; height: 100%; justify-self: stretch; justify-content: center; align-items:center; border-right: solid 1px #002b35">
+            <select id="c2Output" style="width: 80%; height: fit-content;" onchange="outputCalc(2)">
+              <option value="Res1any">--Choose a resource--</option>
+            </select>
+          </div>
+          <button onclick=conversion(2) class="button" style="display: flex; justify-self: center;" >CONVERT</button>
+        </div>
+        <div id="converter3" class="convertSelectorArea">
+          <div style="display: flex; height: 100%; justify-content: space-around; align-items:end; border-right: solid 1px #002b35">
+            <span>INPUT</span>
+          </div>
+          <select id="c3Input" style="display: flex; justify-self: center; align-self: end; width: 80%;" onchange="cOutput(3)">
+            <option value="Res1any">--Choose a resource--</option>
+            <option value="Res1a">Iron</option>
+            <option value="Res1b">Copper</option>
+            <option value="Res1c">Aluminium</option>
+            <option value="Res2a">Zinc</option>
+            <option value="Res2b">Lead</option>
+            <option value="Res2c">Silver</option>
+            <option value="Res3a">Iridium</option>
+            <option value="Res3b">Gold</option>
+            <option value="Res3c">Palladium</option>
+          </select>
+          <div style="display: flex; justify-content: center; align-self: stretch; align-items: end; border-right: solid 1px #002b35">
+            <input type="checkbox" id="c3Auto" name="c3Auto">
+            <label for="c3Auto">Automate ?</label>
+          </div>
+          <div style="display: flex; height: 100%; justify-content: center; align-items:end; text-align: center;">
+            <div>OUPUT : <br><span id="c3OutputValue">0 u</span></div>
+          </div>
+          <div style="display: flex; height: 100%; justify-content: center; align-items:center; border-right: solid 1px #002b35">
+            <input type="text" id="c3InputValue" size="10"><br>
+          </div>
+          <div style="display: flex; height: 100%; justify-content: space-around; align-items:center;">
+            <div>Ratio : <span id="ratio3">0:0</span></div>
+            <div style = "display: flex; position: relative; height: 80%; width: 20%; justify-self: right;">
+              <img class="arrow" src="https://img.icons8.com/material-outlined/384/reply-arrow.png" style="display: block; position: absolute; transform: rotate(180deg); filter: invert(100%); height: 100%; width: 100%;">
+            </div>
+          </div>
+          <div style="display: flex; height: 100%; justify-self: stretch; justify-content: center; align-items:center; border-right: solid 1px #002b35">
+            <select id="c3Output" style="width: 80%; height: fit-content;" onchange="outputCalc(3)">
+              <option value="Res1any">--Choose a resource--</option>
+            </select>
+          </div>
+          <button onclick=conversion(3) class="button" style="display: flex; justify-self: center;" >CONVERT</button>
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ var currency = "USD";
 var savegame = JSON.parse(localStorage.getItem("Save"));
 var saveBP = JSON.parse(localStorage.getItem("BPSave"));
 var saveResearch = JSON.parse(localStorage.getItem("RSave"));
+var saveConversions = JSON.parse(localStorage.getItem("CSave"));
 
 var prestige = JSON.parse(localStorage.getItem("PrestigeSave"));
 
@@ -67,6 +68,17 @@ var gamedata = {
     Rare1: 0,
     Rare2: 0,
     Rare3: 0
+  },
+  resRatio: {
+    Res1R1: 1,
+    Res1R2: 0.02,
+    Res1R3: 0.000625,
+    Res2R1: 50,
+    Res2R2: 1,
+    Res2R3: 0.03125,
+    Res3R1: 1600,
+    Res3R2: 32,
+    Res3R3: 1
   },
   rare: {
     Rare1: false,
@@ -801,7 +813,7 @@ var research = {
       Res3b: 0,
       Res3c: 0
     },
-    desc: "A machine capable of rearranging the atoms that make up matter. (Not Implemented)"
+    desc: "A machine capable of rearranging the atoms that make up matter."
   },
   converterMk2: {
     prev: ["converterMk1"],
@@ -821,7 +833,7 @@ var research = {
       Res3b: 0,
       Res3c: 0
     },
-    desc: "Improves your resource converter by allowing cross tier conversion. (Not Implemented)"
+    desc: "Improves your resource converter by allowing cross tier conversion. Adds one converter."
   },
   converterMk3: {
     prev: ["converterMk2"],
@@ -930,6 +942,26 @@ var research = {
   }
 }
 
+var conversions = {
+  conversion1: {
+    input: "",
+    inputValue: 0,
+    output: "",
+    outputValue: 0
+  },
+  conversion2: {
+    input: "",
+    inputValue: 0,
+    output: "",
+    outputValue: 0
+  },
+  conversion3: {
+    input: "",
+    inputValue: 0,
+    output: "",
+    outputValue: 0
+  },
+}
 window.onload = function() {
   chooseRegion("map", "map");
   if (savegame != null) {
@@ -941,6 +973,9 @@ window.onload = function() {
     });
     Object.entries(research).forEach(([key, value]) => {
       research[key] = saveResearch[key];
+    });
+    Object.entries(conversions).forEach(([key, value]) => {
+      conversions[key] = saveConversions[key];
     });
     offlineProgress();
     if (gamedata.prestigeTimeLeft > 0) {
@@ -1034,6 +1069,17 @@ window.onload = function() {
   if (gamedata.tech.droneMk3 === 1) {
     document.getElementById("droneMk3List").style.display = "flex";
   }
+  if (gamedata.tech.converterMk1 === 1) {
+    document.getElementById("converterButton").style.display = "block";
+  } else {
+    document.getElementById("converterButton").style.display = "none";
+  }
+  cOutput(1);
+  outputCalc(1);
+  cOutput(2);
+  outputCalc(2);
+  cOutput(3);
+  outputCalc(3);
 
   setDim();
   setShop();
@@ -1153,6 +1199,21 @@ function offlineProgress() {
       Math.floor(Math.random() * 3);
     }
   }
+  if (c1Auto.checked){
+    for (let i = 0; i < time; i++) {
+      conversion(1);
+    }
+  }
+  if (c2Auto.checked){
+    for (let i = 0; i < time; i++) {
+      conversion(2);
+    }
+  }
+  if (c3Auto.checked){
+    for (let i = 0; i < time; i++) {
+      conversion(3);
+    }
+  }
   gamedata.timeLeft = gamedata.timeLeft - time;
 }
 
@@ -1263,6 +1324,7 @@ function save() {
   localStorage.setItem("Save", JSON.stringify(gamedata));
   localStorage.setItem("BPSave", JSON.stringify(blueprints));
   localStorage.setItem("RSave", JSON.stringify(research));
+  localStorage.setItem("CSave", JSON.stringify(conversions));
 }
 
 const waitUntil = (condition) => {
@@ -1284,6 +1346,17 @@ var saveGameLoop = window.setInterval(function() {
 
 var mainGameLoop = window.setInterval(function() {
   droneMining();
+  
+  if (c1Auto.checked){
+    conversion(1);
+  }
+  if (c2Auto.checked){
+    conversion(2);
+  }
+  if (c3Auto.checked){
+    conversion(3);
+  }
+
   gamedata.lasttick = Date.now();
 }, 1000);
 
@@ -1311,7 +1384,7 @@ var refreshLoop = window.setInterval(function() {
 
   Object.entries(blueprints).forEach(([key, value]) => {
     if (document.getElementById(key) != null) {
-      if (gamedata.money >= blueprints[key].price / 10 || blueprints[key].price <= 100 || typeof blueprints[key].price == "undefined") {
+      if (gamedata.money >= blueprints[key].price / 30 || blueprints[key].price <= 100 || typeof blueprints[key].price == "undefined") {
         document.getElementById(key).style.display = "flex"
       } else {
         document.getElementById(key).style.display = "none"
@@ -2121,10 +2194,11 @@ function antennaMk3() {
 
 function converterMk1() {
   log("This machine will allow you to convert resources into another of the same tier.", false)
+  document.getElementById('converterButton').style.display = 'block';
 }
 
 function converterMk2() {
-  log("With his improvement, you are now able to convert resources into another of any tier.", false)
+  log("With this improvement, you are now able to convert resources into another of any tier.", false)
 }
 
 function converterMk3() {
@@ -2552,7 +2626,7 @@ function chooseRegion(to, from) {
   }
   document.getElementById(to).style.display = "grid";
   document.getElementById("shipMenu").style.display = "none";
-  document.getElementById("converterMenu").style.display = "none";
+  //document.getElementById("converterMenu").style.display = "none";
   document.getElementById("coordinatesMenu").style.display = "none";
 }
 
@@ -2792,6 +2866,120 @@ function buyDrone3() {
 
 function converterMenu() {
   document.getElementById("converterMenu").style.display = "flex";
+  if (gamedata.tech.converterMk2 === 1){
+    document.getElementById("converter1").style.display = "grid";
+    document.getElementById("converter2").style.display = "grid";
+    document.getElementById("converter3").style.display = "grid";
+  }else{
+    document.getElementById("converter1").style.display = "grid";
+    document.getElementById("converter2").style.display = "none";
+    document.getElementById("converter3").style.display = "none";
+  }
+  //cOutput(1);
+  outputCalc(1);
+  //cOutput(2);
+  outputCalc(2);
+  //cOutput(3);
+  outputCalc(3);
+}
+//Fonctions converter :
+function cOutput(id) {
+  var select = document.getElementById("c"+ id + "Output");
+  document.getElementById("c"+ id + "Auto").checked = false;
+  document.getElementById('ratio' + id).innerHTML = "0:0";
+  select.options.length = 1;
+  if (gamedata.tech.converterMk2 === 0){
+    for(index in gamedata.resName) {
+      if(document.getElementById("c"+ id + "Input").value.includes("Res1") && index.includes("Res1") && index != document.getElementById("c"+ id + "Input").value){
+        select.options[select.options.length] = new Option(gamedata.resName[index], index);
+      } else if(document.getElementById("c"+ id + "Input").value.includes("Res2") && index.includes("Res2") && index != document.getElementById("c"+ id + "Input").value){
+        select.options[select.options.length] = new Option(gamedata.resName[index], index);
+      } else if(document.getElementById("c"+ id + "Input").value.includes("Res3") && index.includes("Res3") && index != document.getElementById("c"+ id + "Input").value){
+        select.options[select.options.length] = new Option(gamedata.resName[index], index);
+      }
+    }
+  } else {
+    for(index in gamedata.resName) {
+      if(index.includes("Res") && index != document.getElementById("c"+ id + "Input").value){
+        select.options[select.options.length] = new Option(gamedata.resName[index], index);
+      }
+    }
+  }
+}
+
+function cRatio(id) {
+  if (document.getElementById("c"+ id + "Input").value != "Res1any" && document.getElementById("c"+ id + "Output").value != "Res1any" ){
+    if (document.getElementById("c"+ id + "Input").value.includes("Res1")){
+      if (document.getElementById("c"+ id + "Output").value.includes("Res1")){
+        document.getElementById('ratio' + id).innerHTML = (1/gamedata.resRatio.Res1R1) + ":1";
+        return gamedata.resRatio.Res1R1;
+      } else if(document.getElementById("c"+ id + "Output").value.includes("Res2")){
+        document.getElementById('ratio' + id).innerHTML = (1/gamedata.resRatio.Res1R2) + ":1";
+        return gamedata.resRatio.Res1R2;
+      } else if(document.getElementById("c"+ id + "Output").value.includes("Res3")){
+        document.getElementById('ratio' + id).innerHTML = (1/gamedata.resRatio.Res1R3) + ":1";
+        return gamedata.resRatio.Res1R3;
+      }
+    } else if (document.getElementById("c"+ id + "Input").value.includes("Res2")){
+      if (document.getElementById("c"+ id + "Output").value.includes("Res1")){
+        document.getElementById('ratio' + id).innerHTML = "1:"+ (gamedata.resRatio.Res2R1);
+        return gamedata.resRatio.Res2R1;
+      } else if(document.getElementById("c"+ id + "Output").value.includes("Res2")){
+        document.getElementById('ratio' + id).innerHTML = (1/gamedata.resRatio.Res2R2) + ":1";
+        return gamedata.resRatio.Res2R2;
+      } else if(document.getElementById("c"+ id + "Output").value.includes("Res3")){
+        document.getElementById('ratio' + id).innerHTML = (1/gamedata.resRatio.Res2R3) + ":1";
+        return gamedata.resRatio.Res2R3;
+      }
+    } else if (document.getElementById("c"+ id + "Input").value.includes("Res3")){
+      if (document.getElementById("c"+ id + "Output").value.includes("Res1")){
+        document.getElementById('ratio' + id).innerHTML = "1:"+ (gamedata.resRatio.Res3R1);
+        return gamedata.resRatio.Res3R1;
+      } else if(document.getElementById("c"+ id + "Output").value.includes("Res2")){
+        document.getElementById('ratio' + id).innerHTML = "1:"+ (gamedata.resRatio.Res3R2);
+        return gamedata.resRatio.Res3R2;
+      } else if(document.getElementById("c"+ id + "Output").value.includes("Res3")){
+        document.getElementById('ratio' + id).innerHTML = (1/gamedata.resRatio.Res3R3) + ":1";
+        return gamedata.resRatio.Res3R3;
+      }
+    }
+  } else {
+    document.getElementById('ratio' + id).innerHTML = "0:0";
+    return 0;
+  }
+}
+
+function outputCalc(id){
+  if (document.getElementById('c' + id + 'Input').value != "Res1any" && document.getElementById('c' + id + 'Output').value != "Res1any"){
+    var result = document.getElementById('c' + id + 'InputValue').value * cRatio(id);
+  } else {
+    var result = 0;
+  }
+  if (result === 0){
+    document.getElementById('c' + id + 'OutputValue').innerHTML = "0 u";
+  } else if (result >= 100000 || result < 0.001){
+    document.getElementById('c' + id + 'OutputValue').innerHTML = format(result, 'scientific') + " u";
+  } else {
+    document.getElementById('c' + id + 'OutputValue').innerHTML = format(result, 'standard') + " u";
+  }
+  conversions['conversion' + id].input = document.getElementById('c' + id + 'Input').value;
+  conversions['conversion' + id].inputValue = document.getElementById('c' + id + 'InputValue').value;
+  conversions['conversion' + id].output = document.getElementById('c' + id + 'Output').value;
+  conversions['conversion' + id].outputValue = result;
+
+  return result
+}
+
+function conversion(id){
+  result = outputCalc(id);
+  if (result >= 0.001 && gamedata.res[document.getElementById('c'+id+'Input').value] >= document.getElementById('c'+id+'InputValue').value){
+    gamedata.res[document.getElementById('c'+id+'Input').value] -= document.getElementById('c'+id+'InputValue').value;
+    gamedata.res[document.getElementById('c'+id+'Output').value] += result;
+  } else if (gamedata.res[document.getElementById('c'+id+'Input').value] < document.getElementById('c'+id+'InputValue').value){
+    log("Not enough resources!", true);
+  } else if (result < 0.001){
+    log("Unable to proceed. Conversion output would be too low!", true);
+  }
 }
 
 function shipMenu() {
