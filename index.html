@@ -19,6 +19,8 @@
     </p>
   </div>
   <div id="righttopbar">
+    <button onclick="tuto()">Reset Tutorial</button>
+    <button onclick="shipCheat()">Ship Cheat</button>
     <button onclick="cheat()">Cheat</button>
     <button onclick="save()">Save</button>
     <button>Options</button>
@@ -96,6 +98,11 @@
           </div>
         </div>
       </div>
+      <div class="d3" style="width: 100%; justify-self: stretch; text-align: center; height: 20%; border-bottom: solid 1px #002b35;">
+        <button onclick="removeAllDrones()" class="button">Unassign drones</button><br><br>
+        <input type="checkbox" id="droneAuto" name="droneAuto" >
+        <label for="droneAuto">Drone autonomy</label>
+      </div>
       <div id="converterArea">
         <button onclick="converterMenu()" id="converterButton" class="button" style = "Display : none">Resource converter</button>
       </div>
@@ -108,7 +115,7 @@
       <div onclick="document.getElementById('converterMenu').style.display = 'none';" class="background">
       </div>
       <div id="converterContainer">
-        <button onclick="document.getElementById('converterMenu').style.display = 'hidden';" class="closeButton">x</button>
+        <button onclick="document.getElementById('converterMenu').style.display = 'none';" class="closeButton">x</button>
         <div class="menutitle">
           Resource Converter Mk1
         </div>
@@ -149,7 +156,7 @@
               <option value="Res1any">--Choose a resource--</option>
             </select>
           </div>
-          <button onclick=conversion(1) class="button" style="display: flex; justify-self: center;" >CONVERT</button>
+          <button onclick=conversion(1,true) class="button" style="display: flex; justify-self: center;" >CONVERT</button>
         </div>
         <div id="converter2" class="convertSelectorArea">
           <div style="display: flex; height: 100%; justify-content: space-around; align-items:end; border-right: solid 1px #002b35">
@@ -175,7 +182,7 @@
             <div>OUPUT : <br><span id="c2OutputValue">0 u</span></div>
           </div>
           <div style="display: flex; height: 100%; justify-content: center; align-items:center; border-right: solid 1px #002b35">
-            <input type="text" id="c2InputValue" size="10"><br>
+            <input type="text" id="c2InputValue" size="10" onchange="outputCalc(2)"><br>
           </div>
           <div style="display: flex; height: 100%; justify-content: space-around; align-items:center;">
             <div>Ratio : <span id="ratio2">0:0</span></div>
@@ -188,7 +195,7 @@
               <option value="Res1any">--Choose a resource--</option>
             </select>
           </div>
-          <button onclick=conversion(2) class="button" style="display: flex; justify-self: center;" >CONVERT</button>
+          <button onclick=conversion(2,true) class="button" style="display: flex; justify-self: center;" >CONVERT</button>
         </div>
         <div id="converter3" class="convertSelectorArea">
           <div style="display: flex; height: 100%; justify-content: space-around; align-items:end; border-right: solid 1px #002b35">
@@ -214,7 +221,7 @@
             <div>OUPUT : <br><span id="c3OutputValue">0 u</span></div>
           </div>
           <div style="display: flex; height: 100%; justify-content: center; align-items:center; border-right: solid 1px #002b35">
-            <input type="text" id="c3InputValue" size="10"><br>
+            <input type="text" id="c3InputValue" size="10"  onchange="outputCalc(3)"><br>
           </div>
           <div style="display: flex; height: 100%; justify-content: space-around; align-items:center;">
             <div>Ratio : <span id="ratio3">0:0</span></div>
@@ -227,7 +234,7 @@
               <option value="Res1any">--Choose a resource--</option>
             </select>
           </div>
-          <button onclick=conversion(3) class="button" style="display: flex; justify-self: center;" >CONVERT</button>
+          <button onclick=conversion(3,true) class="button" style="display: flex; justify-self: center;" >CONVERT</button>
         </div>
       </div>
     </div>
@@ -876,40 +883,40 @@
         <div id="labMachine">
           <div></div>
           <span>Qty to convert/s</span>
-          <span>RP/u</span>
+          <span class="RPprice">RP/u</span>
           <span class="resName cat1">Iron :</span>
           <input type="number" id="Res1aLab" value="0" min="0" step="0.1">
-          <span id="Res1aRP" class="cat1">0</span>
+          <span id="Res1aRP" class="RPprice">0</span>
           <span class="resName cat1">Copper :</span>
           <input type="number" id="Res1bLab" value="0" min="0" step="0.1">
-          <span id="Res1bRP" class="cat1">0</span>
+          <span id="Res1bRP" class="RPprice">0</span>
           <span class="resName cat1">Aluminium :</span>
           <input type="number" id="Res1cLab" value="0" min="0" step="0.1">
-          <span id="Res1cRP" class="cat1">0</span>
+          <span id="Res1cRP" class="RPprice">0</span>
           <span class="resName cat2">Zinc :</span>
           <input type="number" id="Res2aLab" value="0" min="0" step="0.01">
-          <span id="Res2aRP" class="cat2">0</span>
+          <span id="Res2aRP" class="RPprice">0</span>
           <span class="resName cat2">Lead :</span>
           <input type="number" id="Res2bLab" value="0" min="0" step="0.01">
-          <span id="Res2bRP" class="cat2">0</span>
+          <span id="Res2bRP" class="RPprice">0</span>
           <span class="resName cat2">Silver :</span>
           <input type="number" id="Res2cLab" value="0" min="0" step="0.01">
-          <span id="Res2cRP" class="cat2">0</span>
+          <span id="Res2cRP" class="RPprice">0</span>
           <span class="resName cat3">Iridium :</span>
           <input type="number" id="Res3aLab" value="0" min="0" step="0.001">
-          <span id="Res3aRP" class="cat3">0</span>
+          <span id="Res3aRP" class="RPprice">0</span>
           <span class="resName cat3">Gold :</span>
           <input type="number" id="Res3bLab" value="0" min="0" step="0.001">
-          <span id="Res3bRP" class="cat3">0</span>
+          <span id="Res3bRP" class="RPprice">0</span>
           <span class="resName cat3">Palladium :</span>
           <input type="number" id="Res3cLab" value="0" min="0" step="0.001">
-          <span id="Res3cRP" class="cat3">0</span>
+          <span id="Res3cRP" class="RPprice">0</span>
           <span class="resName rare Rare1">Cassiterite :</span>
           <input type="number" id="Rare1Lab" class="Rare1" value="0" min="0" step="1">
-          <span id="Rare1RP" class="rare Rare1">0</span>
-          <span class="resName rare  Rare2">Red beryl :</span>
+          <span id="Rare1RP" class="RPprice Rare1">0</span>
+          <span class="resName rare Rare2">Red beryl :</span>
           <input type="number" id="Rare2Lab" class="Rare2" value="0" min="0" step="1">
-          <span id="Rare2RP" class="rare Rare2">0</span>
+          <span id="Rare2RP" class="RPprice Rare2">0</span>
           <span class="resName rare Rare3">Taaffeite :</span>
           <input type="number" id="Rare3Lab" class="Rare3" value="0" min="0" step="1">
           <span id="Rare3RP" class="rare Rare3">0</span>
@@ -919,7 +926,7 @@
           <span id="sumRP"></span>
         </div>
         <label class='toggle-label'>
-          <input type='checkbox' id="labCheckbox"/>
+          <input type='checkbox' id="labCheckbox" onchange="labSwitch()"/>
           <span class='back'>
             <span class='toggle'></span>
             <span class='label on'>ON</span>

@@ -943,25 +943,29 @@ var research = {
 }
 
 var conversions = {
-  conversion1: {
+  c1: {
     input: "",
     inputValue: 0,
     output: "",
-    outputValue: 0
+    outputValue: 0,
+    auto: false
   },
-  conversion2: {
+  c2: {
     input: "",
     inputValue: 0,
     output: "",
-    outputValue: 0
+    outputValue: 0,
+    auto: false
   },
-  conversion3: {
+  c3: {
     input: "",
     inputValue: 0,
     output: "",
-    outputValue: 0
+    outputValue: 0,
+    auto: false
   },
 }
+
 window.onload = function() {
   chooseRegion("map", "map");
   if (savegame != null) {
@@ -977,6 +981,13 @@ window.onload = function() {
     Object.entries(conversions).forEach(([key, value]) => {
       conversions[key] = saveConversions[key];
     });
+    for (let i = 1; i <= 3; i++) {
+      document.getElementById('c' + i + 'Input').value = conversions['c' + i].input;
+      document.getElementById('c' + i + 'InputValue').value = conversions['c' + i].inputValue;
+      cOutput(i);
+      document.getElementById('c' + i + 'Output').value = conversions['c' + i].output;
+      document.getElementById('c' + i + 'Auto').checked = conversions['c' + i].auto;
+    }
     offlineProgress();
     if (gamedata.prestigeTimeLeft > 0) {
       travelling();
@@ -1074,12 +1085,9 @@ window.onload = function() {
   } else {
     document.getElementById("converterButton").style.display = "none";
   }
-  cOutput(1);
-  outputCalc(1);
-  cOutput(2);
-  outputCalc(2);
-  cOutput(3);
-  outputCalc(3);
+  //outputCalc(1);
+  //outputCalc(2);
+  //outputCalc(3);
 
   setDim();
   setShop();
@@ -1199,19 +1207,20 @@ function offlineProgress() {
       Math.floor(Math.random() * 3);
     }
   }
-  if (c1Auto.checked){
+  if (conversions.c1.auto === true){
     for (let i = 0; i < time; i++) {
-      conversion(1);
+      conversion(1, false);
+    }
+    
+  }
+  if (conversions.c2.auto === true){
+    for (let i = 0; i < time; i++) {
+      conversion(2, false);
     }
   }
-  if (c2Auto.checked){
+  if (conversions.c3.auto === true){
     for (let i = 0; i < time; i++) {
-      conversion(2);
-    }
-  }
-  if (c3Auto.checked){
-    for (let i = 0; i < time; i++) {
-      conversion(3);
+      conversion(3, false);
     }
   }
   gamedata.timeLeft = gamedata.timeLeft - time;
@@ -1348,13 +1357,19 @@ var mainGameLoop = window.setInterval(function() {
   droneMining();
   
   if (c1Auto.checked){
-    conversion(1);
+    conversion(1, false);
   }
   if (c2Auto.checked){
-    conversion(2);
+    conversion(2, false);
   }
   if (c3Auto.checked){
-    conversion(3);
+    conversion(3, false);
+  }
+
+  if (document.getElementById("labCheckbox").checked) {
+    changeRP();
+  } else {
+    //log("Research machine stopped.", true)
   }
 
   gamedata.lasttick = Date.now();
@@ -1384,14 +1399,11 @@ var refreshLoop = window.setInterval(function() {
 
   Object.entries(blueprints).forEach(([key, value]) => {
     if (document.getElementById(key) != null) {
-      if (gamedata.money >= blueprints[key].price / 30 || blueprints[key].price <= 100 || typeof blueprints[key].price == "undefined") {
+      if (gamedata.money >= blueprints[key].price / 2 || blueprints[key].price <= 100 || typeof blueprints[key].price == "undefined") {
         document.getElementById(key).style.display = "flex"
-      } else {
-        document.getElementById(key).style.display = "none"
       }
     }
   });
-
 
   if (gamedata.shipCapacity <= 0) {
     document.getElementById("cargoFull").style.display = "grid";
@@ -1420,10 +1432,13 @@ function log(msg, keep) {
   logBox.scrollTo(0, logBox.scrollHeight);
 }
 
+var inTuto = false;
+
 function tuto() {
-  var startDelay = 6000;
+  var startDelay = 1000;
   var interval = 3000;
   setTimeout(function() {
+    inTuto = true;
     log("Good morning Miner! Please follow this quick guide to start your journey:", false);
     setTimeout(function() {
       log("First, click on an external region of the planet.", true);
@@ -1463,7 +1478,7 @@ async function step3() {
   document.getElementById("ship").classList.remove("glow");
   document.getElementById("logarea").style.zIndex = "9999";
   glow(document.getElementById("resShip"));
-  log("Now set the amount of the collected ore to 10, in the storage part of the ship menu. Then click on 'SELL', this will send your ship to sell those resources. You'll need at least $8 to go through this tutorial.", false);
+  log("Now set the amount of the collected ore to 10, in the storage part of the ship menu. Then click on 'SELL', this will send your ship to sell those resources. You'll need $8 to go further in the tutorial.", false);
   await waitUntil(() => gamedata.money > 8)
   log("Perfect! In the Shop menu, you can now buy the Mining Drone Mk1 Blueprint. Once bought, go to the Workbench tab to see resources required to craft it.", false);
   glow(document.getElementById("shop"));
@@ -1473,11 +1488,14 @@ async function step3() {
 async function step4() {
   document.getElementById("shop").classList.remove("glow");
   document.getElementById("workBenchButton").removeEventListener("click", step4);
-  log("As you can see, you need three differents resources. However, you will only find " + gamedata.outermaterial.name + " on this planet. So go back to a region of your choice and mine until you get the required amount of this resource.", false);
-  await waitUntil(() => gamedata.res[gamedata.outermaterial.ref] >= 2)
-  log("Good. Now go back to the ship menu, load your resources into the storage, and go to another planet by clicking on the 'Leave this planet' button. If your ship isn't back yet, you can mine more " + gamedata.outermaterial.name + ". Ship speed depends on thrusters level. Moreover, you can't load more than 10 units of ore in your ship storage for now. This depends on Cargo bay level.", false);
+  if (gamedata.res[gamedata.outermaterial.ref] >= 2){
+    log("As you can see, you need three differents resources. However, you will only find " + gamedata.outermaterial.name + " on this planet. As you already own the required amount of " + gamedata.outermaterial.name +", go back to the ship menu, load your resources into the storage, and go to another planet by clicking on the 'Leave this planet' button. If your ship isn't back yet, you can mine more " + gamedata.outermaterial.name + ". Ship speed depends on thrusters level. Moreover, you can't load more than 10 units of ore in your ship storage for now. This depends on Cargo bay level.", false);
+  } else {
+    log("As you can see, you need three differents resources. However, you will only find " + gamedata.outermaterial.name + " on this planet. So go back to a region of your choice and mine until you get the required amount of this resource.", false);
+    await waitUntil(() => gamedata.res[gamedata.outermaterial.ref] >= 2)
+    log("Good. Now go back to the ship menu, load your resources into the storage, and go to another planet by clicking on the 'Leave this planet' button. If your ship isn't back yet, you can mine more " + gamedata.outermaterial.name + ". Ship speed depends on thrusters level. Moreover, you can't load more than 10 units of ore in your ship storage for now. This depends on Cargo bay level.", false);
+  }
   document.getElementById("prestige").addEventListener("click", step5);
-
 }
 
 function step5() {
@@ -1486,8 +1504,9 @@ function step5() {
 }
 
 function step6() {
-  log("You are now on a new planet! You can now check its composition and if the first layer material is different from the previous one go mine the amount required for the drone Mk1, and then find a planet with the last required ore. Remember to load your ship before leaving! However, if the material is the same as the one you previously mined, bad luck here. Travel to another planet.\nYou now have the basics of the game, keep going and mine the whole galaxy! For the Universal Mining Corporation!", false);
+  log("You are now on a new planet! Check its composition! If the outer layer material is different from the previous one go mine the amount required for the drone Mk1, and then find a planet with the last required ore. Remember to load your ship before leaving! However, if the material is the same as the one you previously mined, bad luck here. Travel to another planet.\nYou now have the basics of the game, keep going and mine the whole galaxy! For the Universal Mining Corporation!", false);
   document.getElementById("logarea").style.zIndex = "1";
+  inTuto = false;
 }
 
 function update(id, content) {
@@ -1718,6 +1737,7 @@ function createShopItem(BP) {
       buyable.style["background-size"] = "cover";
       buyable_title_text.innerText = nextItem.title + " (BP)";
     }
+    document.getElementById(BP).style.display = "none";
   }
 }
 
@@ -2094,19 +2114,13 @@ function buyLabItem(item, tech) {
   researchLab();
 }
 
-var labMachineButton = document.getElementById("labCheckbox");
-labMachineButton.checked = false;
-var convert;
-
-labMachineButton.onchange = function() {
-  if (labMachineButton.checked) {
-    log("Research machine working.", true)
-    convert = setInterval(changeRP, 1000);
+function labSwitch(){
+  if (document.getElementById("labCheckbox").checked){
+    log("Research machine working.", true);
   } else {
-    log("Research machine stopped.", true)
-    clearInterval(convert);
+    log("Research machine stopped.", true);
   }
-};
+}
 
 function changeRP() {
   Object.entries(gamedata.resRP).forEach(([key, value]) => {
@@ -2203,7 +2217,7 @@ function converterMk2() {
 
 function converterMk3() {
   //antimatter for TP
-  log("With his improvement, your convert ratio are way better.", false)
+  log("With his improvement, your conversion ratio are way better.", false)
 }
 
 function massReducer() {
@@ -2281,7 +2295,7 @@ function removeItemOnce(arr, value, i) {
   if (index > -1) {
     arr.splice(index, 1);
   }
-  rareDrop(i);
+  if(inTuto = false){rareDrop(i);}
   return arr;
 }
 
@@ -2330,13 +2344,25 @@ function removeDrone(region, number) {
   }
 }
 
+function removeAllDrones(){
+  Object.entries(gamedata.droneAssign).forEach(([key, value]) => {
+    if(value> 0){
+      gamedata.droneAssign[key] -= value;
+      gamedata[key.slice(0, 2) + "left"] += value;
+      update(key, gamedata.droneAssign[key]);
+      update("local_" + key, gamedata.droneAssign[key]);
+      update(key.slice(0, 2) + "left", gamedata[key.slice(0, 2) + "left"]);
+    }
+  });
+}
+
 function droneMining() {
   Object.entries(gamedata.droneAssign).forEach(([key, value]) => {
     var toMine = [];
     var cell = [];
-    // var downscale = 0; //DownMining
+    var downscale = 0; //DownMining (les drones peuvent miner les couches d'un tier inférieur au leur)
     if (value > 0) {
-      if (key.includes("core") && gamedata.reach.core != 0) {
+      if (key.includes("core") && gamedata.reach.d2core != 0) {
         if (key.includes("2")) {
           const notMinedExt = gamedata.notMined[key].filter(function(n) {
             if (!coreCoord.includes(n)) {
@@ -2345,23 +2371,23 @@ function droneMining() {
           })
           toMine = notMinedExt.slice(0, gamedata.droneAssign[key]);
         } else if (key.includes("3")) {
-          if (gamedata.reach.d2core != 0 && gamedata.notMined.d2core.includes(coreBorder.slice(-1)[0])) {
+          if (gamedata.reach.core != 0 && gamedata.notMined.d2core.includes(coreBorder.slice(-1)[0])) {
             const notMinedTemp = gamedata.notMined.d2core.filter(function(n) {
               if (coreCoord.includes(n)) {
-                if (coreBorder.includes(gamedata.reach.d2core + l)) {
-                  return n >= (gamedata.reach.d2core + l);
-                } else if (coreBorder.includes(gamedata.reach.d2core + 1)) {
-                  return n >= (gamedata.reach.d2core + 1);
-                } else if (coreBorder.includes(gamedata.reach.d2core - 1)) {
-                  return n >= (gamedata.reach.d2core - 1);
-                } else if (coreBorder.includes(gamedata.reach.d2core - l)) {
-                  return n >= (gamedata.reach.d2core - l);
+                if (coreBorder.includes(gamedata.reach.core + l)) {
+                  return n >= (gamedata.reach.core + l);
+                } else if (coreBorder.includes(gamedata.reach.core + 1)) {
+                  return n >= (gamedata.reach.core + 1);
+                } else if (coreBorder.includes(gamedata.reach.core - 1)) {
+                  return n >= (gamedata.reach.core - 1);
+                } else if (coreBorder.includes(gamedata.reach.core - l)) {
+                  return n >= (gamedata.reach.core - l);
                 }
               }
             })
             toMine = notMinedTemp.slice(0, gamedata.droneAssign[key]);
-          } else if (!gamedata.notMined.d2core.includes(coreBorder.slice(-1)[0])) {
-            const notMinedCore = gamedata.notMined.d2core.filter(function(n) {
+          } else if (!gamedata.notMined.d3core.includes(coreBorder.slice(-1)[0])) {
+            const notMinedCore = gamedata.notMined.d3core.filter(function(n) {
               if (coreCoord.includes(n)) {
                 return n;
               }
@@ -2416,12 +2442,12 @@ function droneMining() {
         for (let x = 0; x < toMine.length; x++) {
           if (cell[toMine[x] - 1] === undefined) {
             // if (key.includes("3")) {  //DownMining
-            //   removeItemOnce(gamedata.notMined.d2core, toMine[x], 3);
-            // } else if (downscale != 1){
-            //   removeItemOnce(gamedata.notMined[key], toMine[x], 2);
-            // } else {
-            //   removeItemOnce(gamedata.notMined["d" + (parseInt(key.slice(1).slice(0,-1))-1).toString() + key.slice(2)], toMine[x], 1);
-            // }
+            //   removeItemOnce(gamedata.notMined.d2core, toMine[x], 3);  //DownMining
+            // } else if (downscale != 1){  //DownMining
+            //   removeItemOnce(gamedata.notMined[key], toMine[x], 2);  //DownMining
+            // } else {  //DownMining
+            //   removeItemOnce(gamedata.notMined["d" + (parseInt(key.slice(1).slice(0,-1))-1).toString() + key.slice(2)], toMine[x], 1);  //DownMining
+            // }  //DownMining
             if (key.includes("1")) {
               if (flatBorder.includes(toMine[x]) && gamedata.reach[key] === 0) {
                 gamedata.reach[key] = toMine[x];
@@ -2449,7 +2475,7 @@ function droneMining() {
                 cell[toMine[x] - 1].click();
                 gamedata.minePower = 1;
               } else {
-                cell[toMine[x] - 1].click();
+                cell[toMine[x] - 1].click(); //bug à résoudre, le minage du coeur se bloque car il essaie de reprendre cellule 1 au lieu de partir à l'envers pour l'atteindre
               }
             } else if (key.includes("1")) {
               cell[toMine[x] - 1].click();
@@ -2459,16 +2485,16 @@ function droneMining() {
       }
     }
   });
-  if (gamedata.tech.autonomousDrone === 1) {
+  if (gamedata.tech.autonomousDrone === 1 && document.getElementById('droneAuto').checked) {
     autonomy();
   }
 }
 
 function mining(grid, el, row, col, i, region, optReg) {
-  /* console.log("You clicked on element:", el);
-  console.log("You clicked on col:", col);
-  console.log("You clicked on row:", row);
-  console.log("You clicked on item #:", i); */
+  console.log("You clicked on element:", el);
+  // console.log("You clicked on col:", col);
+  // console.log("You clicked on row:", row);
+  // console.log("You clicked on item #:", i);
   var antCol = (grid.rows[row].cells[col - 1] !== undefined) ?
     Number(grid.rows[row].cells[col - 1].textContent) :
     0;
@@ -2496,7 +2522,7 @@ function mining(grid, el, row, col, i, region, optReg) {
       (!region.includes(postRow) && postRow != 0) ||
       (optReg.includes("1") && optReg.length === 4 && (col === 0 || row === 0)) ||
       (row === 0 && optReg.includes("1")) ||
-      ((row === 0 || row === l - 1 || col === 0 || col === l - 1) && optReg.includes("core") && gamedata.reach.core != 0) ||
+      ((row === 0 || row === l - 1 || col === 0 || col === l - 1) && optReg.includes("core") && gamedata.reach.d2core != 0) ||
       (optReg.includes("2") && optReg.length === 3 && !gamedata.notMined["d1" + optReg.slice(2)].includes(i + (2 * h / 3 * (l) - l)) && row === 0) ||
       (optReg.includes("2") && optReg.length === 4 && ((!gamedata.notMined["d1" + optReg.slice(2)].includes(h * (2 * h / 3) + 2 / 3 * h * (row + 1)) && col === 0) || (!gamedata.notMined["d1" + optReg.slice(2)].includes(h * (2 * h / 3) - h / 3 + (col + 1)) && row === 0)))
     ) &&
@@ -2506,20 +2532,20 @@ function mining(grid, el, row, col, i, region, optReg) {
       log("You've reached the next layer!", true);
       gamedata.reach[optReg] = i;
     }
-    if (optReg.includes("2") && optReg.length === 3 && gamedata.reach.core === 0 && flatCoreBorder.includes(i)) {
+    if (optReg.includes("2") && optReg.length === 3 && gamedata.reach.d2core === 0 && flatCoreBorder.includes(i)) {
       log("You've reached the core region!", true);
-      gamedata.reach.core = col + optReg;
+      gamedata.reach.d2core = col + optReg;
     }
     if (grid.parentNode.id.includes("core")) {
-      if (!coreCoord.includes(i) && gamedata.minePower > 1 && gamedata.reach.core != 0) {
-        if (coreIntBorder.includes(i) && gamedata.reach.d2core === 0) {
+      if (!coreCoord.includes(i) && gamedata.minePower > 1 && gamedata.reach.d2core != 0) {
+        if (coreIntBorder.includes(i) && gamedata.reach.core === 0) {
           log("You've reached the Core!", true);
-          gamedata.reach.d2core = i;
+          gamedata.reach.core = i;
         }
         removeItemOnce(region, i, 2);
         el.className = "clicked";
         gamedata.res[gamedata.innermaterial.ref] = gamedata.res[gamedata.innermaterial.ref] + gamedata.yield2;
-      } else if (coreCoord.includes(i) && gamedata.minePower > 2 && gamedata.reach.d2core != 0) {
+      } else if (coreCoord.includes(i) && gamedata.minePower > 2 && gamedata.reach.core != 0) {
         removeItemOnce(region, i, 3);
         el.className = "clicked";
         gamedata.res[gamedata.corematerial.ref] = gamedata.res[gamedata.corematerial.ref] + gamedata.yield3;
@@ -2543,7 +2569,7 @@ function mining(grid, el, row, col, i, region, optReg) {
     }
   }
   if (optReg.includes("core")){
-    if (gamedata.reach.core === 0){
+    if (gamedata.reach.d2core === 0){
       log("Can't mine here. You must reach this region by mining outer regions first.", true);
     } else if (coreCoord.includes(i) && gamedata.minePower <= 2) {
       log("You're not strong enough to mine this layer. Research Exoskeleton Mk2 first.", true);
@@ -2579,7 +2605,11 @@ function autonomy() {
         gamedata.droneAssign[key] = gamedata.droneAssign[key] + gamedata.d2left;
         gamedata.d2left = 0;
         update("d2left", gamedata.d2left);
-      } else if (key.includes("3") && gamedata.d3left > 0 && gamedata.reach.d2core > 0) {
+      } else if (key === 'd2core' && gamedata.d2left > 0 && gamedata.reach["d2" + key.slice(2)] != 0) {
+        gamedata.droneAssign[key] = gamedata.droneAssign[key] + gamedata.d2left;
+        gamedata.d2left = 0;
+        update("d2left", gamedata.d2left);
+      } else if (key.includes("3") && gamedata.d3left > 0 && gamedata.reach.core > 0) {
         gamedata.droneAssign[key] = gamedata.droneAssign[key] + gamedata.d3left;
         gamedata.d3left = 0;
         update("d3left", gamedata.d3left);
@@ -2962,23 +2992,36 @@ function outputCalc(id){
   } else {
     document.getElementById('c' + id + 'OutputValue').innerHTML = format(result, 'standard') + " u";
   }
-  conversions['conversion' + id].input = document.getElementById('c' + id + 'Input').value;
-  conversions['conversion' + id].inputValue = document.getElementById('c' + id + 'InputValue').value;
-  conversions['conversion' + id].output = document.getElementById('c' + id + 'Output').value;
-  conversions['conversion' + id].outputValue = result;
+  conversions['c' + id].input = document.getElementById('c' + id + 'Input').value;
+  conversions['c' + id].inputValue = document.getElementById('c' + id + 'InputValue').value;
+  conversions['c' + id].output = document.getElementById('c' + id + 'Output').value;
+  conversions['c' + id].outputValue = result;
+  if (document.getElementById('c' + id + 'Auto').checked){
+    conversions['c' + id].auto = true;
+  } else {
+    conversions['c' + id].auto = false;    
+  }
 
   return result
 }
 
-function conversion(id){
+function conversion(id, button){
   result = outputCalc(id);
   if (result >= 0.001 && gamedata.res[document.getElementById('c'+id+'Input').value] >= document.getElementById('c'+id+'InputValue').value){
     gamedata.res[document.getElementById('c'+id+'Input').value] -= document.getElementById('c'+id+'InputValue').value;
     gamedata.res[document.getElementById('c'+id+'Output').value] += result;
   } else if (gamedata.res[document.getElementById('c'+id+'Input').value] < document.getElementById('c'+id+'InputValue').value){
-    log("Not enough resources!", true);
-  } else if (result < 0.001){
+    if (document.getElementById('c' + id + 'Auto').checked){
+      log("Not enough resources. Converter n°" + id + " stopped.", true);
+      document.getElementById('c' + id + 'Auto').checked = false;
+      conversions['c' + id].auto = false;
+    } else {
+      log("Not enough resources!", true);
+    }
+  } else if (result < 0.001 && document.getElementById('c'+id+'Input').value != 'Res1any' && document.getElementById('c'+id+'Output').value != 'Res1any'){
     log("Unable to proceed. Conversion output would be too low!", true);
+  } else if (button === true){
+    log("Select both input and output to proceed.", true);
   }
 }
 
@@ -3082,7 +3125,7 @@ function changeStock(res, resCat) {
     gamedata.sumValue = gamedata.sumValue + gamedata.shipStock[key] * gamedata.resValue[key];
   });
   update("sumValue", format(gamedata.sumValue, "currency"));
-  gamedata.prestigeCost = Math.pow(1.3, gamedata.prestigeNb) * ((gamedata.shipMaxCargo - gamedata.shipCapacity) / gamedata.shipMaxCargo) + 1;
+  gamedata.prestigeCost = Math.pow(gamedata.prestigeCreep, gamedata.prestigeNb) * ((gamedata.shipMaxCargo - gamedata.shipCapacity) / gamedata.shipMaxCargo) + 1;
   update("prestigeCost", "Cost : " + format(gamedata.prestigeCost, "currency"));
 }
 
@@ -3391,4 +3434,9 @@ function cheat(){
   });
   gamedata.money += 10000;
   gamedata.RP += 10000;
+}
+
+function shipCheat(){
+  document.getElementById("ship").style.display = "block";
+  document.getElementById("timer").style.display = "none";
 }
