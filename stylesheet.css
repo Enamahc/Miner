@@ -1670,6 +1670,10 @@ td {
   background-color: #180b00;
 }
 
+.clicked {
+  background-color: #180b00;
+}
+
 #tabs {
   grid-column: 4/5;
   grid-row: 1/2;

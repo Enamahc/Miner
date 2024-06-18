@@ -1368,8 +1368,6 @@ var mainGameLoop = window.setInterval(function() {
 
   if (document.getElementById("labCheckbox").checked) {
     changeRP();
-  } else {
-    //log("Research machine stopped.", true)
   }
 
   gamedata.lasttick = Date.now();
@@ -2364,32 +2362,66 @@ function droneMining() {
     if (value > 0) {
       if (key.includes("core") && gamedata.reach.d2core != 0) {
         if (key.includes("2")) {
-          const notMinedExt = gamedata.notMined[key].filter(function(n) {
-            if (!coreCoord.includes(n)) {
-              return n;
-            }
-          })
-          toMine = notMinedExt.slice(0, gamedata.droneAssign[key]);
+          if (gamedata.notMined.d2core.includes(1)) {
+            const notMinedExt = gamedata.notMined.d2core.filter(function(n) {
+              if (gamedata.reach.d2core.includes("d2N")) { //Region Coeur atteinte par le nord
+                return n <= (gamedata.reach.d2core.slice(0,-3));                  
+              } else if (gamedata.reach.d2core.includes("d2W")) { //Region Coeur atteinte par l'ouest
+                if ((Math.abs(n - l*(l-gamedata.reach.d2core.slice(0,-3))) + 1) % l === 0 && n <= l*(l-gamedata.reach.d2core.slice(0,-3)) + 1){
+                  return n;
+                }
+              } else if (gamedata.reach.d2core.includes("d2E")) { //Region Coeur atteinte par l'est
+                if (n < coreExtBorder[0] + l){
+                  return n;
+                } else if (Math.abs(n - l*(gamedata.reach.d2core.slice(0,-3))) % l === 0 && n <= l*(l-gamedata.reach.d2core.slice(0,-3))){
+                  return n;
+                }
+              } else if (gamedata.reach.d2core.includes("d2S")) { //Region Coeur atteinte par le sud
+                if (n <= coreExtBorder.slice(0, -gamedata.reach.d2core.slice(0,-3))[coreExtBorder.slice(0, -gamedata.reach.d2core.slice(0,-3)).length-1] && n > coreExtBorder[coreExtBorder.length-1] - l){
+                  return n;
+                } else if((n - coreExtBorder[0]) % l === 0){
+                  return n;
+                }
+              }
+            })
+            toMineReversed = notMinedExt.reverse();
+            toMine = toMineReversed.slice(0, gamedata.droneAssign[key]);
+          } else {
+            const notMinedExt = gamedata.notMined[key].filter(function(n) {
+              if (!coreCoord.includes(n)) {
+                return n;
+              }
+            })
+            toMine = notMinedExt.slice(0, gamedata.droneAssign[key]);
+          }
         } else if (key.includes("3")) {
           if (gamedata.reach.core != 0 && gamedata.notMined.d2core.includes(coreBorder.slice(1)[0])) {
             const notMinedTemp = gamedata.notMined.d2core.filter(function(n) {
-              if (coreCoord.includes(n)) {
-                if (n < gamedata.reach.core + l){
-                  return n;
-                } else if (coreBorder.includes(gamedata.reach.core + l)) {
-                  return n <= (gamedata.reach.core + l);
-                } else if (coreBorder.includes(gamedata.reach.core + 1)) {
-                  return n <= (gamedata.reach.core + 1);
-                } else if (coreBorder.includes(gamedata.reach.core - 1)) {
-                  return n <= (gamedata.reach.core - 1);
-                } else if (coreBorder.includes(gamedata.reach.core - l)) {
-                  return n <= (gamedata.reach.core - l);
+              if (coreBorder.includes(n)) {
+                if (coreBorder.includes(gamedata.reach.core + l)) { //Coeur atteint par le nord
+                  return n <= (gamedata.reach.core + l);                  
+                } else if (coreBorder.includes(gamedata.reach.core + 1)) { //Coeur atteint par l'ouest
+                  if ((Math.abs(n-gamedata.reach.core)+1) % l === 0 || n === gamedata.reach.core +1){
+                    return n;
+                  }
+                } else if (coreBorder.includes(gamedata.reach.core - 1)) { //Coeur atteint par l'est
+                  if (n < coreBorder[0] + l){
+                    return n;
+                  } else if ((Math.abs(n-gamedata.reach.core)-1) % l === 0){
+                    return n;
+                  }
+                } else if (coreBorder.includes(gamedata.reach.core - l)) { //Coeur atteint par le sud
+                  if (n <= gamedata.reach.core - l && n > coreBorder[coreBorder.length-1] - l){
+                    return n;
+                  } else if((n - coreBorder[0]) % l ===0){
+                    return n;
+                  }
                 }
               }
             })
             toMineReversed = notMinedTemp.reverse();
-            toMine = notMinedTemp.slice(0, gamedata.droneAssign[key]);
-          } else if (gamedata.notMined.d2core.includes(coreBorder.slice(-1)[0])) {
+            toMine = toMineReversed.slice(0, gamedata.droneAssign[key]);
+          } else /*if (gamedata.notMined.d2core.includes(coreBorder.slice(-1)[0]))*/ {
             const notMinedCore = gamedata.notMined.d2core.filter(function(n) {
               if (coreCoord.includes(n)) {
                 return n;
