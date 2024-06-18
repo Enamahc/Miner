@@ -2371,28 +2371,31 @@ function droneMining() {
           })
           toMine = notMinedExt.slice(0, gamedata.droneAssign[key]);
         } else if (key.includes("3")) {
-          if (gamedata.reach.core != 0 && gamedata.notMined.d2core.includes(coreBorder.slice(-1)[0])) {
+          if (gamedata.reach.core != 0 && gamedata.notMined.d2core.includes(coreBorder.slice(1)[0])) {
             const notMinedTemp = gamedata.notMined.d2core.filter(function(n) {
               if (coreCoord.includes(n)) {
-                if (coreBorder.includes(gamedata.reach.core + l)) {
-                  return n >= (gamedata.reach.core + l);
+                if (n < gamedata.reach.core + l){
+                  return n;
+                } else if (coreBorder.includes(gamedata.reach.core + l)) {
+                  return n <= (gamedata.reach.core + l);
                 } else if (coreBorder.includes(gamedata.reach.core + 1)) {
-                  return n >= (gamedata.reach.core + 1);
+                  return n <= (gamedata.reach.core + 1);
                 } else if (coreBorder.includes(gamedata.reach.core - 1)) {
-                  return n >= (gamedata.reach.core - 1);
+                  return n <= (gamedata.reach.core - 1);
                 } else if (coreBorder.includes(gamedata.reach.core - l)) {
-                  return n >= (gamedata.reach.core - l);
+                  return n <= (gamedata.reach.core - l);
                 }
               }
             })
+            toMineReversed = notMinedTemp.reverse();
             toMine = notMinedTemp.slice(0, gamedata.droneAssign[key]);
-          } else if (!gamedata.notMined.d3core.includes(coreBorder.slice(-1)[0])) {
-            const notMinedCore = gamedata.notMined.d3core.filter(function(n) {
+          } else if (gamedata.notMined.d2core.includes(coreBorder.slice(-1)[0])) {
+            const notMinedCore = gamedata.notMined.d2core.filter(function(n) {
               if (coreCoord.includes(n)) {
                 return n;
               }
             })
-            toMine = notMinedCore.slice(-gamedata.droneAssign[key]);
+            toMine = notMinedCore.slice(0, gamedata.droneAssign[key]);
           }
         }
       } else if (key.includes("1")) {
@@ -2491,7 +2494,7 @@ function droneMining() {
 }
 
 function mining(grid, el, row, col, i, region, optReg) {
-  console.log("You clicked on element:", el);
+  // console.log("You clicked on element:", el);
   // console.log("You clicked on col:", col);
   // console.log("You clicked on row:", row);
   // console.log("You clicked on item #:", i);
